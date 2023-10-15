@@ -1,23 +1,20 @@
 # `oslo`
 
+> This package is _highly_ experimental - use at your own risk
+
 A collection of utilities for auth, including:
 
-- Session management
-- Password hashing
-- OAuth2 (with built-in providers)
-- Cookie parsing/serialization
-- Verification tokens (email verification, password reset, etc)
-- CSRF protection
-- Cryptographically random strings
-- Encode base64, base64url, hex
+- [`oslo/cookie`](#oslocookie): Cookie parsing and serialization
+- [`oslo/encoding`](#osloencoding): Encode base64, base64url, hex
+- [`oslo/oauth2`](#oslooauth2): OAuth2 helpers
+  - [`oslo/oauth2/providers`](#oslooauth2providers): Built in OAuth2 providers (Apple, Github, Google)
+- [`oslo/password`](#oslopassword): Password hashing
+- [`oslo/random`](#oslorandom): Generate cryptographically random strings and numbers
+- [`oslo/token`](#oslotoken): Verification tokens (email verification, password reset, etc)
+- [`oslo/request`](#oslorequest): CSRF protection
+- [`oslo/session`](#oslosession): Session management
 
-Aside from `oslo/password`, every module will work in any module, including Node.js, Cloudflare Workers, Deno, and Bun.
-
-## Built-in OAuth providers
-
-- Apple
-- Github
-- Google
+Aside from `oslo/password`, every module works in any environment, including Node.js, Cloudflare Workers, Deno, and Bun.
 
 ## `oslo/cookie`
 
@@ -25,13 +22,13 @@ Aside from `oslo/password`, every module will work in any module, including Node
 import { serializeCookie } from "oslo/cookie";
 
 const cookie = serializeCookie(name, value, {
-  // optional
-  expires: new Date(),
-  maxAge: 60 * 60,
-  path: "/",
-  httpOnly: true,
-  secure: true,
-  sameSite: "lax",
+	// optional
+	expires: new Date(),
+	maxAge: 60 * 60,
+	path: "/",
+	httpOnly: true,
+	secure: true,
+	sameSite: "lax"
 });
 response.headers.set("Set-Cookie", cookie);
 
@@ -63,36 +60,23 @@ import { encodeHex, decodeHex } from "oslo/encoding";
 ## `oslo/oauth2`
 
 ```ts
-import { encodeBase64, decodeBase64 } from "oslo/encoding";
-
-const textEncoder = new TextEncoder();
-const encoded = encodeBase64(textEncoder.encode("hello world"));
-const decoded = decodeBase64(encoded);
-
-import { encodeBase64Url, decodeBase64Url } from "oslo/encoding";
-import { encodeHex, decodeHex } from "oslo/encoding";
-```
-
-## `oslo/oauth2`
-
-```ts
 import { createOAuth2AuthorizationUrl } from "oslo/oauth2";
 
 const [url, state] = await createOAuth2AuthorizationUrl(
-  "https://github.com/login/oauth/authorize",
-  {
-    clientId,
-    redirectUri,
-    scope: ["user:email"],
-  }
+	"https://github.com/login/oauth/authorize",
+	{
+		clientId,
+		redirectUri,
+		scope: ["user:email"]
+	}
 );
 
 // see also `oslo/cookie`
 setCookie("github_oauth_state", state, {
-  httpOnly: true,
-  path: "/",
-  maxAge: 60 * 60, // 1 hour
-  secure: true,
+	httpOnly: true,
+	path: "/",
+	maxAge: 60 * 60, // 1 hour
+	secure: true
 });
 
 redirect(url);
@@ -108,38 +92,38 @@ const [url, codeVerifier, state] = await createOAuth2AuthorizationUrlWithPKCE();
 
 ```ts
 import {
-  verifyOAuth2State,
-  validateOAuth2AuthorizationCode,
-  OAuth2RequestError,
+	verifyOAuth2State,
+	validateOAuth2AuthorizationCode,
+	OAuth2RequestError
 } from "oslo/oauth2";
 
 const storedState = getCookie("github_oauth_state");
 const state = url.searchParams.get("state");
 if (!verifyOAuth2State(storedState, state)) {
-  // error
+	// error
 }
 const code = url.searchParams.get("code");
 if (!code) {
-  // error
+	// error
 }
 
 try {
-  const { accessToken, refreshToken } = await validateOAuth2AuthorizationCode<{
-    refreshToken: string;
-  }>(code, {
-    tokenEndpoint: "https://github.com/login/oauth/access_token",
-    clientId: this.config.clientId,
-    clientPassword: {
-      clientSecret: this.config.clientSecret,
-      authenticateWith: "client_secret",
-    },
-  });
+	const { accessToken, refreshToken } = await validateOAuth2AuthorizationCode<{
+		refreshToken: string;
+	}>(code, {
+		tokenEndpoint: "https://github.com/login/oauth/access_token",
+		clientId: this.config.clientId,
+		clientPassword: {
+			clientSecret: this.config.clientSecret,
+			authenticateWith: "client_secret"
+		}
+	});
 } catch (e) {
-  if (e instanceof OAuth2RequestError) {
-    // get request & response that failed
-    const { request, response } = e;
-  }
-  // unknown error
+	if (e instanceof OAuth2RequestError) {
+		// get request & response that failed
+		const { request, response } = e;
+	}
+	// unknown error
 }
 ```
 
@@ -149,9 +133,9 @@ try {
 import { Github, Apple, Google } from "oslo/oauth2/providers";
 
 const github = new Github({
-  clientId,
-  clientSecret,
-  scope: ["user:email"],
+	clientId,
+	clientSecret,
+	scope: ["user:email"]
 });
 
 // wrapper around `createOAuth2AuthorizationURL()`
@@ -217,34 +201,34 @@ import { verifyRequestOrigin } from "oslo/request";
 
 // only allow same-origin requests
 const validRequestOrigin = verifyRequestOrigin({
-  origin: request.headers.get("Origin"),
-  host: request.headers.get("Host"),
+	origin: request.headers.get("Origin"),
+	host: request.headers.get("Host")
 });
 
 if (!validRequestOrigin) {
-  // invalid request origin
-  return new Response(null, {
-    status: 400,
-  });
+	// invalid request origin
+	return new Response(null, {
+		status: 400
+	});
 }
 
 verifyRequestOrigin({
-  origin: request.headers.get("Origin"),
-  host: request.url, // you can use full urls
+	origin: request.headers.get("Origin"),
+	host: request.url // you can use full urls
 });
 
 verifyRequestOrigin({
-  origin: request.headers.get("Origin"),
-  host: request.url,
-  // allow `a.example.com`, `b.example.com`, `a.b.example.com`, etc
-  allowedSubdomains: "*",
+	origin: request.headers.get("Origin"),
+	host: request.url,
+	// allow `a.example.com`, `b.example.com`, `a.b.example.com`, etc
+	allowedSubdomains: "*"
 });
 
 verifyRequestOrigin({
-  origin: request.headers.get("Origin"),
-  host: request.url,
-  // allow `x.example.com`, `y.x.example.com`
-  allowedSubdomains: ["x", "y.x"],
+	origin: request.headers.get("Origin"),
+	host: request.url,
+	// allow `x.example.com`, `y.x.example.com`
+	allowedSubdomains: ["x", "y.x"]
 });
 ```
 
@@ -263,42 +247,42 @@ import type { Session } from "oslo/session";
 const sessionController = new SessionController(new TimeSpan(30, "d"));
 
 async function validateSession(sessionId: string): Promise<Session | null> {
-  const databaseSession = await db.getSession(sessionId);
-  if (!databaseSession) {
-    return null;
-  }
-  const session = sessionController.validateSessionState(
-    sessionId,
-    databaseSession.expires
-  );
-  if (!session) {
-    await db.deleteSession(sessionId);
-    return null;
-  }
-  if (session.fresh) {
-    // session expiration was extended
-    await db.updateSession(session.sessionId, {
-      expires: session.expiresAt,
-    });
-  }
-  return session;
+	const databaseSession = await db.getSession(sessionId);
+	if (!databaseSession) {
+		return null;
+	}
+	const session = sessionController.validateSessionState(
+		sessionId,
+		databaseSession.expires
+	);
+	if (!session) {
+		await db.deleteSession(sessionId);
+		return null;
+	}
+	if (session.fresh) {
+		// session expiration was extended
+		await db.updateSession(session.sessionId, {
+			expires: session.expiresAt
+		});
+	}
+	return session;
 }
 
 async function createSession(): Promise<Session> {
-  const sessionId = generateRandomString(41, alphabet("a-z", "A-Z", "0-9"));
-  const session = sessionController.createSession(sessionId);
-  await db.insertSession({
-    // you can store any data you want :D
-    id: session.sessionId,
-    expires: session.expiresAt,
-  });
-  return session;
+	const sessionId = generateRandomString(41, alphabet("a-z", "A-Z", "0-9"));
+	const session = sessionController.createSession(sessionId);
+	await db.insertSession({
+		// you can store any data you want :D
+		id: session.sessionId,
+		expires: session.expiresAt
+	});
+	return session;
 }
 
 const sessionCookieController = sessionController.sessionCookieController({
-  name: "session",
-  secure: prod,
-  secret,
+	name: "session",
+	secure: prod,
+	secret
 });
 ```
 
@@ -311,18 +295,18 @@ const cookie = sessionCookieController.createSessionCookie(session.sessionId);
 ```ts
 // get cookie
 const sessionId = sessionCookieController.parseCookieHeader(
-  headers.get("Cookie")
+	headers.get("Cookie")
 );
 const sessionId = cookies.get(sessionCookieController.cookieName);
 
 if (!sessionId) {
-  // 401
+	// 401
 }
 const session = await validateSession(sessionId);
 if (session.fresh) {
-  // session expiration was extended
-  const cookie = sessionCookieController.createSessionCookie(session.sessionId);
-  // set cookie again
+	// session expiration was extended
+	const cookie = sessionCookieController.createSessionCookie(session.sessionId);
+	// set cookie again
 }
 ```
 
@@ -344,57 +328,57 @@ import type { Token } from "oslo/token";
 
 // expires in 2 hours
 const verificationTokenController = new VerificationTokenController(
-  new TimeSpan(2, "h")
+	new TimeSpan(2, "h")
 );
 
 async function generatePasswordResetToken(userId: string): Promise<Token> {
-  // check if an unused token already exists
-  const storedUserTokens = await db
-    .table("password_reset_token")
-    .where("user_id", "=", userId)
-    .getAll();
-  if (storedUserTokens.length > 0) {
-    // if exists, check the expiration
-    const reusableStoredToken = storedUserTokens.find((token) => {
-      return verificationTokenController.isReusableToken(token.expires);
-    });
-    // reuse the token if still valid
-    if (reusableStoredToken) return reusableStoredToken.id;
-  }
-  // generate a new token and store it
-  const token = verificationTokenController.createToken(
-    generateRandomString(63, alphabet("a-z", "0-9")),
-    userId
-  );
-  await db
-    .insertInto("password_reset_token")
-    .values({
-      id: token.value,
-      expires: token.expiresAt,
-      user_id: token.userId,
-    })
-    .executeTakeFirst();
-  return token;
+	// check if an unused token already exists
+	const storedUserTokens = await db
+		.table("password_reset_token")
+		.where("user_id", "=", userId)
+		.getAll();
+	if (storedUserTokens.length > 0) {
+		// if exists, check the expiration
+		const reusableStoredToken = storedUserTokens.find((token) => {
+			return verificationTokenController.isReusableToken(token.expires);
+		});
+		// reuse the token if still valid
+		if (reusableStoredToken) return reusableStoredToken.id;
+	}
+	// generate a new token and store it
+	const token = verificationTokenController.createToken(
+		generateRandomString(63, alphabet("a-z", "0-9")),
+		userId
+	);
+	await db
+		.insertInto("password_reset_token")
+		.values({
+			id: token.value,
+			expires: token.expiresAt,
+			user_id: token.userId
+		})
+		.executeTakeFirst();
+	return token;
 }
 
 async function validatePasswordResetToken(token: string): Promise<string> {
-  const storedToken = await db.transaction().execute(async (trx) => {
-    // get token from db
-    const storedToken = await trx
-      .table("password_reset_token")
-      .where("id", "=", token)
-      .get();
-    if (!storedToken) return null;
-    await trx.table("password_reset_token").where("id", "=", token).delete();
-    return storedToken;
-  });
-  if (!storedToken) throw new Error("Invalid token");
-  // check for expiration
-  if (!isWithinExpirationDate(storedToken.expires)) {
-    throw new Error("Expired token");
-  }
-  // return owner
-  return storedToken.user_id;
+	const storedToken = await db.transaction().execute(async (trx) => {
+		// get token from db
+		const storedToken = await trx
+			.table("password_reset_token")
+			.where("id", "=", token)
+			.get();
+		if (!storedToken) return null;
+		await trx.table("password_reset_token").where("id", "=", token).delete();
+		return storedToken;
+	});
+	if (!storedToken) throw new Error("Invalid token");
+	// check for expiration
+	if (!isWithinExpirationDate(storedToken.expires)) {
+		throw new Error("Expired token");
+	}
+	// return owner
+	return storedToken.user_id;
 }
 ```
 

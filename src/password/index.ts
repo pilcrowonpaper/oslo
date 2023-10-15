@@ -1,6 +1,6 @@
 export interface PasswordHashingAlgorithm {
-  hash: (password: string) => Promise<string>;
-  verify: (hash: string, password: string) => Promise<boolean>;
+	hash: (password: string) => Promise<string>;
+	verify: (hash: string, password: string) => Promise<boolean>;
 }
 
 export { Argon2Id } from "./argon2id.js";
