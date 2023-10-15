@@ -8,8 +8,8 @@
 	"module": "dist/index.js",
 	"scripts": {
 		"build": "tsc",
-    "format": "prettier -w .",
-    "lint": "eslint ."
+		"format": "prettier -w .",
+		"lint": "eslint ."
 	},
 	"files": [
 		"/dist/"
