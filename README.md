@@ -33,7 +33,7 @@ const cookie = serializeCookie(name, value, {
 response.headers.set("Set-Cookie", cookie);
 
 // names and values are URI component encoded
-serializeCookie("this_is_fine_=;", "this_too_=;");
+serializeCookie("this is fine =;", "this too =;");
 ```
 
 ```ts
