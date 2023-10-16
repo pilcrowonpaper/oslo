@@ -120,7 +120,8 @@ export async function validateOAuth2AuthorizationCode<
 	}
 
 	const headers = new Headers({
-		"Content-Type": "application/x-www-form-urlencoded"
+		"Content-Type": "application/x-www-form-urlencoded",
+		Accept: "application/json"
 	});
 	if (
 		options.clientPassword &&
