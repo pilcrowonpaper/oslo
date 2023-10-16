@@ -29,7 +29,7 @@ export class SessionController {
 		if (!isWithinExpirationDate(activePeriodExpirationDate)) {
 			// extend expiration
 			expiresAt = expirationDate(this.expiresIn);
-			fresh = true
+			fresh = true;
 		}
 		return {
 			sessionId,

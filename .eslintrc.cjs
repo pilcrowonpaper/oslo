@@ -9,13 +9,10 @@ module.exports = {
 		"no-useless-catch": "off"
 	},
 	parser: "@typescript-eslint/parser",
-	extends: [
-		"eslint:recommended",
-		"plugin:@typescript-eslint/recommended"
-	],
+	extends: ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
 	plugins: ["@typescript-eslint"],
 	ignorePatterns: ["*.cjs"],
 	env: {
-        "node": true
-    }
+		node: true
+	}
 };

@@ -212,6 +212,10 @@ const validRequestOrigin = verifyRequestOrigin({
 	origin: request.headers.get("Origin"),
 	host: request.headers.get("Host")
 });
+const validRequestOrigin = verifyRequestOrigin({
+	origin: request.headers.get("Origin"),
+	host: request.url
+});
 
 if (!validRequestOrigin) {
 	// invalid request origin
@@ -219,24 +223,34 @@ if (!validRequestOrigin) {
 		status: 400
 	});
 }
+```
 
+```ts
+// true
 verifyRequestOrigin({
-	origin: request.headers.get("Origin"),
-	host: request.url // you can use full urls
+	origin: "https://example.com",
+	host: "example.com"
 });
 
+// true
 verifyRequestOrigin({
-	origin: request.headers.get("Origin"),
-	host: request.url,
-	// allow `a.example.com`, `b.example.com`, `a.b.example.com`, etc
-	allowedSubdomains: "*"
+	origin: "https://foo.example.com",
+	host: "bar.example.com",
+	allowedSubdomains: "*" // wild card to allow any subdomains
 });
 
+// true
 verifyRequestOrigin({
-	origin: request.headers.get("Origin"),
-	host: request.url,
-	// allow `x.example.com`, `y.x.example.com`
-	allowedSubdomains: ["x", "y.x"]
+	origin: "https://foo.example.com",
+	host: "bar.example.com",
+	allowedSubdomains: ["foo"]
+});
+
+// true
+verifyRequestOrigin({
+	origin: "https://example.com",
+	host: "foo.example.com",
+	allowedSubdomains: [null] // `null` to only allow base domain
 });
 ```
 
