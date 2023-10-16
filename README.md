@@ -102,7 +102,7 @@ const [url, codeVerifier, state] = await createOAuth2AuthorizationUrlWithPKCE();
 import {
 	verifyOAuth2State,
 	validateOAuth2AuthorizationCode,
-	OAuth2RequestError
+	OAuth2AccessTokenRequestError
 } from "oslo/oauth2";
 
 const storedState = getCookie("github_oauth_state");
@@ -127,9 +127,9 @@ try {
 		}
 	});
 } catch (e) {
-	if (e instanceof OAuth2RequestError) {
-		// get request & response that failed
-		const { request, response } = e;
+	if (e instanceof OAuth2AccessTokenRequestError) {
+		// see https://www.rfc-editor.org/rfc/rfc6749#section-5.2
+		const { request, message, description } = e;
 	}
 	// unknown error
 }

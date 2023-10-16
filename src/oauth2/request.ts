@@ -1,24 +1,3 @@
-export class OAuth2RequestError extends Error {
-	public request: Request;
-	public response: Response;
-	constructor(request: Request, response: Response) {
-		super(response.statusText);
-		this.request = request;
-		this.response = response;
-	}
-}
-
-export async function handleRequest<_ResponseBody extends {}>(
-	request: Request
-): Promise<_ResponseBody> {
-	request.headers.set("Accept", "application/json");
-	const response = await fetch(request);
-	if (!response.ok) {
-		throw new OAuth2RequestError(request, response);
-	}
-	return (await response.json()) as _ResponseBody;
-}
-
 export function createURL(
 	url: string | URL,
 	urlSearchParams: Record<string, string | undefined>

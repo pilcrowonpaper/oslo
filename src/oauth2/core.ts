@@ -1,6 +1,6 @@
 import { encodeBase64, encodeBase64Url } from "../encoding/index.js";
 import { alphabet, generateRandomString } from "../random/index.js";
-import { authorizationHeader, createURL, handleRequest } from "./request.js";
+import { authorizationHeader, createURL } from "./request.js";
 
 export interface OAuth2Tokens {
 	accessToken: string;
@@ -85,7 +85,10 @@ export async function generatePKCECodeChallenge(
 	throw new TypeError("Invalid PKCE code challenge method");
 }
 
-export async function validateOAuth2AuthorizationCode<_ResponseBody extends {}>(
+export async function validateOAuth2AuthorizationCode<
+	_ResponseBody extends
+		OAuth2AccessTokenResponseBody = OAuth2AccessTokenResponseBody
+>(
 	authorizationCode: string,
 	options: {
 		tokenEndpoint: string | URL;
@@ -141,7 +144,38 @@ export async function validateOAuth2AuthorizationCode<_ResponseBody extends {}>(
 		headers,
 		body
 	});
-	return await handleRequest<_ResponseBody>(request);
+	const response = await fetch(request);
+	const result: _ResponseBody | OAuth2AccessTokenErrorResponseBody =
+		await response.json();
+	// github returns status 200 for errors
+	if (!("access_token" in result) && "error" in result) {
+		throw new OAuth2AccessTokenRequestError(request, result);
+	} else if (!response.ok) {
+		throw new OAuth2AccessTokenRequestError(request, {});
+	}
+	return result;
+}
+
+export class OAuth2AccessTokenRequestError extends Error {
+	public request: Request;
+	public description: string | null;
+	constructor(
+		request: Request,
+		body: Partial<OAuth2AccessTokenErrorResponseBody>
+	) {
+		super(body.error ?? "");
+		this.request = request;
+		this.description = body.error_description ?? null;
+	}
+}
+
+interface OAuth2AccessTokenErrorResponseBody {
+	error: string;
+	error_description?: string;
+}
+
+interface OAuth2AccessTokenResponseBody {
+	access_token: string;
 }
 
 export function verifyOAuth2State(
