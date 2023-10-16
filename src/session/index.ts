@@ -46,43 +46,53 @@ export class SessionController {
 		};
 	}
 
-	public sessionCookie(options: SessionCookieOptions): SessionCookieController {
+	public sessionCookie(options: SessionCookieConfig): SessionCookieController {
 		return new SessionCookieController(this, options);
 	}
 }
 
-export interface SessionCookieOptions {
-	name: string;
-	secure: boolean;
+export interface SessionCookieAttributesOptions {
 	path?: string;
 	domain?: string;
 	sameSite?: "lax" | "strict";
 }
 
+export interface SessionCookieConfig {
+	name: string;
+	secure: boolean;
+	attributes?: SessionCookieAttributesOptions;
+	expires?: boolean;
+}
+
 export class SessionCookieController {
 	constructor(
 		sessionCookieController: SessionController,
-		options: SessionCookieOptions
+		options: SessionCookieConfig
 	) {
 		this.sessionExpiresIn = sessionCookieController.expiresIn;
 		this.cookieName = options.name;
+		this.cookieExpires = options.expires ?? true;
 		this.baseCookieAttributes = {
 			secure: options.secure,
-			sameSite: options.sameSite ?? "lax",
+			sameSite: options.attributes?.sameSite ?? "lax",
 			httpOnly: true,
-			path: options.path ?? "/",
-			domain: options.domain
+			path: options.attributes?.path ?? "/",
+			domain: options.attributes?.domain
 		};
 	}
 
 	public cookieName: string;
+	private cookieExpires: boolean;
 	private sessionExpiresIn: TimeSpan;
 	private baseCookieAttributes: CookieAttributes;
 
 	public createSessionCookie(sessionId: string): Cookie {
+		const maxAge = this.cookieExpires
+			? this.sessionExpiresIn.seconds()
+			: new TimeSpan(52 * 2, "w").seconds();
 		return new Cookie(this.cookieName, sessionId, {
 			...this.baseCookieAttributes,
-			maxAge: Math.ceil(this.sessionExpiresIn.seconds())
+			maxAge
 		});
 	}
 

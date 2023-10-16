@@ -4,16 +4,18 @@ export function verifyRequestOrigin(options: {
 	allowedSubdomains?: Array<string | null> | "*";
 }): boolean {
 	if (!options.origin || !options.host) return false;
-	const originHost = new URL(options.origin).host;
-	let host: string;
+	const originHost = safeURL(options.origin)?.host ?? null;
+	if (!originHost) return false;
+	let host: string | null;
 	if (
 		options.host.startsWith("https//") ||
 		options.host.startsWith("https://")
 	) {
-		host = new URL(options.host).host;
+		host = safeURL(options.host)?.host ?? null;
 	} else {
-		host = options.host.split(":")[0]!;
+		host = options.host.split(":").at(0) ?? null;
 	}
+	if (!host) return false;
 	if (!options.allowedSubdomains) {
 		return originHost === host;
 	}
@@ -35,4 +37,12 @@ export function verifyRequestOrigin(options: {
 		}
 	}
 	return originHost === host;
+}
+
+function safeURL(url: URL | string): URL | null {
+	try {
+		return new URL(url);
+	} catch {
+		return null;
+	}
 }
