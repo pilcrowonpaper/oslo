@@ -77,3 +77,18 @@ export class Cookies {
 		return this.internal.entries();
 	}
 }
+
+export class Cookie {
+	constructor(name: string, value: string, attributes: CookieAttributes) {
+		this.name = name;
+		this.value = value;
+		this.attributes = attributes;
+	}
+	public name: string;
+	public value: string;
+	public attributes: CookieAttributes;
+
+	public serialize() {
+		return serializeCookie(this.name, this.value, this.attributes);
+	}
+}
