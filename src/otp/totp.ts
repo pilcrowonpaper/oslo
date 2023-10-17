@@ -10,9 +10,7 @@ export class TOTP {
 		this.period = options?.period ?? new TimeSpan(30, "s");
 	}
 
-	public async generate(
-		secret: string | ArrayBufferLike
-	): Promise<string> {
+	public async generate(secret: string | ArrayBufferLike): Promise<string> {
 		const counter = Math.floor(Date.now() / this.period.milliseconds());
 		return await generateHOTP(secret, counter, this.digits);
 	}
