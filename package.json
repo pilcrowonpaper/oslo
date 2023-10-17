@@ -1,7 +1,7 @@
 {
 	"name": "oslo",
 	"type": "module",
-	"version": "0.6.0",
+	"version": "0.6.1",
 	"description": "A collection of auth-related utilities",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
@@ -22,12 +22,12 @@
 		"./oauth2/providers": "./dist/oauth2/providers/index.js",
 		"./oidc": "./dist/oidc/index.js",
 		"./otp": "./dist/otp/index.js",
-		"./passkey": "./dist/passkey/index.js",
 		"./password": "./dist/password/index.js",
 		"./random": "./dist/random/index.js",
 		"./request": "./dist/request/index.js",
 		"./session": "./dist/session/index.js",
-		"./token": "./dist/token/index.js"
+		"./token": "./dist/token/index.js",
+		"./webauthn": "./dist/webauthn/index.js"
 	},
 	"keywords": [
 		"auth",
