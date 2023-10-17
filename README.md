@@ -400,7 +400,7 @@ const cookie = sessionCookieController.createBlankSessionCookie();
 
 ## `oslo/token`
 
-For email verification tokens and password rest tokens.
+For email verification tokens and password reset tokens.
 
 ```ts
 import { VerificationTokenController } from "oslo/token";
