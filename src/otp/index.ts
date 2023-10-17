@@ -8,7 +8,7 @@ export { TOTP } from "./totp.js";
 export function createKeyURI(config: TOTPKeyURIConfig | HOTPKeyURIConfig) {
 	const encodedIssuer = encodeURIComponent(config.issuer);
 	const encodedAccountName = encodeURIComponent(config.accountName);
-	let result = `otpauth://${config.type}/${encodedIssuer}:${encodedAccountName}?`;
+	let result = `otpauth://${config.type}/${encodedIssuer}:${encodedAccountName}`;
 	let secretBytes: Uint8Array;
 	if (typeof config.secret === "string") {
 		secretBytes = new TextEncoder().encode(config.secret);
