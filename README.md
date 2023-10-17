@@ -14,6 +14,7 @@ A collection of utilities for auth, including:
 - [`oslo/token`](#oslotoken): Verification tokens (email verification, password reset, etc)
 - [`oslo/request`](#oslorequest): CSRF protection
 - [`oslo/session`](#oslosession): Session management
+- [`oslo/webauthn`](#oslowebauthn): Verify Web Authentication API attestations and assertions
 
 Aside from `oslo/password`, every module works in any environment, including Node.js, Cloudflare Workers, Deno, and Bun.
 
@@ -469,4 +470,49 @@ async function validatePasswordResetToken(token: string): Promise<string> {
 const token = await generatePasswordResetToken(session.userId);
 // send password reset email with link (page with form for inputting new password)
 await sendEmail(`http://localhost:3000/reset-password/${token.value}`);
+```
+
+## `oslo/webauthn`
+
+`validateWebAuthnAttestationResponse()` does not validate attestation certificates.
+
+```ts
+import { validateWebAuthnAttestationResponse } from "oslo/webauthn";
+
+try {
+	await validateWebAuthnAttestationResponse({
+		response: {
+			// all `ArrayBufferLike` type (`Uint8Array`, `ArrayBuffer` etc)
+			clientDataJSON,
+			authenticatorData
+		},
+		challenge, //  `ArrayBufferLike`
+		origin: "http://localhost:3000" // website origin
+	});
+} catch {
+	// failed to validate attestation response
+}
+```
+
+`validateWebAuthnAssertionResponse()` currently only supports ECDSA using secp256k1 curve and SHA-256 (algorithm ID `-7`).
+
+```ts
+import { validateWebAuthnAssertionResponse } from "oslo/webauthn";
+
+try {
+	await validateWebAuthnAssertionResponse({
+		algorithm: "ES256K",
+		response: {
+			// all `ArrayBufferLike` type (`Uint8Array`, `ArrayBuffer` etc)
+			clientDataJSON,
+			authenticatorData,
+			signature
+		},
+		challenge, // `ArrayBufferLike`
+		publicKey, // `ArrayBufferLike`
+		origin: "http://localhost:3000" // website origin
+	});
+} catch {
+	// failed to validate assertion response
+}
 ```

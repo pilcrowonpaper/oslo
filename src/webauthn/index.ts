@@ -1,25 +1,19 @@
 import { encodeBase64Url } from "../encoding/index.js";
 import { compareBytes } from "../bytes.js";
 
-export interface PasskeyAssertionResponse {
-	clientDataJSON: ArrayBufferLike;
-	authenticatorData: ArrayBufferLike;
-	signature: ArrayBufferLike;
-}
-
-export interface PasskeyAttestationResponse {
+export interface WebAuthnAttestationResponse {
 	clientDataJSON: ArrayBufferLike;
 	authenticatorData: ArrayBufferLike;
 }
 
-export async function validatePasskeyAttestation(options: {
-	attestationResponse: PasskeyAttestationResponse;
+export async function validateWebAuthnAttestationResponse(options: {
+	response: WebAuthnAttestationResponse;
 	challenge: ArrayBufferLike;
 	origin: string;
 }): Promise<void> {
 	const originURL = new URL(options.origin);
 	const clientDataJSON = new TextDecoder().decode(
-		options.attestationResponse.clientDataJSON
+		options.response.clientDataJSON
 	);
 	const clientData: unknown = JSON.parse(clientDataJSON);
 	if (!clientData || typeof clientData !== "object") {
@@ -38,9 +32,7 @@ export async function validatePasskeyAttestation(options: {
 		throw new Error("Failed to verify 'clientData.origin");
 	}
 
-	const authData = new Uint8Array(
-		options.attestationResponse.authenticatorData
-	);
+	const authData = new Uint8Array(options.response.authenticatorData);
 	if (authData.byteLength < 37) {
 		throw new Error("Malformed 'authData'");
 	}
@@ -57,8 +49,14 @@ export async function validatePasskeyAttestation(options: {
 	}
 }
 
-export async function validatePasskeyAssertion(options: {
-	assertionResponse: PasskeyAssertionResponse;
+export interface WebAuthnAssertionResponse {
+	clientDataJSON: ArrayBufferLike;
+	authenticatorData: ArrayBufferLike;
+	signature: ArrayBufferLike;
+}
+
+export async function validateWebAuthnAssertionResponse(options: {
+	response: WebAuthnAssertionResponse;
 	publicKey: ArrayBufferLike;
 	challenge: ArrayBufferLike;
 	origin: string;
@@ -66,7 +64,7 @@ export async function validatePasskeyAssertion(options: {
 }): Promise<void> {
 	const originURL = new URL(options.origin);
 	const clientDataJSON = new TextDecoder().decode(
-		options.assertionResponse.clientDataJSON
+		options.response.clientDataJSON
 	);
 	const clientData: unknown = JSON.parse(clientDataJSON);
 	if (!clientData || typeof clientData !== "object") {
@@ -85,7 +83,7 @@ export async function validatePasskeyAssertion(options: {
 		throw new Error("Failed to verify 'clientData.origin");
 	}
 
-	const authData = new Uint8Array(options.assertionResponse.authenticatorData);
+	const authData = new Uint8Array(options.response.authenticatorData);
 	if (authData.byteLength < 37) {
 		throw new Error("Malformed 'authData'");
 	}
@@ -104,11 +102,11 @@ export async function validatePasskeyAssertion(options: {
 	// the signature is encoded in DER
 	// so we need to convert into ECDSA compatible format
 	const signature = convertDERSignatureToECDSASignature(
-		options.assertionResponse.signature
+		options.response.signature
 	);
 	const hash = await crypto.subtle.digest(
 		"SHA-256",
-		options.assertionResponse.clientDataJSON
+		options.response.clientDataJSON
 	);
 	const data = concatenateBuffer(authData, hash);
 	const key = await crypto.subtle.importKey(

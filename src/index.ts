@@ -38,7 +38,7 @@ export class TimeSpan {
 }
 
 export function isWithinExpirationDate(date: Date): boolean {
-	return Date.now() <= date.getTime();
+	return Date.now() < date.getTime();
 }
 
 export function expirationDate(timeSpan: TimeSpan): Date {
