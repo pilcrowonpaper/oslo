@@ -7,13 +7,64 @@ export interface PasskeyAssertionResponse {
 	signature: ArrayBufferLike;
 }
 
-export async function verifyPasskeyAssertion(options: {
+export interface PasskeyAttestationResponse {
+	clientDataJSON: ArrayBufferLike;
+	authenticatorData: ArrayBufferLike;
+}
+
+export async function validatePasskeyAttestation(options: {
+	attestationResponse: PasskeyAttestationResponse;
+	challenge: ArrayBufferLike;
+	origin: string;
+}): Promise<void> {
+	const originURL = new URL(options.origin);
+	const clientDataJSON = new TextDecoder().decode(
+		options.attestationResponse.clientDataJSON
+	);
+	const clientData: unknown = JSON.parse(clientDataJSON);
+	if (!clientData || typeof clientData !== "object") {
+		throw new Error("Failed to parse JSON");
+	}
+	if (!("type" in clientData) || clientData.type !== "webauthn.create") {
+		throw new Error("Failed to verify 'clientData.type'");
+	}
+	if (
+		!("challenge" in clientData) ||
+		clientData.challenge !== encodeBase64Url(options.challenge)
+	) {
+		throw new Error("Failed to verify 'clientData.challenge'");
+	}
+	if (!("origin" in clientData) || clientData.origin !== originURL.origin) {
+		throw new Error("Failed to verify 'clientData.origin");
+	}
+
+	const authData = new Uint8Array(
+		options.attestationResponse.authenticatorData
+	);
+	if (authData.byteLength < 37) {
+		throw new Error("Malformed 'authData'");
+	}
+	const rpIdHash = authData.slice(0, 32);
+	const rpIdData = new TextEncoder().encode(originURL.hostname);
+	const expectedRpIdHash = await crypto.subtle.digest("SHA-256", rpIdData);
+	// compare buffer
+	if (!compareBytes(rpIdHash, expectedRpIdHash)) {
+		throw new Error("Failed to verify 'rpId' hash");
+	}
+	const flagsBits = authData[32]!.toString(2);
+	if (flagsBits.charAt(flagsBits.length - 1) !== "1") {
+		throw new Error("Failed to verify user present flag");
+	}
+}
+
+export async function validatePasskeyAssertion(options: {
 	assertionResponse: PasskeyAssertionResponse;
 	publicKey: ArrayBufferLike;
 	challenge: ArrayBufferLike;
 	origin: string;
 	algorithm: "ES256K";
-}): Promise<boolean> {
+}): Promise<void> {
+	const originURL = new URL(options.origin);
 	const clientDataJSON = new TextDecoder().decode(
 		options.assertionResponse.clientDataJSON
 	);
@@ -30,7 +81,7 @@ export async function verifyPasskeyAssertion(options: {
 	) {
 		throw new Error("Failed to verify 'clientData.challenge'");
 	}
-	if (!("origin" in clientData) || clientData.origin !== origin) {
+	if (!("origin" in clientData) || clientData.origin !== originURL.origin) {
 		throw new Error("Failed to verify 'clientData.origin");
 	}
 
@@ -39,7 +90,7 @@ export async function verifyPasskeyAssertion(options: {
 		throw new Error("Malformed 'authData'");
 	}
 	const rpIdHash = authData.slice(0, 32);
-	const rpIdData = new TextEncoder().encode(window.location.hostname);
+	const rpIdData = new TextEncoder().encode(originURL.hostname);
 	const expectedRpIdHash = await crypto.subtle.digest("SHA-256", rpIdData);
 	// compare buffer
 	if (!compareBytes(rpIdHash, expectedRpIdHash)) {
@@ -70,7 +121,7 @@ export async function verifyPasskeyAssertion(options: {
 		true,
 		["verify"]
 	);
-	return await crypto.subtle.verify(
+	const validSignature = await crypto.subtle.verify(
 		{
 			name: "ECDSA",
 			hash: "SHA-256"
@@ -79,6 +130,9 @@ export async function verifyPasskeyAssertion(options: {
 		signature,
 		data
 	);
+	if (!validSignature) {
+		throw new Error("Invalid signature");
+	}
 }
 
 function convertDERSignatureToECDSASignature(
