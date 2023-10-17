@@ -1,7 +1,7 @@
 import { bitsToInt, byteToBits } from "../bytes.js";
 
 export async function generateHOTP(
-	secret: string | ArrayLike<number> | ArrayBufferLike,
+	secret: string | ArrayBufferLike,
 	counter: number,
 	digits = 6
 ): Promise<string> {
