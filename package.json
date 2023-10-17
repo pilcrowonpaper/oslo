@@ -1,7 +1,7 @@
 {
 	"name": "oslo",
 	"type": "module",
-	"version": "0.4.1",
+	"version": "0.4.2",
 	"description": "A collection of auth-related utilities",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
@@ -21,6 +21,7 @@
 		"./oauth2": "./dist/oauth2/index.js",
 		"./oauth2/providers": "./dist/oauth2/providers/index.js",
 		"./oidc": "./dist/oidc/index.js",
+		"./otp": "./dist/otp/index.js",
 		"./password": "./dist/password/index.js",
 		"./random": "./dist/random/index.js",
 		"./request": "./dist/request/index.js",
