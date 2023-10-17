@@ -10,16 +10,14 @@ export class TOTP {
 		this.period = options?.period ?? new TimeSpan(30, "s");
 	}
 
-	public async generate(
-		secret: string | ArrayLike<number> | ArrayBufferLike
-	): Promise<string> {
+	public async generate(secret: string | ArrayBufferLike): Promise<string> {
 		const counter = Math.floor(Date.now() / this.period.milliseconds());
 		return await generateHOTP(secret, counter, this.digits);
 	}
 
 	public async verify(
 		totp: string,
-		secret: string | ArrayLike<number> | ArrayBufferLike
+		secret: string | ArrayBufferLike
 	): Promise<boolean> {
 		const expectedTOTP = await this.generate(secret);
 		return totp === expectedTOTP;

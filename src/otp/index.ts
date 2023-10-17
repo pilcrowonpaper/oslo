@@ -38,7 +38,7 @@ export function createKeyURI(config: TOTPKeyURIConfig | HOTPKeyURIConfig) {
 }
 
 export interface BaseKeyURIConfig {
-	secret: string | ArrayLike<number> | ArrayBufferLike;
+	secret: string | ArrayBufferLike;
 	accountName: string;
 	issuer: string;
 	digits?: number;

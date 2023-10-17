@@ -1,13 +1,13 @@
 import { bitsToInt, byteToBits } from "../bytes.js";
 
 export async function generateHOTP(
-	secret: string | ArrayLike<number> | ArrayBufferLike,
+	secret: string | ArrayBufferLike,
 	counter: number,
 	digits = 6
 ): Promise<string> {
-    if (digits > 8) {
-        throw new TypeError("Digits must be 8 or smaller")
-    }
+	if (digits > 8) {
+		throw new TypeError("Digits must be 8 or smaller");
+	}
 	const secretBytes =
 		typeof secret === "string"
 			? new TextEncoder().encode(secret)
