@@ -8,6 +8,7 @@ A collection of utilities for auth, including:
 - [`oslo/encoding`](#osloencoding): Encode base64, base64url, hex
 - [`oslo/oauth2`](#oslooauth2): OAuth2 helpers
   - [`oslo/oauth2/providers`](#oslooauth2providers): Built in OAuth2 providers (Apple, Github, Google)
+- [`oslo/otp`](#oslootp): HOTP, TOTP
 - [`oslo/password`](#oslopassword): Password hashing
 - [`oslo/random`](#oslorandom): Generate cryptographically random strings and numbers
 - [`oslo/token`](#oslotoken): Verification tokens (email verification, password reset, etc)
@@ -159,6 +160,66 @@ const tokens = await validateOAuth2AuthorizationCode(code);
 import { parseIdToken } from "oslo/oidc";
 
 const { sub, exp, email } = parseIdToken<{ email: string }>(idToken);
+```
+
+## `oslo/otp`
+
+```ts
+import { generateHOTP } from "oslo/otp";
+
+const secret = new Uint8Array(20);
+crypto.getRandomValues(secret);
+
+let counter = 0;
+
+const otp = await generateHOTP(secret, counter); // default 6 digits
+const otp = await generateHOTP(secret, counter, 8); // 8 digits (max)
+```
+
+```ts
+import { TOTP } from "oslo/otp";
+import { TimeSpan } from "oslo";
+
+const totp = new TOTP({
+	// optional
+	period: new TimeSpan(30, "s"), // default: 30s
+	digits: 6 // default: 6
+});
+
+const secret = new Uint8Array(20);
+crypto.getRandomValues(secret);
+
+const otp = await totp.generate(secret);
+const validOTP = await totp.verify(otp, secret);
+```
+
+```ts
+import { createKeyURI } from "oslo/otp";
+
+const secret = new Uint8Array(20);
+crypto.getRandomValues(secret);
+
+const uri = createKeyURI({
+	type: "totp",
+	secret,
+	issuer: "My website",
+	accountName: "user@example.com",
+	//optional
+	period: new TimeSpan(30, "s"), // default: 30s
+	algorithm: "SHA-1", // ignored by google authenticator
+	digits: 6 // default: 6
+});
+const uri = createKeyURI({
+	type: "hotp",
+	secret,
+	issuer: "My website",
+	accountName: "user@example.com",
+	//optional
+	counter, //default: 0
+	digits: 6 // default: 6
+});
+
+const qr = createQRCode(uri); // example
 ```
 
 ## `oslo/password`
