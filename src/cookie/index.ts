@@ -6,6 +6,7 @@ export interface CookieAttributes {
 	httpOnly?: boolean;
 	maxAge?: number;
 	expires?: Date;
+	priority?: "low" | "medium" | "high";
 }
 
 export function serializeCookie(
@@ -41,6 +42,15 @@ export function serializeCookie(
 	}
 	if (attributes?.secure) {
 		keyValueEntries.push(["Secure"]);
+	}
+	if (attributes?.priority === "low") {
+		keyValueEntries.push(["Priority", "Low"]);
+	}
+	if (attributes?.priority === "medium") {
+		keyValueEntries.push(["Priority", "Medium"]);
+	}
+	if (attributes?.priority === "high") {
+		keyValueEntries.push(["Priority", "High"]);
 	}
 	return keyValueEntries.map((pair) => pair.join("=")).join("; ");
 }
