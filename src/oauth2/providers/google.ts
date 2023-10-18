@@ -1,11 +1,11 @@
 import {
-	createOAuth2AuthorizationUrl,
+	createOAuth2AuthorizationURL,
 	validateOAuth2AuthorizationCode
 } from "../core.js";
 
 import type { OAuth2Provider } from "../core.js";
 
-export interface GoogleConfig {
+interface GoogleConfig {
 	clientId: string;
 	clientSecret: string;
 	redirectUri: string;
@@ -20,27 +20,25 @@ export class Google implements OAuth2Provider<GoogleTokens> {
 		this.config = config;
 	}
 
-	public createAuthorizationURL = async (): Promise<
+	public async createAuthorizationURL(): Promise<
 		readonly [url: URL, state: string]
-	> => {
+	> {
 		const scopeConfig = this.config.scope ?? [];
-		const [url, state] = await createOAuth2AuthorizationUrl(
-			"https://accounts.google.com/o/oauth2/v2/auth",
-			{
-				clientId: this.config.clientId,
-				redirectUri: this.config.redirectUri,
-				scope: [
-					"https://www.googleapis.com/auth/userinfo.profile",
-					...scopeConfig
-				]
-			}
-		);
+		const [url, state] = await createOAuth2AuthorizationURL({
+			endpoint: "https://accounts.google.com/o/oauth2/v2/auth",
+			clientId: this.config.clientId,
+			redirectUri: this.config.redirectUri,
+			scope: [
+				"https://www.googleapis.com/auth/userinfo.profile",
+				...scopeConfig
+			]
+		});
 		const accessType = this.config.accessType ?? "online"; // ( default ) online
 		url.searchParams.set("access_type", accessType);
 		return [url, state];
-	};
+	}
 
-	public validateCallback = async (code: string): Promise<GoogleTokens> => {
+	public async validateCallback(code: string): Promise<GoogleTokens> {
 		const tokens = await validateOAuth2AuthorizationCode<{
 			access_token: string;
 			refresh_token?: string;
@@ -60,7 +58,7 @@ export class Google implements OAuth2Provider<GoogleTokens> {
 			refreshToken: tokens.refresh_token ?? null,
 			accessTokenExpiresIn: tokens.expires_in
 		};
-	};
+	}
 }
 
 export interface GoogleTokens {

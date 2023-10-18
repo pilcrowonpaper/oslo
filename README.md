@@ -5,7 +5,7 @@
 A collection of utilities for auth, including:
 
 - [`oslo/cookie`](#oslocookie): Cookie parsing and serialization
-- [`oslo/encoding`](#osloencoding): Encode base64, base64url, hex
+- [`oslo/encoding`](#osloencoding): Encode base64, base64url, base32, hex
 - [`oslo/oauth2`](#oslooauth2): OAuth2 helpers
   - [`oslo/oauth2/providers`](#oslooauth2providers): Built in OAuth2 providers (Apple, Github, Google)
 - [`oslo/otp`](#oslootp): HOTP, TOTP
@@ -63,16 +63,17 @@ const textEncoder = new TextEncoder();
 const encoded = encodeBase64(textEncoder.encode("hello world"));
 const decoded = decodeBase64(encoded);
 
-import { encodeBase64Url, decodeBase64Url } from "oslo/encoding";
+import { encodeBase64url, decodeBase64url } from "oslo/encoding";
 import { encodeHex, decodeHex } from "oslo/encoding";
+import { encodeBase32, decodeBase32 } from "oslo/encoding";
 ```
 
 ## `oslo/oauth2`
 
 ```ts
-import { createOAuth2AuthorizationUrl } from "oslo/oauth2";
+import { createOAuth2AuthorizationURL } from "oslo/oauth2";
 
-const [url, state] = await createOAuth2AuthorizationUrl(
+const [url, state] = await createOAuth2AuthorizationURL(
 	"https://github.com/login/oauth/authorize",
 	{
 		clientId,
@@ -93,23 +94,23 @@ redirect(url);
 ```
 
 ```ts
-import { createOAuth2AuthorizationUrlWithPKCE } from "oslo/oauth2";
+import { createOAuth2AuthorizationURLWithPKCE } from "oslo/oauth2";
 
-const [url, codeVerifier, state] = await createOAuth2AuthorizationUrlWithPKCE();
+const [url, codeVerifier, state] = await createOAuth2AuthorizationURLWithPKCE();
 
 // store `codeVerifier` as cookie
 ```
 
 ```ts
 import {
-	verifyOAuth2State,
+	verifyState,
 	validateOAuth2AuthorizationCode,
-	OAuth2AccessTokenRequestError
+	AccessTokenRequestError
 } from "oslo/oauth2";
 
 const storedState = getCookie("github_oauth_state");
 const state = url.searchParams.get("state");
-if (!verifyOAuth2State(storedState, state)) {
+if (!verifyState(storedState, state)) {
 	// error
 }
 const code = url.searchParams.get("code");
@@ -129,7 +130,7 @@ try {
 		}
 	});
 } catch (e) {
-	if (e instanceof OAuth2AccessTokenRequestError) {
+	if (e instanceof AccessTokenRequestError) {
 		// see https://www.rfc-editor.org/rfc/rfc6749#section-5.2
 		const { request, message, description } = e;
 	}
@@ -152,7 +153,7 @@ const github = new Github({
 const [url, state] = await github.createAuthorizationURL();
 
 // wrapper around `validateOAuth2AuthorizationCode()`
-const tokens = await validateOAuth2AuthorizationCode(code);
+const tokens = await github.validateOAuth2AuthorizationCode(code);
 ```
 
 ## `oslo/oidc`
@@ -178,10 +179,10 @@ const otp = await generateHOTP(secret, counter, 8); // 8 digits (max)
 ```
 
 ```ts
-import { TOTP } from "oslo/otp";
+import { TOTPController } from "oslo/otp";
 import { TimeSpan } from "oslo";
 
-const totp = new TOTP({
+const totpController = new TOTPController({
 	// optional
 	period: new TimeSpan(30, "s"), // default: 30s
 	digits: 6 // default: 6
@@ -190,8 +191,8 @@ const totp = new TOTP({
 const secret = new Uint8Array(20);
 crypto.getRandomValues(secret);
 
-const otp = await totp.generate(secret);
-const validOTP = await totp.verify(otp, secret);
+const otp = await totpController.generate(secret);
+const validOTP = await totpController.verify(otp, secret);
 ```
 
 ```ts
@@ -225,16 +226,21 @@ const qr = createQRCode(uri); // example
 
 ## `oslo/password`
 
-This module only works in Node.js. Use packages provided by your runtime for non-Node.js environment.
+Hash passwords with argon2id, scrypt, and bcrypt using the fastest package available for Node.js.
 
 ```ts
-import { Argon2Id, Scrypt, Bcrypt } from "oslo/password";
+import { Argon2id, Scrypt, Bcrypt } from "oslo/password";
 
 // `Scrypt` and `Bcrypt` implement the same methods
-const argon2Id = new Argon2Id(options);
-const hash = await argon2Id.hash(password);
-const matches = await argon2Id.verify(hash, password);
+const argon2id = new Argon2id(options);
+const hash = await argon2id.hash(password);
+const matches = await argon2id.verify(hash, password);
 ```
+
+This specific module only works in Node.js. See these packages for other runtimes:
+
+- [`hash-wasm`](https://github.com/Daninet/hash-wasm): Pure WASM implementation
+- [`argon2`](https://deno.land/x/argon2@v0.9.2): Rust-based Deno package
 
 ## `oslo/random`
 
@@ -270,12 +276,10 @@ CSRF protection.
 import { verifyRequestOrigin } from "oslo/request";
 
 // only allow same-origin requests
-const validRequestOrigin = verifyRequestOrigin({
-	origin: request.headers.get("Origin"),
+const validRequestOrigin = verifyRequestOrigin(request.headers.get("Origin"), {
 	host: request.headers.get("Host")
 });
-const validRequestOrigin = verifyRequestOrigin({
-	origin: request.headers.get("Origin"),
+const validRequestOrigin = verifyRequestOrigin(request.headers.get("Origin"), {
 	host: request.url
 });
 
@@ -289,28 +293,24 @@ if (!validRequestOrigin) {
 
 ```ts
 // true
-verifyRequestOrigin({
-	origin: "https://example.com",
+verifyRequestOrigin("https://example.com", {
 	host: "example.com"
 });
 
 // true
-verifyRequestOrigin({
-	origin: "https://foo.example.com",
+verifyRequestOrigin("https://foo.example.com", {
 	host: "bar.example.com",
 	allowedSubdomains: "*" // wild card to allow any subdomains
 });
 
 // true
-verifyRequestOrigin({
-	origin: "https://foo.example.com",
+verifyRequestOrigin("https://foo.example.com", {
 	host: "bar.example.com",
 	allowedSubdomains: ["foo"]
 });
 
 // true
-verifyRequestOrigin({
-	origin: "https://example.com",
+verifyRequestOrigin("https://example.com", {
 	host: "foo.example.com",
 	allowedSubdomains: [null] // `null` to only allow base domain
 });
@@ -424,9 +424,10 @@ async function generatePasswordResetToken(userId: string): Promise<Token> {
 	if (storedUserTokens.length > 0) {
 		// if exists, check the expiration
 		const reusableStoredToken = storedUserTokens.find((token) => {
-			return verificationTokenController.isReusableToken(token.expires);
+			// returns true if there's 1 hour left (1/2 of 2 hours)
+			return verificationTokenController.isTokenReusable(token.expires);
 		});
-		// reuse the token if still valid
+		// reuse token if it exists
 		if (reusableStoredToken) return reusableStoredToken.id;
 	}
 	// generate a new token and store it
@@ -479,13 +480,15 @@ await sendEmail(`http://localhost:3000/reset-password/${token.value}`);
 ```ts
 import { validateWebAuthnAttestationResponse } from "oslo/webauthn";
 
+import type { WebAuthnAttestationResponse } from "oslo/webauthn";
+
 try {
-	await validateWebAuthnAttestationResponse({
-		response: {
-			// all `ArrayBufferLike` type (`Uint8Array`, `ArrayBuffer` etc)
-			clientDataJSON,
-			authenticatorData
-		},
+	const response: WebAuthnAttestationResponse = {
+		// all `ArrayBufferLike` type (`Uint8Array`, `ArrayBuffer` etc)
+		clientDataJSON,
+		authenticatorData
+	};
+	await validateWebAuthnAttestationResponse(response, {
 		challenge, //  `ArrayBufferLike`
 		origin: "http://localhost:3000" // website origin
 	});
@@ -499,15 +502,17 @@ try {
 ```ts
 import { validateWebAuthnAssertionResponse } from "oslo/webauthn";
 
+import type { WebAuthnAssertionResponse } from "oslo/webauthn";
+
 try {
-	await validateWebAuthnAssertionResponse({
+	const response: WebAuthnAssertionResponse = {
+		// all `ArrayBufferLike` type (`Uint8Array`, `ArrayBuffer` etc)
+		clientDataJSON,
+		authenticatorData,
+		signature
+	};
+	await validateWebAuthnAssertionResponse(response, {
 		algorithm: "ES256K",
-		response: {
-			// all `ArrayBufferLike` type (`Uint8Array`, `ArrayBuffer` etc)
-			clientDataJSON,
-			authenticatorData,
-			signature
-		},
 		challenge, // `ArrayBufferLike`
 		publicKey, // `ArrayBufferLike`
 		origin: "http://localhost:3000" // website origin

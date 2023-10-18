@@ -2,7 +2,7 @@ import { hash, verify } from "@node-rs/bcrypt";
 
 import type { PasswordHashingAlgorithm } from "./index.js";
 
-export interface BcryptConfig {
+interface BcryptConfig {
 	cost?: number;
 }
 

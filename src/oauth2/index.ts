@@ -1,11 +1,11 @@
 export {
-	createOAuth2AuthorizationUrl,
-	createOAuth2AuthorizationUrlWithPKCE,
+	createOAuth2AuthorizationURL,
+	createOAuth2AuthorizationURLWithPKCE,
 	generatePKCECodeChallenge,
 	generateState,
 	validateOAuth2AuthorizationCode,
-	verifyOAuth2State,
-	OAuth2AccessTokenRequestError
+	verifyState,
+	AccessTokenRequestError
 } from "./core.js";
 export type {
 	OAuth2Provider,

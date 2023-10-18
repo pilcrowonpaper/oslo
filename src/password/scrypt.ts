@@ -4,7 +4,7 @@ import { encodeHex } from "../encoding/index.js";
 
 import type { PasswordHashingAlgorithm } from "./index.js";
 
-export interface ScryptConfig {
+interface ScryptConfig {
 	N?: number;
 	r?: number;
 	p?: number;
@@ -33,14 +33,18 @@ export class Scrypt implements PasswordHashingAlgorithm {
 	private async rawHash(password: string, salt: string): Promise<string> {
 		const dkLen = this.config.dkLen ?? 64;
 		return await new Promise<string>((resolve, reject) => {
+			const N = this.config.N ?? 16384;
+			const p = this.config.p ?? 1;
+			const r = this.config.r ?? 16;
 			scrypt(
 				password.normalize("NFKC"),
 				salt!,
 				dkLen,
 				{
-					N: this.config.N ?? 16384,
-					p: this.config.p ?? 1,
-					r: this.config.r ?? 16
+					N,
+					p,
+					r,
+					maxmem: 128 * N * r * 2
 				},
 				(err, buff) => {
 					if (err) return reject(err);

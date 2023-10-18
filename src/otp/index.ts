@@ -3,7 +3,7 @@ import { encodeBase32 } from "../encoding/index.js";
 import type { TimeSpan } from "../index.js";
 
 export { generateHOTP } from "./hotp.js";
-export { TOTP } from "./totp.js";
+export { TOTPController } from "./totp.js";
 
 export function createKeyURI(config: TOTPKeyURIConfig | HOTPKeyURIConfig) {
 	const encodedIssuer = encodeURIComponent(config.issuer);

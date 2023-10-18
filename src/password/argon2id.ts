@@ -2,7 +2,7 @@ import { hash, verify } from "@node-rs/argon2";
 
 import type { PasswordHashingAlgorithm } from "./index.js";
 
-export interface Argon2IdConfig {
+interface Argon2idConfig {
 	memorySize?: number;
 	iterations?: number;
 	tagLength?: number;
@@ -11,12 +11,12 @@ export interface Argon2IdConfig {
 	secret?: Buffer;
 }
 
-export class Argon2Id implements PasswordHashingAlgorithm {
-	constructor(config: Argon2IdConfig = {}) {
+export class Argon2id implements PasswordHashingAlgorithm {
+	constructor(config: Argon2idConfig = {}) {
 		this.config = config;
 	}
 
-	private config: Argon2IdConfig;
+	private config: Argon2idConfig;
 
 	public async hash(password: string): Promise<string> {
 		return await hash(password.normalize("NFKC"), {

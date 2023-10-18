@@ -1,12 +1,12 @@
 import {
-	createOAuth2AuthorizationUrl,
+	createOAuth2AuthorizationURL,
 	validateOAuth2AuthorizationCode
 } from "../core.js";
 import { createES256SignedJWT } from "../jwt.js";
 
 import type { OAuth2Provider } from "../core.js";
 
-export interface AppleConfig {
+interface AppleConfig {
 	redirectUri: string;
 	clientId: string;
 	teamId: string;
@@ -25,23 +25,21 @@ export class Apple implements OAuth2Provider<AppleTokens> {
 		this.config = config;
 	}
 
-	public createAuthorizationURL = async (): Promise<
+	public async createAuthorizationURL(): Promise<
 		readonly [url: URL, state: string]
-	> => {
+	> {
 		const scopeConfig = this.config.scope ?? [];
-		const [url, state] = await createOAuth2AuthorizationUrl(
-			"https://appleid.apple.com/auth/authorize",
-			{
-				clientId: this.config.clientId,
-				redirectUri: this.config.redirectUri,
-				scope: scopeConfig
-			}
-		);
+		const [url, state] = await createOAuth2AuthorizationURL({
+			endpoint: "https://appleid.apple.com/auth/authorize",
+			clientId: this.config.clientId,
+			redirectUri: this.config.redirectUri,
+			scope: scopeConfig
+		});
 		url.searchParams.set("response_mode", this.config.responseMode ?? "query");
 		return [url, state];
-	};
+	}
 
-	public validateCallback = async (code: string): Promise<AppleTokens> => {
+	public async validateCallback(code: string): Promise<AppleTokens> {
 		const clientSecret = await createSecretId({
 			certificate: this.config.certificate,
 			teamId: this.config.teamId,
@@ -69,7 +67,7 @@ export class Apple implements OAuth2Provider<AppleTokens> {
 			accessTokenExpiresIn: tokens.expires_in,
 			idToken: tokens.id_token
 		};
-	};
+	}
 }
 
 async function createSecretId(config: {

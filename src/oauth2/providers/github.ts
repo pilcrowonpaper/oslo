@@ -1,10 +1,11 @@
 import {
-	createOAuth2AuthorizationUrl,
+	createOAuth2AuthorizationURL,
 	validateOAuth2AuthorizationCode
 } from "../core.js";
+
 import type { OAuth2Provider } from "../core.js";
 
-export interface GitHubConfig {
+interface GitHubConfig {
 	clientId: string;
 	clientSecret: string;
 	scope?: string[];
@@ -21,17 +22,15 @@ export class GitHub implements OAuth2Provider<GitHubTokens> {
 	public async createAuthorizationURL(): Promise<
 		readonly [url: URL, state: string]
 	> {
-		return await createOAuth2AuthorizationUrl(
-			"https://github.com/login/oauth/authorize",
-			{
-				clientId: this.config.clientId,
-				scope: this.config.scope ?? [],
-				redirectUri: this.config.redirectUri
-			}
-		);
+		return await createOAuth2AuthorizationURL({
+			endpoint: "https://github.com/login/oauth/authorize",
+			clientId: this.config.clientId,
+			scope: this.config.scope ?? [],
+			redirectUri: this.config.redirectUri
+		});
 	}
 
-	public validateCallback = async (code: string): Promise<GitHubTokens> => {
+	public async validateCallback(code: string): Promise<GitHubTokens> {
 		const tokens =
 			await validateOAuth2AuthorizationCode<AccessTokenResponseBody>(code, {
 				tokenEndpoint: "https://github.com/login/oauth/access_token",
@@ -53,7 +52,7 @@ export class GitHub implements OAuth2Provider<GitHubTokens> {
 			accessToken: tokens.access_token,
 			accessTokenExpiresIn: null
 		};
-	};
+	}
 }
 
 export type GitHubTokens = BaseGitHubTokens | GitHubTokensWithRefreshToken;

@@ -1,4 +1,4 @@
-import { encodeBase64, encodeBase64Url } from "../encoding/index.js";
+import { encodeBase64, encodeBase64url } from "../encoding/index.js";
 import { alphabet, generateRandomString } from "../random/index.js";
 import { authorizationHeader, createURL } from "./request.js";
 
@@ -7,45 +7,41 @@ export interface OAuth2Tokens {
 }
 
 export interface OAuth2Provider<_Tokens extends OAuth2Tokens> {
-	createAuthorizationURL: () => Promise<readonly [url: URL, state: string]>;
-	validateCallback: (code: string) => Promise<_Tokens>;
+	createAuthorizationURL(): Promise<readonly [url: URL, state: string]>;
+	validateCallback(code: string): Promise<_Tokens>;
 }
 
 export interface OAuth2ProviderWithPKCE<_Tokens extends OAuth2Tokens> {
-	createAuthorizationURL: () => Promise<
+	createAuthorizationURL(): Promise<
 		readonly [url: URL, state: string, codeVerifier: string]
 	>;
-	validateCallback: (code: string) => Promise<_Tokens>;
+	validateCallback(code: string, codeVerifier: string): Promise<_Tokens>;
 }
 
-export async function createOAuth2AuthorizationUrl(
-	url: string | URL,
-	options: {
-		clientId: string;
-		scope: string[];
-		redirectUri?: string;
-	}
-): Promise<readonly [authorizationUrl: URL, state: string]> {
+export async function createOAuth2AuthorizationURL(config: {
+	endpoint: string | URL;
+	clientId: string;
+	scope: string[];
+	redirectUri?: string;
+}): Promise<readonly [authorizationUrl: URL, state: string]> {
 	const state = generateState();
-	const authorizationUrl = createURL(url, {
+	const authorizationUrl = createURL(config.endpoint, {
 		response_type: "code",
-		client_id: options.clientId,
-		scope: options.scope.join(" "),
+		client_id: config.clientId,
+		scope: config.scope.join(" "),
 		state,
-		redirect_uri: options.redirectUri
+		redirect_uri: config.redirectUri
 	});
 	return [authorizationUrl, state] as const;
 }
 
-export async function createOAuth2AuthorizationUrlWithPKCE(
-	url: string | URL,
-	options: {
-		clientId: string;
-		scope: string[];
-		codeChallengeMethod: "S256";
-		redirectUri?: string;
-	}
-): Promise<
+export async function createOAuth2AuthorizationURLWithPKCE(config: {
+	endpoint: string | URL;
+	clientId: string;
+	scope: string[];
+	codeChallengeMethod: "S256";
+	redirectUri?: string;
+}): Promise<
 	readonly [authorizationUrl: URL, codeVerifier: string, state: string]
 > {
 	const codeVerifier = generateRandomString(
@@ -54,12 +50,12 @@ export async function createOAuth2AuthorizationUrlWithPKCE(
 	);
 	const codeChallenge = await generatePKCECodeChallenge("S256", codeVerifier);
 	const state = generateState();
-	const authorizationUrl = createURL(url, {
+	const authorizationUrl = createURL(config.endpoint, {
 		response_type: "code",
-		client_id: options.clientId,
-		scope: options.scope.join(" "),
+		client_id: config.clientId,
+		scope: config.scope.join(" "),
 		state,
-		redirect_uri: options.redirectUri,
+		redirect_uri: config.redirectUri,
 		code_challenge_method: "S256",
 		code_challenge: codeChallenge
 	});
@@ -80,14 +76,13 @@ export async function generatePKCECodeChallenge(
 			"SHA-256",
 			verifierBuffer
 		);
-		return encodeBase64Url(challengeBuffer);
+		return encodeBase64url(challengeBuffer);
 	}
 	throw new TypeError("Invalid PKCE code challenge method");
 }
 
 export async function validateOAuth2AuthorizationCode<
-	_ResponseBody extends
-		OAuth2AccessTokenResponseBody = OAuth2AccessTokenResponseBody
+	_ResponseBody extends AccessTokenResponseBody
 >(
 	authorizationCode: string,
 	options: {
@@ -146,40 +141,37 @@ export async function validateOAuth2AuthorizationCode<
 		body
 	});
 	const response = await fetch(request);
-	const result: _ResponseBody | OAuth2AccessTokenErrorResponseBody =
+	const result: _ResponseBody | AccessTokenErrorResponseBody =
 		await response.json();
 	// github returns status 200 for errors
 	if (!("access_token" in result) && "error" in result) {
-		throw new OAuth2AccessTokenRequestError(request, result);
+		throw new AccessTokenRequestError(request, result);
 	} else if (!response.ok) {
-		throw new OAuth2AccessTokenRequestError(request, {});
+		throw new AccessTokenRequestError(request, {});
 	}
 	return result;
 }
 
-export class OAuth2AccessTokenRequestError extends Error {
+export class AccessTokenRequestError extends Error {
 	public request: Request;
 	public description: string | null;
-	constructor(
-		request: Request,
-		body: Partial<OAuth2AccessTokenErrorResponseBody>
-	) {
+	constructor(request: Request, body: Partial<AccessTokenErrorResponseBody>) {
 		super(body.error ?? "");
 		this.request = request;
 		this.description = body.error_description ?? null;
 	}
 }
 
-interface OAuth2AccessTokenErrorResponseBody {
+interface AccessTokenErrorResponseBody {
 	error: string;
 	error_description?: string;
 }
 
-interface OAuth2AccessTokenResponseBody {
+interface AccessTokenResponseBody {
 	access_token: string;
 }
 
-export function verifyOAuth2State(
+export function verifyState(
 	state1: string | null | undefined,
 	state2: string | null | undefined
 ): boolean {

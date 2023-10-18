@@ -1,7 +1,7 @@
 import { TimeSpan } from "../index.js";
 import { generateHOTP } from "./hotp.js";
 
-export class TOTP {
+export class TOTPController {
 	private digits: number;
 	private period: TimeSpan;
 
@@ -12,7 +12,11 @@ export class TOTP {
 
 	public async generate(secret: string | ArrayBufferLike): Promise<string> {
 		const counter = Math.floor(Date.now() / this.period.milliseconds());
-		return await generateHOTP(secret, counter, this.digits);
+		return await generateHOTP({
+			secret,
+			counter,
+			digits: this.digits
+		});
 	}
 
 	public async verify(

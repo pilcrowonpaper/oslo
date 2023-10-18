@@ -1,4 +1,4 @@
-import { encodeBase64Url } from "../encoding/index.js";
+import { encodeBase64url } from "../encoding/index.js";
 import { compareBytes } from "../bytes.js";
 
 export interface WebAuthnAttestationResponse {
@@ -6,15 +6,15 @@ export interface WebAuthnAttestationResponse {
 	authenticatorData: ArrayBufferLike;
 }
 
-export async function validateWebAuthnAttestationResponse(options: {
-	response: WebAuthnAttestationResponse;
-	challenge: ArrayBufferLike;
-	origin: string;
-}): Promise<void> {
-	const originURL = new URL(options.origin);
-	const clientDataJSON = new TextDecoder().decode(
-		options.response.clientDataJSON
-	);
+export async function validateWebAuthnAttestationResponse(
+	response: WebAuthnAttestationResponse,
+	config: {
+		challenge: ArrayBufferLike;
+		origin: string;
+	}
+): Promise<void> {
+	const originURL = new URL(config.origin);
+	const clientDataJSON = new TextDecoder().decode(response.clientDataJSON);
 	const clientData: unknown = JSON.parse(clientDataJSON);
 	if (!clientData || typeof clientData !== "object") {
 		throw new Error("Failed to parse JSON");
@@ -24,7 +24,7 @@ export async function validateWebAuthnAttestationResponse(options: {
 	}
 	if (
 		!("challenge" in clientData) ||
-		clientData.challenge !== encodeBase64Url(options.challenge)
+		clientData.challenge !== encodeBase64url(config.challenge)
 	) {
 		throw new Error("Failed to verify 'clientData.challenge'");
 	}
@@ -32,7 +32,7 @@ export async function validateWebAuthnAttestationResponse(options: {
 		throw new Error("Failed to verify 'clientData.origin");
 	}
 
-	const authData = new Uint8Array(options.response.authenticatorData);
+	const authData = new Uint8Array(response.authenticatorData);
 	if (authData.byteLength < 37) {
 		throw new Error("Malformed 'authData'");
 	}
@@ -55,17 +55,17 @@ export interface WebAuthnAssertionResponse {
 	signature: ArrayBufferLike;
 }
 
-export async function validateWebAuthnAssertionResponse(options: {
-	response: WebAuthnAssertionResponse;
-	publicKey: ArrayBufferLike;
-	challenge: ArrayBufferLike;
-	origin: string;
-	algorithm: "ES256K";
-}): Promise<void> {
-	const originURL = new URL(options.origin);
-	const clientDataJSON = new TextDecoder().decode(
-		options.response.clientDataJSON
-	);
+export async function validateWebAuthnAssertionResponse(
+	response: WebAuthnAssertionResponse,
+	config: {
+		publicKey: ArrayBufferLike;
+		challenge: ArrayBufferLike;
+		origin: string;
+		algorithm: "ES256K";
+	}
+): Promise<void> {
+	const originURL = new URL(config.origin);
+	const clientDataJSON = new TextDecoder().decode(response.clientDataJSON);
 	const clientData: unknown = JSON.parse(clientDataJSON);
 	if (!clientData || typeof clientData !== "object") {
 		throw new Error("Failed to parse JSON");
@@ -75,7 +75,7 @@ export async function validateWebAuthnAssertionResponse(options: {
 	}
 	if (
 		!("challenge" in clientData) ||
-		clientData.challenge !== encodeBase64Url(options.challenge)
+		clientData.challenge !== encodeBase64url(config.challenge)
 	) {
 		throw new Error("Failed to verify 'clientData.challenge'");
 	}
@@ -83,7 +83,7 @@ export async function validateWebAuthnAssertionResponse(options: {
 		throw new Error("Failed to verify 'clientData.origin");
 	}
 
-	const authData = new Uint8Array(options.response.authenticatorData);
+	const authData = new Uint8Array(response.authenticatorData);
 	if (authData.byteLength < 37) {
 		throw new Error("Malformed 'authData'");
 	}
@@ -101,17 +101,12 @@ export async function validateWebAuthnAssertionResponse(options: {
 
 	// the signature is encoded in DER
 	// so we need to convert into ECDSA compatible format
-	const signature = convertDERSignatureToECDSASignature(
-		options.response.signature
-	);
-	const hash = await crypto.subtle.digest(
-		"SHA-256",
-		options.response.clientDataJSON
-	);
+	const signature = convertDERSignatureToECDSASignature(response.signature);
+	const hash = await crypto.subtle.digest("SHA-256", response.clientDataJSON);
 	const data = concatenateBuffer(authData, hash);
 	const key = await crypto.subtle.importKey(
 		"spki",
-		options.publicKey,
+		config.publicKey,
 		{
 			name: "ECDSA",
 			namedCurve: "P-256"

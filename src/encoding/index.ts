@@ -21,7 +21,7 @@ export function decodeBase64(data: string): Uint8Array {
 	);
 }
 
-export function encodeBase64Url(data: ArrayBufferLike): string {
+export function encodeBase64url(data: ArrayBufferLike): string {
 	return encodeBase64(data, {
 		padding: false
 	})
@@ -29,7 +29,7 @@ export function encodeBase64Url(data: ArrayBufferLike): string {
 		.replaceAll("/", "_");
 }
 
-export function decodeBase64Url(data: string): Uint8Array {
+export function decodeBase64url(data: string): Uint8Array {
 	return decodeBase64(data.replaceAll("-", "+").replaceAll("_", "/"));
 }
 

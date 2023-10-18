@@ -13,7 +13,7 @@ export class VerificationTokenController {
 	}
 	public expiresIn: TimeSpan;
 
-	public isReusableToken(expiresAt: Date): boolean {
+	public isTokenReusable(expiresAt: Date): boolean {
 		const activePeriodExpirationDate = new Date(
 			expiresAt.getTime() - this.expiresIn.milliseconds() / 2
 		);
