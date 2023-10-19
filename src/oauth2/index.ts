@@ -1,9 +1,9 @@
 export {
-	createOAuth2AuthorizationURL,
-	createOAuth2AuthorizationURLWithPKCE,
+	createAuthorizationURL,
+	createAuthorizationURLWithPKCE,
 	generatePKCECodeChallenge,
 	generateState,
-	validateOAuth2AuthorizationCode,
+	validateAuthorizationCode,
 	verifyState,
 	AccessTokenRequestError
 } from "./core.js";

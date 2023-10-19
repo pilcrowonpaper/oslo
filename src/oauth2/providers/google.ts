@@ -1,54 +1,51 @@
-import {
-	createOAuth2AuthorizationURL,
-	validateOAuth2AuthorizationCode
-} from "../core.js";
+import { createAuthorizationURL, validateAuthorizationCode } from "../core.js";
 
 import type { OAuth2Provider } from "../core.js";
 
 interface GoogleConfig {
 	clientId: string;
 	clientSecret: string;
-	redirectUri: string;
+	redirectURI: string;
 	scope?: string[];
 	accessType?: "online" | "offline";
 }
 
 export class Google implements OAuth2Provider<GoogleTokens> {
-	private config: GoogleConfig;
+	private options: GoogleConfig;
 
-	constructor(config: GoogleConfig) {
-		this.config = config;
+	constructor(options: GoogleConfig) {
+		this.options = options;
 	}
 
 	public async createAuthorizationURL(): Promise<
 		readonly [url: URL, state: string]
 	> {
-		const scopeConfig = this.config.scope ?? [];
-		const [url, state] = await createOAuth2AuthorizationURL({
+		const scopeConfig = this.options.scope ?? [];
+		const [url, state] = await createAuthorizationURL({
 			endpoint: "https://accounts.google.com/o/oauth2/v2/auth",
-			clientId: this.config.clientId,
-			redirectUri: this.config.redirectUri,
+			clientId: this.options.clientId,
+			redirectURI: this.options.redirectURI,
 			scope: [
 				"https://www.googleapis.com/auth/userinfo.profile",
 				...scopeConfig
 			]
 		});
-		const accessType = this.config.accessType ?? "online"; // ( default ) online
+		const accessType = this.options.accessType ?? "online"; // ( default ) online
 		url.searchParams.set("access_type", accessType);
 		return [url, state];
 	}
 
 	public async validateCallback(code: string): Promise<GoogleTokens> {
-		const tokens = await validateOAuth2AuthorizationCode<{
+		const tokens = await validateAuthorizationCode<{
 			access_token: string;
 			refresh_token?: string;
 			expires_in: number;
 		}>(code, {
 			tokenEndpoint: "https://oauth2.googleapis.com/token",
-			clientId: this.config.clientId,
-			redirectUri: this.config.redirectUri,
+			clientId: this.options.clientId,
+			redirectURI: this.options.redirectURI,
 			clientPassword: {
-				clientSecret: this.config.clientSecret,
+				clientSecret: this.options.clientSecret,
 				authenticateWith: "client_secret"
 			}
 		});

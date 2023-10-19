@@ -12,11 +12,11 @@ interface ScryptConfig {
 }
 
 export class Scrypt implements PasswordHashingAlgorithm {
-	constructor(config: ScryptConfig = {}) {
-		this.config = config;
+	constructor(options: ScryptConfig = {}) {
+		this.options = options;
 	}
 
-	private config: ScryptConfig;
+	private options: ScryptConfig;
 
 	public async hash(password: string): Promise<string> {
 		const salt = generateRandomString(16, alphabet("a-z", "A-Z", "0-9"));
@@ -31,11 +31,11 @@ export class Scrypt implements PasswordHashingAlgorithm {
 	}
 
 	private async rawHash(password: string, salt: string): Promise<string> {
-		const dkLen = this.config.dkLen ?? 64;
+		const dkLen = this.options.dkLen ?? 64;
 		return await new Promise<string>((resolve, reject) => {
-			const N = this.config.N ?? 16384;
-			const p = this.config.p ?? 1;
-			const r = this.config.r ?? 16;
+			const N = this.options.N ?? 16384;
+			const p = this.options.p ?? 1;
+			const r = this.options.r ?? 16;
 			scrypt(
 				password.normalize("NFKC"),
 				salt!,

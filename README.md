@@ -71,13 +71,13 @@ import { encodeBase32, decodeBase32 } from "oslo/encoding";
 ## `oslo/oauth2`
 
 ```ts
-import { createOAuth2AuthorizationURL } from "oslo/oauth2";
+import { createAuthorizationURL } from "oslo/oauth2";
 
-const [url, state] = await createOAuth2AuthorizationURL(
+const [url, state] = await createAuthorizationURL(
 	"https://github.com/login/oauth/authorize",
 	{
 		clientId,
-		redirectUri,
+		redirectURI,
 		scope: ["user:email"]
 	}
 );
@@ -94,9 +94,9 @@ redirect(url);
 ```
 
 ```ts
-import { createOAuth2AuthorizationURLWithPKCE } from "oslo/oauth2";
+import { createAuthorizationURLWithPKCE } from "oslo/oauth2";
 
-const [url, codeVerifier, state] = await createOAuth2AuthorizationURLWithPKCE();
+const [url, codeVerifier, state] = await createAuthorizationURLWithPKCE();
 
 // store `codeVerifier` as cookie
 ```
@@ -104,7 +104,7 @@ const [url, codeVerifier, state] = await createOAuth2AuthorizationURLWithPKCE();
 ```ts
 import {
 	verifyState,
-	validateOAuth2AuthorizationCode,
+	validateAuthorizationCode,
 	AccessTokenRequestError
 } from "oslo/oauth2";
 
@@ -119,13 +119,13 @@ if (!code) {
 }
 
 try {
-	const { accessToken, refreshToken } = await validateOAuth2AuthorizationCode<{
+	const { accessToken, refreshToken } = await validateAuthorizationCode<{
 		refreshToken: string;
 	}>(code, {
 		tokenEndpoint: "https://github.com/login/oauth/access_token",
-		clientId: this.config.clientId,
+		clientId: this.options.clientId,
 		clientPassword: {
-			clientSecret: this.config.clientSecret,
+			clientSecret: this.options.clientSecret,
 			authenticateWith: "client_secret"
 		}
 	});
@@ -149,11 +149,11 @@ const github = new Github({
 	scope: ["user:email"]
 });
 
-// wrapper around `createOAuth2AuthorizationURL()`
+// wrapper around `createAuthorizationURL()`
 const [url, state] = await github.createAuthorizationURL();
 
-// wrapper around `validateOAuth2AuthorizationCode()`
-const tokens = await github.validateOAuth2AuthorizationCode(code);
+// wrapper around `validateAuthorizationCode()`
+const tokens = await github.validateAuthorizationCode(code);
 ```
 
 ## `oslo/oidc`
@@ -475,20 +475,20 @@ await sendEmail(`http://localhost:3000/reset-password/${token.value}`);
 
 ## `oslo/webauthn`
 
-`validateWebAuthnAttestationResponse()` does not validate attestation certificates.
+`validateAttestationResponse()` does not validate attestation certificates.
 
 ```ts
-import { validateWebAuthnAttestationResponse } from "oslo/webauthn";
+import { validateAttestationResponse } from "oslo/webauthn";
 
-import type { WebAuthnAttestationResponse } from "oslo/webauthn";
+import type { AttestationResponse } from "oslo/webauthn";
 
 try {
-	const response: WebAuthnAttestationResponse = {
+	const response: AttestationResponse = {
 		// all `ArrayBufferLike` type (`Uint8Array`, `ArrayBuffer` etc)
 		clientDataJSON,
 		authenticatorData
 	};
-	await validateWebAuthnAttestationResponse(response, {
+	await validateAttestationResponse(response, {
 		challenge, //  `ArrayBufferLike`
 		origin: "http://localhost:3000" // website origin
 	});
@@ -497,21 +497,21 @@ try {
 }
 ```
 
-`validateWebAuthnAssertionResponse()` currently only supports ECDSA using secp256k1 curve and SHA-256 (algorithm ID `-7`).
+`validateAssertionResponse()` currently only supports ECDSA using secp256k1 curve and SHA-256 (algorithm ID `-7`).
 
 ```ts
-import { validateWebAuthnAssertionResponse } from "oslo/webauthn";
+import { validateAssertionResponse } from "oslo/webauthn";
 
-import type { WebAuthnAssertionResponse } from "oslo/webauthn";
+import type { AssertionResponse } from "oslo/webauthn";
 
 try {
-	const response: WebAuthnAssertionResponse = {
+	const response: AssertionResponse = {
 		// all `ArrayBufferLike` type (`Uint8Array`, `ArrayBuffer` etc)
 		clientDataJSON,
 		authenticatorData,
 		signature
 	};
-	await validateWebAuthnAssertionResponse(response, {
+	await validateAssertionResponse(response, {
 		algorithm: "ES256K",
 		challenge, // `ArrayBufferLike`
 		publicKey, // `ArrayBufferLike`

@@ -1,13 +1,10 @@
-import {
-	createOAuth2AuthorizationURL,
-	validateOAuth2AuthorizationCode
-} from "../core.js";
+import { createAuthorizationURL, validateAuthorizationCode } from "../core.js";
 import { createES256SignedJWT } from "../jwt.js";
 
 import type { OAuth2Provider } from "../core.js";
 
 interface AppleConfig {
-	redirectUri: string;
+	redirectURI: string;
 	clientId: string;
 	teamId: string;
 	keyId: string;
@@ -19,42 +16,42 @@ interface AppleConfig {
 const APPLE_AUD = "https://appleid.apple.com";
 
 export class Apple implements OAuth2Provider<AppleTokens> {
-	private config: AppleConfig;
+	private options: AppleConfig;
 
-	constructor(config: AppleConfig) {
-		this.config = config;
+	constructor(options: AppleConfig) {
+		this.options = options;
 	}
 
 	public async createAuthorizationURL(): Promise<
 		readonly [url: URL, state: string]
 	> {
-		const scopeConfig = this.config.scope ?? [];
-		const [url, state] = await createOAuth2AuthorizationURL({
+		const scopeConfig = this.options.scope ?? [];
+		const [url, state] = await createAuthorizationURL({
 			endpoint: "https://appleid.apple.com/auth/authorize",
-			clientId: this.config.clientId,
-			redirectUri: this.config.redirectUri,
+			clientId: this.options.clientId,
+			redirectURI: this.options.redirectURI,
 			scope: scopeConfig
 		});
-		url.searchParams.set("response_mode", this.config.responseMode ?? "query");
+		url.searchParams.set("response_mode", this.options.responseMode ?? "query");
 		return [url, state];
 	}
 
 	public async validateCallback(code: string): Promise<AppleTokens> {
 		const clientSecret = await createSecretId({
-			certificate: this.config.certificate,
-			teamId: this.config.teamId,
-			clientId: this.config.clientId,
-			keyId: this.config.keyId
+			certificate: this.options.certificate,
+			teamId: this.options.teamId,
+			clientId: this.options.clientId,
+			keyId: this.options.keyId
 		});
-		const tokens = await validateOAuth2AuthorizationCode<{
+		const tokens = await validateAuthorizationCode<{
 			access_token: string;
 			refresh_token?: string;
 			expires_in: number;
 			id_token: string;
 		}>(code, {
 			tokenEndpoint: "https://appleid.apple.com/auth/token",
-			clientId: this.config.clientId,
-			redirectUri: this.config.redirectUri,
+			clientId: this.options.clientId,
+			redirectURI: this.options.redirectURI,
 			clientPassword: {
 				clientSecret,
 				authenticateWith: "client_secret"
@@ -70,7 +67,7 @@ export class Apple implements OAuth2Provider<AppleTokens> {
 	}
 }
 
-async function createSecretId(config: {
+async function createSecretId(options: {
 	certificate: string;
 	teamId: string;
 	clientId: string;
@@ -78,17 +75,17 @@ async function createSecretId(config: {
 }): Promise<string> {
 	const now = Math.floor(Date.now() / 1000);
 	const payload = {
-		iss: config.teamId,
+		iss: options.teamId,
 		iat: now,
 		exp: now + 60 * 3,
 		aud: APPLE_AUD,
-		sub: config.clientId
+		sub: options.clientId
 	};
-	const privateKey = parsePKCS8(config.certificate);
+	const privateKey = parsePKCS8(options.certificate);
 	const jwt = await createES256SignedJWT(
 		{
 			alg: "ES256",
-			kid: config.keyId
+			kid: options.keyId
 		},
 		payload,
 		privateKey

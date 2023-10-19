@@ -18,29 +18,29 @@ export interface OAuth2ProviderWithPKCE<_Tokens extends OAuth2Tokens> {
 	validateCallback(code: string, codeVerifier: string): Promise<_Tokens>;
 }
 
-export async function createOAuth2AuthorizationURL(config: {
+export async function createAuthorizationURL(options: {
 	endpoint: string | URL;
 	clientId: string;
 	scope: string[];
-	redirectUri?: string;
+	redirectURI?: string;
 }): Promise<readonly [authorizationUrl: URL, state: string]> {
 	const state = generateState();
-	const authorizationUrl = createURL(config.endpoint, {
+	const authorizationUrl = createURL(options.endpoint, {
 		response_type: "code",
-		client_id: config.clientId,
-		scope: config.scope.join(" "),
+		client_id: options.clientId,
+		scope: options.scope.join(" "),
 		state,
-		redirect_uri: config.redirectUri
+		redirect_uri: options.redirectURI
 	});
 	return [authorizationUrl, state] as const;
 }
 
-export async function createOAuth2AuthorizationURLWithPKCE(config: {
+export async function createAuthorizationURLWithPKCE(options: {
 	endpoint: string | URL;
 	clientId: string;
 	scope: string[];
 	codeChallengeMethod: "S256";
-	redirectUri?: string;
+	redirectURI?: string;
 }): Promise<
 	readonly [authorizationUrl: URL, codeVerifier: string, state: string]
 > {
@@ -50,12 +50,12 @@ export async function createOAuth2AuthorizationURLWithPKCE(config: {
 	);
 	const codeChallenge = await generatePKCECodeChallenge("S256", codeVerifier);
 	const state = generateState();
-	const authorizationUrl = createURL(config.endpoint, {
+	const authorizationUrl = createURL(options.endpoint, {
 		response_type: "code",
-		client_id: config.clientId,
-		scope: config.scope.join(" "),
+		client_id: options.clientId,
+		scope: options.scope.join(" "),
 		state,
-		redirect_uri: config.redirectUri,
+		redirect_uri: options.redirectURI,
 		code_challenge_method: "S256",
 		code_challenge: codeChallenge
 	});
@@ -81,14 +81,14 @@ export async function generatePKCECodeChallenge(
 	throw new TypeError("Invalid PKCE code challenge method");
 }
 
-export async function validateOAuth2AuthorizationCode<
+export async function validateAuthorizationCode<
 	_ResponseBody extends AccessTokenResponseBody
 >(
 	authorizationCode: string,
 	options: {
 		tokenEndpoint: string | URL;
 		clientId: string;
-		redirectUri?: string;
+		redirectURI?: string;
 		codeVerifier?: string;
 		clientPassword?: {
 			clientSecret: string;
@@ -101,8 +101,8 @@ export async function validateOAuth2AuthorizationCode<
 		client_id: options.clientId,
 		grant_type: "authorization_code"
 	});
-	if (options.redirectUri) {
-		body.set("redirect_uri", options.redirectUri);
+	if (options.redirectURI) {
+		body.set("redirect_uri", options.redirectURI);
 	}
 	if (options.codeVerifier) {
 		body.set("code_verifier", options.codeVerifier);

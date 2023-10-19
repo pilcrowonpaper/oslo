@@ -5,15 +5,15 @@ import type { TimeSpan } from "../index.js";
 export { generateHOTP } from "./hotp.js";
 export { TOTPController } from "./totp.js";
 
-export function createKeyURI(config: TOTPKeyURIConfig | HOTPKeyURIConfig) {
-	const encodedIssuer = encodeURIComponent(config.issuer);
-	const encodedAccountName = encodeURIComponent(config.accountName);
-	let result = `otpauth://${config.type}/${encodedIssuer}:${encodedAccountName}`;
+export function createKeyURI(options: TOTPKeyURIConfig | HOTPKeyURIConfig) {
+	const encodedIssuer = encodeURIComponent(options.issuer);
+	const encodedAccountName = encodeURIComponent(options.accountName);
+	let result = `otpauth://${options.type}/${encodedIssuer}:${encodedAccountName}`;
 	let secretBytes: Uint8Array;
-	if (typeof config.secret === "string") {
-		secretBytes = new TextEncoder().encode(config.secret);
+	if (typeof options.secret === "string") {
+		secretBytes = new TextEncoder().encode(options.secret);
 	} else {
-		secretBytes = new Uint8Array(config.secret);
+		secretBytes = new Uint8Array(options.secret);
 	}
 	const params = new URLSearchParams({
 		secret: encodeBase32(secretBytes, {
@@ -21,17 +21,17 @@ export function createKeyURI(config: TOTPKeyURIConfig | HOTPKeyURIConfig) {
 		}),
 		issuer: encodedIssuer
 	});
-	if (config.digits !== undefined) {
-		params.set("digits", config.digits.toString());
+	if (options.digits !== undefined) {
+		params.set("digits", options.digits.toString());
 	}
-	if (config.algorithm) {
-		params.set("algorithm", config.algorithm);
+	if (options.algorithm) {
+		params.set("algorithm", options.algorithm);
 	}
-	if (config.type === "hotp" && config.counter !== undefined) {
-		params.set("counter", config.counter.toString());
+	if (options.type === "hotp" && options.counter !== undefined) {
+		params.set("counter", options.counter.toString());
 	}
-	if (config.type === "totp" && config.period !== undefined) {
-		params.set("period", config.period.seconds().toString());
+	if (options.type === "totp" && options.period !== undefined) {
+		params.set("period", options.period.seconds().toString());
 	}
 	result += "?" + params.toString();
 	return result;

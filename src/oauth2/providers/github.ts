@@ -1,7 +1,4 @@
-import {
-	createOAuth2AuthorizationURL,
-	validateOAuth2AuthorizationCode
-} from "../core.js";
+import { createAuthorizationURL, validateAuthorizationCode } from "../core.js";
 
 import type { OAuth2Provider } from "../core.js";
 
@@ -9,37 +6,39 @@ interface GitHubConfig {
 	clientId: string;
 	clientSecret: string;
 	scope?: string[];
-	redirectUri?: string;
+	redirectURI?: string;
 }
 
 export class GitHub implements OAuth2Provider<GitHubTokens> {
-	private config: GitHubConfig;
+	private options: GitHubConfig;
 
-	constructor(config: GitHubConfig) {
-		this.config = config;
+	constructor(options: GitHubConfig) {
+		this.options = options;
 	}
 
 	public async createAuthorizationURL(): Promise<
 		readonly [url: URL, state: string]
 	> {
-		return await createOAuth2AuthorizationURL({
+		return await createAuthorizationURL({
 			endpoint: "https://github.com/login/oauth/authorize",
-			clientId: this.config.clientId,
-			scope: this.config.scope ?? [],
-			redirectUri: this.config.redirectUri
+			clientId: this.options.clientId,
+			scope: this.options.scope ?? [],
+			redirectURI: this.options.redirectURI
 		});
 	}
 
 	public async validateCallback(code: string): Promise<GitHubTokens> {
-		const tokens =
-			await validateOAuth2AuthorizationCode<AccessTokenResponseBody>(code, {
+		const tokens = await validateAuthorizationCode<AccessTokenResponseBody>(
+			code,
+			{
 				tokenEndpoint: "https://github.com/login/oauth/access_token",
-				clientId: this.config.clientId,
+				clientId: this.options.clientId,
 				clientPassword: {
-					clientSecret: this.config.clientSecret,
+					clientSecret: this.options.clientSecret,
 					authenticateWith: "client_secret"
 				}
-			});
+			}
+		);
 		if ("refresh_token" in tokens) {
 			return {
 				accessToken: tokens.access_token,

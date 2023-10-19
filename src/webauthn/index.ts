@@ -1,19 +1,19 @@
 import { encodeBase64url } from "../encoding/index.js";
 import { compareBytes } from "../bytes.js";
 
-export interface WebAuthnAttestationResponse {
+export interface AttestationResponse {
 	clientDataJSON: ArrayBufferLike;
 	authenticatorData: ArrayBufferLike;
 }
 
-export async function validateWebAuthnAttestationResponse(
-	response: WebAuthnAttestationResponse,
-	config: {
+export async function validateAttestationResponse(
+	response: AttestationResponse,
+	options: {
 		challenge: ArrayBufferLike;
 		origin: string;
 	}
 ): Promise<void> {
-	const originURL = new URL(config.origin);
+	const originURL = new URL(options.origin);
 	const clientDataJSON = new TextDecoder().decode(response.clientDataJSON);
 	const clientData: unknown = JSON.parse(clientDataJSON);
 	if (!clientData || typeof clientData !== "object") {
@@ -24,7 +24,7 @@ export async function validateWebAuthnAttestationResponse(
 	}
 	if (
 		!("challenge" in clientData) ||
-		clientData.challenge !== encodeBase64url(config.challenge)
+		clientData.challenge !== encodeBase64url(options.challenge)
 	) {
 		throw new Error("Failed to verify 'clientData.challenge'");
 	}
@@ -49,22 +49,22 @@ export async function validateWebAuthnAttestationResponse(
 	}
 }
 
-export interface WebAuthnAssertionResponse {
+export interface AssertionResponse {
 	clientDataJSON: ArrayBufferLike;
 	authenticatorData: ArrayBufferLike;
 	signature: ArrayBufferLike;
 }
 
-export async function validateWebAuthnAssertionResponse(
-	response: WebAuthnAssertionResponse,
-	config: {
+export async function validateAssertionResponse(
+	response: AssertionResponse,
+	options: {
 		publicKey: ArrayBufferLike;
 		challenge: ArrayBufferLike;
 		origin: string;
 		algorithm: "ES256K";
 	}
 ): Promise<void> {
-	const originURL = new URL(config.origin);
+	const originURL = new URL(options.origin);
 	const clientDataJSON = new TextDecoder().decode(response.clientDataJSON);
 	const clientData: unknown = JSON.parse(clientDataJSON);
 	if (!clientData || typeof clientData !== "object") {
@@ -75,7 +75,7 @@ export async function validateWebAuthnAssertionResponse(
 	}
 	if (
 		!("challenge" in clientData) ||
-		clientData.challenge !== encodeBase64url(config.challenge)
+		clientData.challenge !== encodeBase64url(options.challenge)
 	) {
 		throw new Error("Failed to verify 'clientData.challenge'");
 	}
@@ -106,7 +106,7 @@ export async function validateWebAuthnAssertionResponse(
 	const data = concatenateBuffer(authData, hash);
 	const key = await crypto.subtle.importKey(
 		"spki",
-		config.publicKey,
+		options.publicKey,
 		{
 			name: "ECDSA",
 			namedCurve: "P-256"

@@ -7,14 +7,14 @@ interface BcryptConfig {
 }
 
 export class Bcrypt implements PasswordHashingAlgorithm {
-	constructor(config: BcryptConfig = {}) {
-		this.config = config;
+	constructor(options: BcryptConfig = {}) {
+		this.options = options;
 	}
 
-	private config: BcryptConfig;
+	private options: BcryptConfig;
 
 	public async hash(password: string): Promise<string> {
-		const cost = this.config.cost ?? 10;
+		const cost = this.options.cost ?? 10;
 		return await hash(password.normalize("NFKC"), cost);
 	}
 

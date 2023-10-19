@@ -12,31 +12,31 @@ interface Argon2idConfig {
 }
 
 export class Argon2id implements PasswordHashingAlgorithm {
-	constructor(config: Argon2idConfig = {}) {
-		this.config = config;
+	constructor(options: Argon2idConfig = {}) {
+		this.options = options;
 	}
 
-	private config: Argon2idConfig;
+	private options: Argon2idConfig;
 
 	public async hash(password: string): Promise<string> {
 		return await hash(password.normalize("NFKC"), {
-			memoryCost: this.config.memorySize ?? 19456,
-			timeCost: this.config.iterations ?? 2,
-			outputLen: this.config.tagLength,
-			parallelism: this.config.parallelism ?? 1,
-			version: this.config.version,
-			secret: this.config.secret
+			memoryCost: this.options.memorySize ?? 19456,
+			timeCost: this.options.iterations ?? 2,
+			outputLen: this.options.tagLength,
+			parallelism: this.options.parallelism ?? 1,
+			version: this.options.version,
+			secret: this.options.secret
 		});
 	}
 
 	public async verify(hash: string, password: string): Promise<boolean> {
 		return await verify(hash, password.normalize("NFKC"), {
-			memoryCost: this.config.memorySize,
-			timeCost: this.config.iterations,
-			outputLen: this.config.tagLength,
-			parallelism: this.config.parallelism,
-			version: this.config.version,
-			secret: this.config.secret
+			memoryCost: this.options.memorySize,
+			timeCost: this.options.iterations,
+			outputLen: this.options.tagLength,
+			parallelism: this.options.parallelism,
+			version: this.options.version,
+			secret: this.options.secret
 		});
 	}
 }
