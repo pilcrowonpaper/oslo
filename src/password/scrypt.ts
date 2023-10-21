@@ -30,9 +30,9 @@ export class Scrypt implements PasswordHashingAlgorithm {
 		return constantTimeEqual(targetKey, key!);
 	}
 
-	private async rawHash(password: string, salt: string): Promise<string> {
+	private rawHash(password: string, salt: string): Promise<string> {
 		const dkLen = this.options.dkLen ?? 64;
-		return await new Promise<string>((resolve, reject) => {
+		return new Promise<string>((resolve, reject) => {
 			const N = this.options.N ?? 16384;
 			const p = this.options.p ?? 1;
 			const r = this.options.r ?? 16;

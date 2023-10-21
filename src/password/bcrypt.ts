@@ -13,12 +13,12 @@ export class Bcrypt implements PasswordHashingAlgorithm {
 
 	private options: BcryptConfig;
 
-	public async hash(password: string): Promise<string> {
+	public hash(password: string): Promise<string> {
 		const cost = this.options.cost ?? 10;
-		return await hash(password.normalize("NFKC"), cost);
+		return hash(password.normalize("NFKC"), cost);
 	}
 
-	public async verify(hash: string, password: string): Promise<boolean> {
-		return await verify(password.normalize("NFKC"), hash);
+	public verify(hash: string, password: string): Promise<boolean> {
+		return verify(password.normalize("NFKC"), hash);
 	}
 }

@@ -18,8 +18,8 @@ export class Argon2id implements PasswordHashingAlgorithm {
 
 	private options: Argon2idConfig;
 
-	public async hash(password: string): Promise<string> {
-		return await hash(password.normalize("NFKC"), {
+	public hash(password: string): Promise<string> {
+		return hash(password.normalize("NFKC"), {
 			memoryCost: this.options.memorySize ?? 19456,
 			timeCost: this.options.iterations ?? 2,
 			outputLen: this.options.tagLength,
@@ -29,8 +29,8 @@ export class Argon2id implements PasswordHashingAlgorithm {
 		});
 	}
 
-	public async verify(hash: string, password: string): Promise<boolean> {
-		return await verify(hash, password.normalize("NFKC"), {
+	public verify(hash: string, password: string): Promise<boolean> {
+		return verify(hash, password.normalize("NFKC"), {
 			memoryCost: this.options.memorySize,
 			timeCost: this.options.iterations,
 			outputLen: this.options.tagLength,
