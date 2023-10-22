@@ -1,7 +1,7 @@
 {
 	"name": "oslo",
 	"type": "module",
-	"version": "0.9.0",
+	"version": "0.9.1",
 	"description": "A collection of auth-related utilities",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
@@ -15,57 +15,25 @@
 		"/dist/"
 	],
 	"exports": {
-		".": {
-			"import": "./dist/index.js",
-			"types": "./dist/index.d.ts"
-		},
-		"./cookie": {
-			"import": "./dist/cookie/index.js",
-			"types": "./dist/cookie/index.d.ts"
-		},
-		"./encoding": {
-			"import": "./dist/encoding/index.js",
-			"types": "./dist/encoding/index.d.ts"
-		},
-		"./oauth2": {
-			"types": "./dist/oauth2/index.js",
-			"import": "./dist/oauth2/index.d.ts"
-		},
-		"./oauth2/providers": {
-			"types": "./dist/oauth2/providers/index.js",
-			"import": "./dist/oauth2/providers/index.d.ts"
-		},
-		"./oidc": {
-			"types": "./dist/oidc/index.js",
-			"import": "./dist/oidc/index.d.ts"
-		},
-		"./otp": {
-			"types": "./dist/otp/index.js",
-			"import": "./dist/otp/index.d.ts"
-		},
-		"./password": {
-			"types": "./dist/password/index.js",
-			"import": "./dist/password/index.d.ts"
-		},
-		"./random": {
-			"types": "./dist/random/index.js",
-			"import": "./dist/random/index.d.ts"
-		},
-		"./request": {
-			"types": "./dist/request/index.js",
-			"import": "./dist/request/index.d.ts"
-		},
-		"./session": {
-			"types": "./dist/session/index.js",
-			"import": "./dist/session/index.d.ts"
-		},
-		"./token": {
-			"types": "./dist/token/index.js",
-			"import": "./dist/token/index.d.ts"
-		},
-		"./webauthn": {
-			"types": "./dist/webauthn/index.js",
-			"import": "./dist/webauthn/index.d.ts"
+		".": "./dist/index.js",
+		"./cookie": "./dist/cookie/index.js",
+		"./encoding": "./dist/encoding/index.js",
+		"./oauth2": "./dist/oauth2/index.js",
+		"./oauth2/providers": "./dist/oauth2/providers/index.js",
+		"./oidc": "./dist/oidc/index.js",
+		"./otp": "./dist/otp/index.js",
+		"./password": "./dist/password/index.js",
+		"./random": "./dist/random/index.js",
+		"./request": "./dist/request/index.js",
+		"./session": "./dist/session/index.js",
+		"./token": "./dist/token/index.js",
+		"./webauthn": "./dist/webauthn/index.js"
+	},
+	"typesVersions": {
+		"*": {
+			"*": [
+				"dist/*"
+			]
 		}
 	},
 	"keywords": [
