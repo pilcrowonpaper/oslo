@@ -11,7 +11,7 @@ export interface OAuth2Provider<_Tokens extends OAuth2Tokens> {
 }
 
 export interface OAuth2ProviderWithPKCE<_Tokens extends OAuth2Tokens> {
-	createAuthorizationURL(state?: string, codeVerifier?: string): Promise<URL>;
+	createAuthorizationURL(codeVerifier: string, state?: string): Promise<URL>;
 	validateAuthorizationCode(code: string, codeVerifier: string): Promise<_Tokens>;
 }
 
