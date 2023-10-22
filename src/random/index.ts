@@ -1,4 +1,14 @@
-/** A cryptographically secure alternative to `Math.random()` */
+/** A cryptographically secure alternative to `Math.random()`.
+ * See `oslo/random:generateRandomNumber` for generating numbers in a range.
+ *
+ * @returns a random floating-point number between 0 (inclusive) and 1 (exclusive))
+ *
+ * ```ts
+ * import { random } from "oslo/random";
+ *
+ * const num = random();
+ * ```
+ */
 export function random(): number {
 	const randomUint32Values = new Uint32Array(1);
 	crypto.getRandomValues(randomUint32Values);
@@ -8,17 +18,34 @@ export function random(): number {
 	return randomUint32Values[0]! / (u32Max + 1);
 }
 
-/**
- * Generates a random integer between 2 integers (cryptographically secure)
+/** Generates a random integer between 2 integers (cryptographically secure).
+ *
  * @param min minimum (inclusive)
  * @param max maximum (exclusive)
+ *
+ * ```ts
+ * import { generateRandomNumber } from "oslo/random";
+ *
+ * // 0, 1, 2...9
+ * const num = await generateRandomNumber(0, 10);
+ * ```
  * */
 export function generateRandomNumber(min: number, max: number): number {
 	return Math.floor((max - min) * random()) + min;
 }
 
-/** Generates a random string of a given length using the provided alphabet (cryptographically secure) */
-export function generateRandomString(length: number, alphabet: string) {
+/** Generates a random string (cryptographically secure).
+ * @param length length of the generated string
+ * @param string a string of characters (see `oslo/random:alphabet`)
+ *
+ * ```ts
+ * import { generateRandomString, alphabet } from "oslo/random";
+ *
+ * // a random 10-characters string consisting of characters a-z and 0-9
+ * const id = generateRandomString(10, alphabet("a-z", "0-9"));
+ * ```
+ */
+export function generateRandomString(length: number, alphabet: string): string {
 	// see `random()` for explanation
 	const randomUint32Values = new Uint32Array(length);
 	crypto.getRandomValues(randomUint32Values);
@@ -33,7 +60,18 @@ export function generateRandomString(length: number, alphabet: string) {
 
 type AlphabetPattern = "a-z" | "A-Z" | "0-9" | "-" | "_";
 
-/** Creates an alphabet string using the provided patterns for `generateRandomString()` etc */
+/** Creates an alphabet string using the provided patterns.
+ *
+ * @param patterns
+ * @returns a string with all the characters from the provided pattern
+ *
+ * ```ts
+ * import { alphabet } from "oslo/random";
+ *
+ * // "abcdefghijklmnopqrstuvwxyz0123456789"
+ * const lowercaseAlphanumericCharacters = alphabet("a-z", "0-9");
+ * ```
+ */
 export function alphabet(...patterns: AlphabetPattern[]): string {
 	const patternSet = new Set<AlphabetPattern>(patterns);
 	let result = "";

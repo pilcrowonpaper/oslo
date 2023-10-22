@@ -1,44 +1,46 @@
-import { createAuthorizationURL, validateAuthorizationCode } from "../core.js";
+import { OAuth2Controller } from "../core.js";
 
 import type { OAuth2Provider } from "../core.js";
 
-interface GitHubConfig {
-	clientId: string;
-	clientSecret: string;
-	scope?: string[];
-	redirectURI?: string;
-}
-
 export class GitHub implements OAuth2Provider<GitHubTokens> {
-	private options: GitHubConfig;
+	private clientSecret: string;
+	private scope: string[];
 
-	constructor(options: GitHubConfig) {
-		this.options = options;
+	private controller: OAuth2Controller;
+
+	constructor(
+		clientId: string,
+		clientSecret: string,
+		options?: {
+			scope?: string[];
+			redirectURI?: string;
+		}
+	) {
+		this.clientSecret = clientSecret;
+		this.scope = options?.scope ?? [];
+
+		this.controller = new OAuth2Controller(
+			clientId,
+			"https://github.com/login/oauth/authorize",
+			"https://github.com/login/oauth/access_token",
+			{
+				redirectURI: options?.redirectURI
+			}
+		);
 	}
 
-	public async createAuthorizationURL(): Promise<
-		readonly [url: URL, state: string]
-	> {
-		return await createAuthorizationURL({
-			endpoint: "https://github.com/login/oauth/authorize",
-			clientId: this.options.clientId,
-			scope: this.options.scope ?? [],
-			redirectURI: this.options.redirectURI
+	public async createAuthorizationURL(state: string): Promise<URL> {
+		return await this.controller.createAuthorizationURL({
+			state,
+			scope: this.scope
 		});
 	}
 
-	public async validateCallback(code: string): Promise<GitHubTokens> {
-		const tokens = await validateAuthorizationCode<AccessTokenResponseBody>(
-			code,
-			{
-				tokenEndpoint: "https://github.com/login/oauth/access_token",
-				clientId: this.options.clientId,
-				clientPassword: {
-					clientSecret: this.options.clientSecret,
-					authenticateWith: "client_secret"
-				}
-			}
-		);
+	public async validateAuthorizationCode(code: string): Promise<GitHubTokens> {
+		const tokens = await this.controller.validateAuthorizationCode<TokenResponseBody>(code, {
+			credentials: this.clientSecret,
+			authenticateWith: "request_body"
+		});
 		if ("refresh_token" in tokens) {
 			return {
 				accessToken: tokens.access_token,
@@ -68,17 +70,14 @@ interface GitHubTokensWithRefreshToken {
 	refreshTokenExpiresIn: number;
 }
 
-interface BaseAccessTokenResponseBody {
+interface BaseTokenResponseBody {
 	access_token: string;
 }
 
-interface AccessTokenResponseBodyWithRefreshToken
-	extends BaseAccessTokenResponseBody {
+interface TokenResponseBodyWithRefreshToken extends BaseTokenResponseBody {
 	refresh_token: string;
 	expires_in: number;
 	refresh_token_expires_in: number;
 }
 
-type AccessTokenResponseBody =
-	| BaseAccessTokenResponseBody
-	| AccessTokenResponseBodyWithRefreshToken;
+type TokenResponseBody = BaseTokenResponseBody | TokenResponseBodyWithRefreshToken;

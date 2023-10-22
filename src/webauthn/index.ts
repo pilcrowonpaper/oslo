@@ -6,131 +6,129 @@ export interface AttestationResponse {
 	authenticatorData: ArrayBufferLike;
 }
 
-export async function validateAttestationResponse(
-	response: AttestationResponse,
-	options: {
-		challenge: ArrayBufferLike;
-		origin: string;
-	}
-): Promise<void> {
-	const originURL = new URL(options.origin);
-	const clientDataJSON = new TextDecoder().decode(response.clientDataJSON);
-	const clientData: unknown = JSON.parse(clientDataJSON);
-	if (!clientData || typeof clientData !== "object") {
-		throw new Error("Failed to parse JSON");
-	}
-	if (!("type" in clientData) || clientData.type !== "webauthn.create") {
-		throw new Error("Failed to verify 'clientData.type'");
-	}
-	if (
-		!("challenge" in clientData) ||
-		clientData.challenge !== encodeBase64url(options.challenge)
-	) {
-		throw new Error("Failed to verify 'clientData.challenge'");
-	}
-	if (!("origin" in clientData) || clientData.origin !== originURL.origin) {
-		throw new Error("Failed to verify 'clientData.origin");
-	}
-
-	const authData = new Uint8Array(response.authenticatorData);
-	if (authData.byteLength < 37) {
-		throw new Error("Malformed 'authData'");
-	}
-	const rpIdHash = authData.slice(0, 32);
-	const rpIdData = new TextEncoder().encode(originURL.hostname);
-	const expectedRpIdHash = await crypto.subtle.digest("SHA-256", rpIdData);
-	// compare buffer
-	if (!compareBytes(rpIdHash, expectedRpIdHash)) {
-		throw new Error("Failed to verify 'rpId' hash");
-	}
-	const flagsBits = authData[32]!.toString(2);
-	if (flagsBits.charAt(flagsBits.length - 1) !== "1") {
-		throw new Error("Failed to verify user present flag");
-	}
-}
-
 export interface AssertionResponse {
 	clientDataJSON: ArrayBufferLike;
 	authenticatorData: ArrayBufferLike;
 	signature: ArrayBufferLike;
 }
 
-export async function validateAssertionResponse(
-	response: AssertionResponse,
-	options: {
-		publicKey: ArrayBufferLike;
-		challenge: ArrayBufferLike;
-		origin: string;
-		algorithm: "ES256K";
-	}
-): Promise<void> {
-	const originURL = new URL(options.origin);
-	const clientDataJSON = new TextDecoder().decode(response.clientDataJSON);
-	const clientData: unknown = JSON.parse(clientDataJSON);
-	if (!clientData || typeof clientData !== "object") {
-		throw new Error("Failed to parse JSON");
-	}
-	if (!("type" in clientData) || clientData.type !== "webauthn.get") {
-		throw new Error("Failed to verify 'clientData.type'");
-	}
-	if (
-		!("challenge" in clientData) ||
-		clientData.challenge !== encodeBase64url(options.challenge)
-	) {
-		throw new Error("Failed to verify 'clientData.challenge'");
-	}
-	if (!("origin" in clientData) || clientData.origin !== originURL.origin) {
-		throw new Error("Failed to verify 'clientData.origin");
+export class WebAuthnController {
+	private originURL: URL;
+	constructor(origin: string) {
+		this.originURL = new URL(origin);
 	}
 
-	const authData = new Uint8Array(response.authenticatorData);
-	if (authData.byteLength < 37) {
-		throw new Error("Malformed 'authData'");
-	}
-	const rpIdHash = authData.slice(0, 32);
-	const rpIdData = new TextEncoder().encode(originURL.hostname);
-	const expectedRpIdHash = await crypto.subtle.digest("SHA-256", rpIdData);
-	// compare buffer
-	if (!compareBytes(rpIdHash, expectedRpIdHash)) {
-		throw new Error("Failed to verify 'rpId' hash");
-	}
-	const flagsBits = authData[32]!.toString(2);
-	if (flagsBits.charAt(flagsBits.length - 1) !== "1") {
-		throw new Error("Failed to verify user present flag");
+	public async validateAttestationResponse(
+		response: AttestationResponse,
+		challenge: ArrayBufferLike
+	): Promise<void> {
+		const validClientDataJSON = this.verifyClientDataJSON(
+			"webauthn.create",
+			response.clientDataJSON,
+			challenge
+		);
+		if (!validClientDataJSON) {
+			throw new Error("Failed to validate client data JSON");
+		}
+
+		const validAuthenticatorData = await this.verifyAuthenticatorData(response.authenticatorData);
+		if (!validAuthenticatorData) {
+			throw new Error("Failed to validate authenticator data");
+		}
 	}
 
-	// the signature is encoded in DER
-	// so we need to convert into ECDSA compatible format
-	const signature = convertDERSignatureToECDSASignature(response.signature);
-	const hash = await crypto.subtle.digest("SHA-256", response.clientDataJSON);
-	const data = concatenateBuffer(authData, hash);
-	const key = await crypto.subtle.importKey(
-		"spki",
-		options.publicKey,
-		{
-			name: "ECDSA",
-			namedCurve: "P-256"
-		},
-		true,
-		["verify"]
-	);
-	const validSignature = await crypto.subtle.verify(
-		{
-			name: "ECDSA",
-			hash: "SHA-256"
-		},
-		key,
-		signature,
-		data
-	);
-	if (!validSignature) {
-		throw new Error("Invalid signature");
+	public async validateAssertionResponse(
+		algorithm: "ES256",
+		response: AssertionResponse,
+		publicKey: ArrayBufferLike,
+		challenge: ArrayBufferLike
+	): Promise<void> {
+		const validClientDataJSON = this.verifyClientDataJSON(
+			"webauthn.get",
+			response.clientDataJSON,
+			challenge
+		);
+		if (!validClientDataJSON) {
+			throw new Error("Failed to validate client data JSON");
+		}
+
+		const validAuthenticatorData = await this.verifyAuthenticatorData(response.authenticatorData);
+		if (!validAuthenticatorData) {
+			throw new Error("Failed to validate authenticator data");
+		}
+
+		if (algorithm === "ES256") {
+			const signature = convertDERSignatureToECDSASignature(response.signature);
+			const hash = await crypto.subtle.digest("SHA-256", response.clientDataJSON);
+			const data = concatenateArrayBuffer(response.authenticatorData, hash);
+			const key = await crypto.subtle.importKey(
+				"spki",
+				publicKey,
+				{
+					name: "ECDSA",
+					namedCurve: "P-256"
+				},
+				true,
+				["verify"]
+			);
+			const validSignature = await crypto.subtle.verify(
+				{
+					name: "ECDSA",
+					hash: "SHA-256"
+				},
+				key,
+				signature,
+				data
+			);
+			if (!validSignature) {
+				throw new Error("Failed to validate signature");
+			}
+		}
+		throw new TypeError(`Unknown algorithm: ${algorithm}`);
+	}
+
+	private verifyClientDataJSON(
+		type: "webauthn.create" | "webauthn.get",
+		clientDataJSON: ArrayBufferLike,
+		challenge: ArrayBufferLike
+	): boolean {
+		const clientData: unknown = JSON.parse(new TextDecoder().decode(clientDataJSON));
+		if (!clientData || typeof clientData !== "object") {
+			return false;
+		}
+		if (!("type" in clientData) || clientData.type !== type) {
+			return false;
+		}
+		if (!("challenge" in clientData) || clientData.challenge !== encodeBase64url(challenge)) {
+			return false;
+		}
+		if (!("origin" in clientData) || clientData.origin !== this.originURL.origin) {
+			return false;
+		}
+		return true;
+	}
+
+	private async verifyAuthenticatorData(authenticatorData: ArrayBufferLike): Promise<boolean> {
+		const authData = new Uint8Array(authenticatorData);
+		if (authData.byteLength < 37) {
+			return false;
+		}
+		const rpIdHash = authData.slice(0, 32);
+		const rpIdData = new TextEncoder().encode(this.originURL.hostname);
+		const expectedRpIdHash = await crypto.subtle.digest("SHA-256", rpIdData);
+		// compare buffer
+		if (!compareBytes(rpIdHash, expectedRpIdHash)) {
+			return false;
+		}
+		const flagsBits = authData[32]!.toString(2);
+		if (flagsBits.charAt(flagsBits.length - 1) !== "1") {
+			return false;
+		}
+		return true;
 	}
 }
 
-function convertDERSignatureToECDSASignature(
-	DERSignature: ArrayBufferLike
-): ArrayBuffer {
+function convertDERSignatureToECDSASignature(DERSignature: ArrayBufferLike): ArrayBuffer {
 	const signatureBytes = new Uint8Array(DERSignature);
 
 	const rStart = 4;
@@ -150,10 +148,7 @@ function convertDERSignatureToECDSASignature(
 	return ECDSASignature.buffer;
 }
 
-function decodeDERInteger(
-	integerBytes: Uint8Array,
-	expectedLength: number
-): Uint8Array {
+function decodeDERInteger(integerBytes: Uint8Array, expectedLength: number): Uint8Array {
 	if (integerBytes.byteLength === expectedLength) return integerBytes;
 	if (integerBytes.byteLength < expectedLength) {
 		return concatenateUint8Array(
@@ -166,18 +161,11 @@ function decodeDERInteger(
 	return integerBytes.slice(-32);
 }
 
-function concatenateBuffer(
-	buffer1: ArrayBuffer,
-	buffer2: ArrayBuffer
-): ArrayBuffer {
-	return concatenateUint8Array(new Uint8Array(buffer1), new Uint8Array(buffer2))
-		.buffer;
+function concatenateArrayBuffer(buffer1: ArrayBufferLike, buffer2: ArrayBufferLike): ArrayBuffer {
+	return concatenateUint8Array(new Uint8Array(buffer1), new Uint8Array(buffer2)).buffer;
 }
 
-function concatenateUint8Array(
-	bytes1: Uint8Array,
-	bytes2: Uint8Array
-): Uint8Array {
+function concatenateUint8Array(bytes1: Uint8Array, bytes2: Uint8Array): Uint8Array {
 	const result = new Uint8Array(bytes1.byteLength + bytes2.byteLength);
 	result.set(new Uint8Array(bytes1), 0);
 	result.set(new Uint8Array(bytes2), bytes1.byteLength);

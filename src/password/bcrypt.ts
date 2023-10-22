@@ -2,16 +2,16 @@ import { hash, verify } from "@node-rs/bcrypt";
 
 import type { PasswordHashingAlgorithm } from "./index.js";
 
-interface BcryptConfig {
+interface BcryptOptions {
 	cost?: number;
 }
 
 export class Bcrypt implements PasswordHashingAlgorithm {
-	constructor(options: BcryptConfig = {}) {
-		this.options = options;
+	constructor(options?: BcryptOptions) {
+		this.options = options ?? {};
 	}
 
-	private options: BcryptConfig;
+	private options: BcryptOptions;
 
 	public async hash(password: string): Promise<string> {
 		const cost = this.options.cost ?? 10;

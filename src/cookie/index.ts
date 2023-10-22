@@ -53,10 +53,7 @@ export function parseCookieHeader(header: string | null | undefined): Cookies {
 		const rawKey = pair[0];
 		const rawValue = pair[1];
 		if (!rawKey || !rawValue) continue;
-		cookieEntries.push([
-			decodeURIComponent(rawKey),
-			decodeURIComponent(rawValue)
-		]);
+		cookieEntries.push([decodeURIComponent(rawKey), decodeURIComponent(rawValue)]);
 	}
 	const cookies = new Cookies(cookieEntries);
 	return cookies;
@@ -88,7 +85,7 @@ export class Cookie {
 	public value: string;
 	public attributes: CookieAttributes;
 
-	public serialize() {
+	public serialize(): string {
 		return serializeCookie(this.name, this.value, this.attributes);
 	}
 }

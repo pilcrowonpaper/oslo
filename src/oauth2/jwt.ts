@@ -2,11 +2,13 @@ import { decodeBase64, encodeBase64url } from "../encoding/index.js";
 
 const encoder = new TextEncoder();
 
+export interface JWTHeader {
+	alg: "ES256";
+	kid?: string;
+}
+
 export async function createES256SignedJWT(
-	header: {
-		alg: "ES256";
-		kid?: string;
-	},
+	header: JWTHeader,
 	payload: Record<any, any>,
 	privateKey: string
 ): Promise<string> {
@@ -20,12 +22,8 @@ export async function createES256SignedJWT(
 		true,
 		["sign"]
 	);
-	const base64UrlHeader = encodeBase64url(
-		encoder.encode(JSON.stringify(header))
-	);
-	const base64UrlPayload = encodeBase64url(
-		encoder.encode(JSON.stringify(payload))
-	);
+	const base64UrlHeader = encodeBase64url(encoder.encode(JSON.stringify(header)));
+	const base64UrlPayload = encodeBase64url(encoder.encode(JSON.stringify(payload)));
 	const signatureBody = [base64UrlHeader, base64UrlPayload].join(".");
 	const signatureBuffer = await crypto.subtle.sign(
 		{

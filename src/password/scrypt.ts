@@ -4,7 +4,7 @@ import { encodeHex } from "../encoding/index.js";
 
 import type { PasswordHashingAlgorithm } from "./index.js";
 
-interface ScryptConfig {
+interface ScryptOptions {
 	N?: number;
 	r?: number;
 	p?: number;
@@ -12,11 +12,11 @@ interface ScryptConfig {
 }
 
 export class Scrypt implements PasswordHashingAlgorithm {
-	constructor(options: ScryptConfig = {}) {
-		this.options = options;
+	constructor(options?: ScryptOptions) {
+		this.options = options ?? {};
 	}
 
-	private options: ScryptConfig;
+	private options: ScryptOptions;
 
 	public async hash(password: string): Promise<string> {
 		const salt = generateRandomString(16, alphabet("a-z", "A-Z", "0-9"));
@@ -44,6 +44,7 @@ export class Scrypt implements PasswordHashingAlgorithm {
 					N,
 					p,
 					r,
+					// errors when 128 * N * r > `maxmem` (approximately)
 					maxmem: 128 * N * r * 2
 				},
 				(err, buff) => {

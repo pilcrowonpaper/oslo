@@ -1,61 +1,58 @@
-import { createAuthorizationURL, validateAuthorizationCode } from "../core.js";
+import { OAuth2Controller } from "../core.js";
 import { createES256SignedJWT } from "../jwt.js";
 
 import type { OAuth2Provider } from "../core.js";
 
-interface AppleConfig {
-	redirectURI: string;
+export interface AppleCredentials {
 	clientId: string;
 	teamId: string;
 	keyId: string;
 	certificate: string;
-	responseMode?: "query" | "form_post";
-	scope?: string[];
 }
 
-const APPLE_AUD = "https://appleid.apple.com";
-
 export class Apple implements OAuth2Provider<AppleTokens> {
-	private options: AppleConfig;
+	private credentials: AppleCredentials;
+	private responseMode: "query" | "form_post";
+	private scope: string[];
 
-	constructor(options: AppleConfig) {
-		this.options = options;
-	}
+	private controller: OAuth2Controller;
 
-	public async createAuthorizationURL(): Promise<
-		readonly [url: URL, state: string]
-	> {
-		const scopeConfig = this.options.scope ?? [];
-		const [url, state] = await createAuthorizationURL({
-			endpoint: "https://appleid.apple.com/auth/authorize",
-			clientId: this.options.clientId,
-			redirectURI: this.options.redirectURI,
-			scope: scopeConfig
-		});
-		url.searchParams.set("response_mode", this.options.responseMode ?? "query");
-		return [url, state];
-	}
+	constructor(
+		credentials: AppleCredentials,
+		redirectURI: string,
+		options?: {
+			responseMode?: "query" | "form_post";
+			scope?: string[];
+		}
+	) {
+		this.credentials = credentials;
+		this.responseMode = options?.responseMode ?? "query";
+		this.scope = options?.scope ?? [];
 
-	public async validateCallback(code: string): Promise<AppleTokens> {
-		const clientSecret = await createSecretId({
-			certificate: this.options.certificate,
-			teamId: this.options.teamId,
-			clientId: this.options.clientId,
-			keyId: this.options.keyId
-		});
-		const tokens = await validateAuthorizationCode<{
-			access_token: string;
-			refresh_token?: string;
-			expires_in: number;
-			id_token: string;
-		}>(code, {
-			tokenEndpoint: "https://appleid.apple.com/auth/token",
-			clientId: this.options.clientId,
-			redirectURI: this.options.redirectURI,
-			clientPassword: {
-				clientSecret,
-				authenticateWith: "client_secret"
+		this.controller = new OAuth2Controller(
+			credentials.clientId,
+			"https://appleid.apple.com/auth/authorize",
+			"https://appleid.apple.com/auth/token",
+			{
+				redirectURI
 			}
+		);
+	}
+
+	public async createAuthorizationURL(state: string): Promise<URL> {
+		const url = await this.controller.createAuthorizationURL({
+			state,
+			scope: this.scope
+		});
+		url.searchParams.set("response_mode", this.responseMode);
+		return url;
+	}
+
+	public async validateAuthorizationCode(code: string): Promise<AppleTokens> {
+		const clientSecret = await createSecret(this.credentials);
+		const tokens = await this.controller.validateAuthorizationCode<TokenResponseBody>(code, {
+			credentials: clientSecret,
+			authenticateWith: "request_body"
 		});
 
 		return {
@@ -67,25 +64,20 @@ export class Apple implements OAuth2Provider<AppleTokens> {
 	}
 }
 
-async function createSecretId(options: {
-	certificate: string;
-	teamId: string;
-	clientId: string;
-	keyId: string;
-}): Promise<string> {
+async function createSecret(credentials: AppleCredentials): Promise<string> {
 	const now = Math.floor(Date.now() / 1000);
 	const payload = {
-		iss: options.teamId,
+		iss: credentials.teamId,
 		iat: now,
 		exp: now + 60 * 3,
-		aud: APPLE_AUD,
-		sub: options.clientId
+		aud: "https://appleid.apple.com",
+		sub: credentials.clientId
 	};
-	const privateKey = parsePKCS8(options.certificate);
+	const privateKey = parsePKCS8(credentials.certificate);
 	const jwt = await createES256SignedJWT(
 		{
 			alg: "ES256",
-			kid: options.keyId
+			kid: credentials.keyId
 		},
 		payload,
 		privateKey
@@ -103,9 +95,14 @@ export interface AppleTokens {
 function parsePKCS8(pkcs8: string): string {
 	return [
 		"\n",
-		pkcs8
-			.replace(/-----BEGIN PRIVATE KEY-----/, "")
-			.replace(/-----END PRIVATE KEY-----/, ""),
+		pkcs8.replace(/-----BEGIN PRIVATE KEY-----/, "").replace(/-----END PRIVATE KEY-----/, ""),
 		"\n"
 	].join("");
+}
+
+interface TokenResponseBody {
+	access_token: string;
+	refresh_token?: string;
+	expires_in: number;
+	id_token: string;
 }

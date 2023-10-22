@@ -1,53 +1,49 @@
-import { createAuthorizationURL, validateAuthorizationCode } from "../core.js";
+import { OAuth2Controller } from "../core.js";
 
 import type { OAuth2Provider } from "../core.js";
 
-interface GoogleConfig {
-	clientId: string;
-	clientSecret: string;
-	redirectURI: string;
-	scope?: string[];
-	accessType?: "online" | "offline";
-}
-
 export class Google implements OAuth2Provider<GoogleTokens> {
-	private options: GoogleConfig;
+	private clientSecret: string;
+	private scope: string[];
+	private accessType: "online" | "offline";
 
-	constructor(options: GoogleConfig) {
-		this.options = options;
-	}
+	private controller: OAuth2Controller;
 
-	public async createAuthorizationURL(): Promise<
-		readonly [url: URL, state: string]
-	> {
-		const scopeConfig = this.options.scope ?? [];
-		const [url, state] = await createAuthorizationURL({
-			endpoint: "https://accounts.google.com/o/oauth2/v2/auth",
-			clientId: this.options.clientId,
-			redirectURI: this.options.redirectURI,
-			scope: [
-				"https://www.googleapis.com/auth/userinfo.profile",
-				...scopeConfig
-			]
-		});
-		const accessType = this.options.accessType ?? "online"; // ( default ) online
-		url.searchParams.set("access_type", accessType);
-		return [url, state];
-	}
-
-	public async validateCallback(code: string): Promise<GoogleTokens> {
-		const tokens = await validateAuthorizationCode<{
-			access_token: string;
-			refresh_token?: string;
-			expires_in: number;
-		}>(code, {
-			tokenEndpoint: "https://oauth2.googleapis.com/token",
-			clientId: this.options.clientId,
-			redirectURI: this.options.redirectURI,
-			clientPassword: {
-				clientSecret: this.options.clientSecret,
-				authenticateWith: "client_secret"
+	constructor(
+		clientId: string,
+		clientSecret: string,
+		redirectURI: string,
+		options?: {
+			scope?: string[];
+			accessType?: "online" | "offline";
+		}
+	) {
+		this.clientSecret = clientId;
+		this.scope = options?.scope ?? [];
+		this.accessType = options?.accessType ?? "online";
+		this.controller = new OAuth2Controller(
+			clientId,
+			"https://accounts.google.com/o/oauth2/v2/auth",
+			"https://oauth2.googleapis.com/token",
+			{
+				redirectURI: redirectURI
 			}
+		);
+	}
+
+	public async createAuthorizationURL(state: string): Promise<URL> {
+		const url = await this.controller.createAuthorizationURL({
+			state,
+			scope: this.scope
+		});
+		url.searchParams.set("access_type", this.accessType);
+		return url;
+	}
+
+	public async validateAuthorizationCode(code: string): Promise<GoogleTokens> {
+		const tokens = await this.controller.validateAuthorizationCode<TokenResponseBody>(code, {
+			credentials: this.clientSecret,
+			authenticateWith: "request_body"
 		});
 
 		return {
@@ -62,4 +58,10 @@ export interface GoogleTokens {
 	accessToken: string;
 	refreshToken: string | null;
 	accessTokenExpiresIn: number;
+}
+
+interface TokenResponseBody {
+	access_token: string;
+	refresh_token?: string;
+	expires_in: number;
 }

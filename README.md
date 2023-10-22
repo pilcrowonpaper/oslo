@@ -71,63 +71,48 @@ import { encodeBase32, decodeBase32 } from "oslo/encoding";
 ## `oslo/oauth2`
 
 ```ts
-import { createAuthorizationURL } from "oslo/oauth2";
+import { OAuth2Controller } from "oslo/oauth2";
 
-const [url, state] = await createAuthorizationURL(
-	"https://github.com/login/oauth/authorize",
-	{
-		clientId,
-		redirectURI,
-		scope: ["user:email"]
-	}
-);
+const authorizeEndpoint = "https://github.com/login/oauth/authorize";
+const tokenEndpoint = "https://github.com/login/oauth/access_token";
 
-// see also `oslo/cookie`
-setCookie("github_oauth_state", state, {
-	httpOnly: true,
-	path: "/",
-	maxAge: 60 * 60, // 1 hour
-	secure: true
+const oauth2Controller = new OAuth2Controller(clientId, authorizeEndpoint, tokenEndpoint, {
+	// optional
+	redirectURI: "http://localhost:3000/login/callback"
 });
-
-redirect(url);
 ```
 
 ```ts
-import { createAuthorizationURLWithPKCE } from "oslo/oauth2";
+import { generateState, generateCodeVerifier } from "oslo/oauth2";
 
-const [url, codeVerifier, state] = await createAuthorizationURLWithPKCE();
+const state = generateState();
+const codeVerifier = generateCodeVerifier(); // for PKCE flow
 
-// store `codeVerifier` as cookie
+const url = await createAuthorizationURL({
+	// optional
+	state,
+	scope: ["user:email"],
+	codeVerifier
+});
 ```
 
 ```ts
-import {
-	verifyState,
-	validateAuthorizationCode,
-	AccessTokenRequestError
-} from "oslo/oauth2";
+import { verifyState, AccessTokenRequestError } from "oslo/oauth2";
 
-const storedState = getCookie("github_oauth_state");
-const state = url.searchParams.get("state");
 if (!verifyState(storedState, state)) {
 	// error
 }
-const code = url.searchParams.get("code");
-if (!code) {
-	// error
-}
+
+// ...
 
 try {
-	const { accessToken, refreshToken } = await validateAuthorizationCode<{
+	const { accessToken, refreshToken } = await oauth2Controller.validateAuthorizationCode<{
 		refreshToken: string;
 	}>(code, {
-		tokenEndpoint: "https://github.com/login/oauth/access_token",
-		clientId: this.options.clientId,
-		clientPassword: {
-			clientSecret: this.options.clientSecret,
-			authenticateWith: "client_secret"
-		}
+		// optional
+		credentials: clientSecret,
+		authenticateWith: "request_body", // default: "http_basic_auth"
+		codeVerifier // for PKCE flow
 	});
 } catch (e) {
 	if (e instanceof AccessTokenRequestError) {
@@ -140,20 +125,18 @@ try {
 
 ### `oslo/oauth2/providers`
 
+Some providers may require a code challenge and code verifier.
+
 ```ts
 import { Github, Apple, Google } from "oslo/oauth2/providers";
 
-const github = new Github({
-	clientId,
-	clientSecret,
+const githubOAuth = new Github(clientId, clientSecret, {
 	scope: ["user:email"]
 });
 
-// wrapper around `createAuthorizationURL()`
-const [url, state] = await github.createAuthorizationURL();
+const url = await githubOAuth.createAuthorizationURL(state);
 
-// wrapper around `validateAuthorizationCode()`
-const tokens = await github.validateAuthorizationCode(code);
+const tokens = await githubOAuth.validateAuthorizationCode(code);
 ```
 
 ## `oslo/oidc`
@@ -196,32 +179,27 @@ const validOTP = await totpController.verify(otp, secret);
 ```
 
 ```ts
-import { createKeyURI } from "oslo/otp";
+import { createHOTPKeyURI, createTOTPKeyURI } from "oslo/otp";
 
 const secret = new Uint8Array(20);
 crypto.getRandomValues(secret);
 
-const uri = createKeyURI({
-	type: "totp",
-	secret,
-	issuer: "My website",
-	accountName: "user@example.com",
+const issuer = "My website";
+const accountName = "user@example.com";
+
+const uri = createHOTPKeyURI(issuer, accountName, secret, {
 	//optional
-	period: new TimeSpan(30, "s"), // default: 30s
-	algorithm: "SHA-1", // ignored by google authenticator
-	digits: 6 // default: 6
-});
-const uri = createKeyURI({
-	type: "hotp",
-	secret,
-	issuer: "My website",
-	accountName: "user@example.com",
-	//optional
-	counter, //default: 0
+	counter: 0, // default: 0
+	algorithm: "SHA-1", // default: SHA-1
 	digits: 6 // default: 6
 });
 
-const qr = createQRCode(uri); // example
+const uri = createTOTPKeyURI(issuer, accountName, secret, {
+	//optional
+	period: new TimeSpan(30, "s"), // default: 30s
+	algorithm: "SHA-1", // default: SHA-1
+	digits: 6 // default: 6
+});
 ```
 
 ## `oslo/password`
@@ -293,26 +271,21 @@ if (!validRequestOrigin) {
 
 ```ts
 // true
-verifyRequestOrigin("https://example.com", {
-	host: "example.com"
-});
+verifyRequestOrigin("https://example.com", "example.com");
 
 // true
-verifyRequestOrigin("https://foo.example.com", {
-	host: "bar.example.com",
+verifyRequestOrigin("https://foo.example.com", "bar.example.com", {
 	allowedSubdomains: "*" // wild card to allow any subdomains
 });
 
 // true
-verifyRequestOrigin("https://foo.example.com", {
-	host: "bar.example.com",
+verifyRequestOrigin("https://foo.example.com", "bar.example.com", {
 	allowedSubdomains: ["foo"]
 });
 
 // true
-verifyRequestOrigin("https://example.com", {
-	host: "foo.example.com",
-	allowedSubdomains: [null] // `null` to only allow base domain
+verifyRequestOrigin("https://example.com", "foo.example.com", {
+	allowBaseDomain: true
 });
 ```
 
@@ -335,10 +308,7 @@ async function validateSession(sessionId: string): Promise<Session | null> {
 	if (!databaseSession) {
 		return null;
 	}
-	const session = sessionController.validateSessionState(
-		sessionId,
-		databaseSession.expires
-	);
+	const session = sessionController.validateSessionState(sessionId, databaseSession.expires);
 	if (!session) {
 		await db.deleteSession(sessionId);
 		return null;
@@ -363,10 +333,15 @@ async function createSession(): Promise<Session> {
 	return session;
 }
 
-const sessionCookieController = sessionController.sessionCookieController({
-	name: "session",
-	secure: prod,
-	secret
+const sessionCookieController = sessionController.sessionCookieController(cookieName, {
+	// optional
+	// if the cookie expires
+	expires: true, // default: true
+	// set to `false` in dev
+	secure: true, // default: false
+	path: "/", // default: "/"
+	domain, // default: undefined
+	sameSite // default: "lax"
 });
 ```
 
@@ -378,9 +353,7 @@ const cookie = sessionCookieController.createSessionCookie(session.sessionId);
 
 ```ts
 // get cookie
-const sessionId = sessionCookieController.parseCookieHeader(
-	headers.get("Cookie")
-);
+const sessionId = sessionCookieController.parseCookieHeader(headers.get("Cookie"));
 const sessionId = cookies.get(sessionCookieController.cookieName);
 
 if (!sessionId) {
@@ -411,9 +384,7 @@ import { generateRandomString, alphabet } from "oslo/random";
 import type { Token } from "oslo/token";
 
 // expires in 2 hours
-const verificationTokenController = new VerificationTokenController(
-	new TimeSpan(2, "h")
-);
+const verificationTokenController = new VerificationTokenController(new TimeSpan(2, "h"));
 
 async function generatePasswordResetToken(userId: string): Promise<Token> {
 	// check if an unused token already exists
@@ -449,10 +420,7 @@ async function generatePasswordResetToken(userId: string): Promise<Token> {
 async function validatePasswordResetToken(token: string): Promise<string> {
 	const storedToken = await db.transaction().execute(async (trx) => {
 		// get token from db
-		const storedToken = await trx
-			.table("password_reset_token")
-			.where("id", "=", token)
-			.get();
+		const storedToken = await trx.table("password_reset_token").where("id", "=", token).get();
 		if (!storedToken) return null;
 		await trx.table("password_reset_token").where("id", "=", token).delete();
 		return storedToken;
@@ -475,12 +443,12 @@ await sendEmail(`http://localhost:3000/reset-password/${token.value}`);
 
 ## `oslo/webauthn`
 
-`validateAttestationResponse()` does not validate attestation certificates.
+`validateAttestationResponse()` does not validate attestation certificates. `validateAssertionResponse()` currently only supports ECDSA using secp256k1 curve and SHA-256 (algorithm ID `-7`).
 
 ```ts
-import { validateAttestationResponse } from "oslo/webauthn";
+import { WebAuthnController } from "oslo/webauthn";
 
-import type { AttestationResponse } from "oslo/webauthn";
+const webauthn = new WebAuthnController("http://localhost:3000");
 
 try {
 	const response: AttestationResponse = {
@@ -488,21 +456,10 @@ try {
 		clientDataJSON,
 		authenticatorData
 	};
-	await validateAttestationResponse(response, {
-		challenge, //  `ArrayBufferLike`
-		origin: "http://localhost:3000" // website origin
-	});
+	await webauthn.validateAttestationResponse(response, challenge);
 } catch {
-	// failed to validate attestation response
+	// failed to validate
 }
-```
-
-`validateAssertionResponse()` currently only supports ECDSA using secp256k1 curve and SHA-256 (algorithm ID `-7`).
-
-```ts
-import { validateAssertionResponse } from "oslo/webauthn";
-
-import type { AssertionResponse } from "oslo/webauthn";
 
 try {
 	const response: AssertionResponse = {
@@ -511,13 +468,13 @@ try {
 		authenticatorData,
 		signature
 	};
-	await validateAssertionResponse(response, {
-		algorithm: "ES256K",
-		challenge, // `ArrayBufferLike`
+	await webauthn.validateAssertionResponse(
+		"ES256",
+		response,
 		publicKey, // `ArrayBufferLike`
-		origin: "http://localhost:3000" // website origin
-	});
+		challenge // `ArrayBufferLike`
+	);
 } catch {
-	// failed to validate assertion response
+	// failed to validate
 }
 ```

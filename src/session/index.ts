@@ -10,15 +10,24 @@ export interface Session {
 }
 
 export class SessionController {
+	/**
+	 * @param expiresIn How long the session is valid for
+	 */
 	constructor(expiresIn: TimeSpan) {
 		this.expiresIn = expiresIn;
 	}
+
+	/** How long the session is valid for */
 	public expiresIn: TimeSpan;
 
-	public validateSessionState(
-		sessionId: string,
-		expiresAt: Date
-	): Session | null {
+	/**
+	 * Checks the session expiration and extends the expiration if necessary.
+	 * As such, the date in the returned `Session` may not match the provided date.
+	 *
+	 * @param sessionId
+	 * @param expiresAt Session expiration stored in the database
+	 */
+	public validateSessionState(sessionId: string, expiresAt: Date): Session | null {
 		if (!isWithinExpirationDate(expiresAt)) {
 			return null;
 		}
@@ -38,7 +47,7 @@ export class SessionController {
 		};
 	}
 
-	public createSession(sessionId: string) {
+	public createSession(sessionId: string): Session {
 		return {
 			sessionId,
 			expiresAt: expirationDate(this.expiresIn),
@@ -46,56 +55,51 @@ export class SessionController {
 		};
 	}
 
-	public sessionCookie(options: SessionCookieConfig): SessionCookieController {
-		return new SessionCookieController(this, options);
+	public sessionCookieController(
+		cookieName: string,
+		options?: SessionCookieOptions
+	): SessionCookieController {
+		return new SessionCookieController(cookieName, this.expiresIn, options);
 	}
 }
 
-export interface SessionCookieAttributesOptions {
+interface SessionCookieOptions {
+	expires?: boolean;
+	secure?: boolean;
 	path?: string;
 	domain?: string;
 	sameSite?: "lax" | "strict";
 }
 
-export interface SessionCookieConfig {
-	name: string;
-	secure: boolean;
-	attributes?: SessionCookieAttributesOptions;
-	expires?: boolean;
-}
-
 export class SessionCookieController {
-	constructor(
-		sessionCookieController: SessionController,
-		options: SessionCookieConfig
-	) {
-		this.sessionExpiresIn = sessionCookieController.expiresIn;
-		this.cookieName = options.name;
-		this.cookieExpires = options.expires ?? true;
+	constructor(cookieName: string, sessionExpiresIn: TimeSpan, options?: SessionCookieOptions) {
+		this.cookieName = cookieName;
+		if (options?.expires) {
+			this.sessionExpiresIn = sessionExpiresIn;
+		} else {
+			this.sessionExpiresIn = new TimeSpan(52 * 2, "w");
+		}
 		this.baseCookieAttributes = {
-			secure: options.secure,
-			sameSite: options.attributes?.sameSite ?? "lax",
+			secure: options?.secure ?? true,
+			sameSite: options?.sameSite ?? "lax",
 			httpOnly: true,
-			path: options.attributes?.path ?? "/",
-			domain: options.attributes?.domain
+			path: options?.path ?? "/",
+			domain: options?.domain
 		};
 	}
 
 	public cookieName: string;
-	private cookieExpires: boolean;
 	private sessionExpiresIn: TimeSpan;
 	private baseCookieAttributes: CookieAttributes;
 
 	public createSessionCookie(sessionId: string): Cookie {
-		const maxAge = this.cookieExpires
-			? this.sessionExpiresIn.seconds()
-			: new TimeSpan(52 * 2, "w").seconds();
 		return new Cookie(this.cookieName, sessionId, {
 			...this.baseCookieAttributes,
-			maxAge
+			maxAge: this.sessionExpiresIn.seconds()
 		});
 	}
 
+	/**Creates a new `Cookie` that deletes the existing cookie when set. */
 	public createBlankSessionCookie(): Cookie {
 		return new Cookie(this.cookieName, "", {
 			...this.baseCookieAttributes,

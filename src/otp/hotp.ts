@@ -1,22 +1,17 @@
 import { bitsToInt, byteToBits } from "../bytes.js";
 
-export async function generateHOTP(options: {
-	secret: string | ArrayBufferLike;
-	counter: number;
-	digits?: number;
-}): Promise<string> {
-	const digits = options.digits ?? 6;
+export async function generateHOTP(
+	secret: ArrayBufferLike,
+	counter: number,
+	digits: number = 6
+): Promise<string> {
 	if (digits > 8) {
 		throw new TypeError("Digits must be 8 or smaller");
 	}
-	const secretBytes =
-		typeof options.secret === "string"
-			? new TextEncoder().encode(options.secret)
-			: new Uint8Array(options.secret);
-	const counterBytes = intTo8Bytes(options.counter);
+	const counterBytes = intTo8Bytes(counter);
 	const key = await crypto.subtle.importKey(
 		"raw",
-		secretBytes,
+		secret,
 		{
 			name: "HMAC",
 			hash: "SHA-1"

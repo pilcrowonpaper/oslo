@@ -13,6 +13,7 @@ export class VerificationTokenController {
 	}
 	public expiresIn: TimeSpan;
 
+	/**Checks if there is enough time before expiration for an existing token to be sent to the user again.  */
 	public isTokenReusable(expiresAt: Date): boolean {
 		const activePeriodExpirationDate = new Date(
 			expiresAt.getTime() - this.expiresIn.milliseconds() / 2

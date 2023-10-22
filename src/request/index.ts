@@ -1,39 +1,44 @@
+/** Checks if the domain of the origin matches the host domain to prevent CSRF attacks.
+ *
+ * By default, host of the origin url must exactly match the provided host.
+ * To allow subdomains, pass a list of subdomains to `options.allowedSubdomains`,
+ * where the base domain is the host base domain.
+ * For example, if the host is api.example.com, the base domain is example.com.
+ * Alternatively pass `"*"` to allow all subdomains, including those with no subdomains.
+ *
+ * Set `options.allowBaseDomain` to `true` to allow the base domain.
+ */
 export function verifyRequestOrigin(
 	origin: string | null | undefined,
-	options: {
-		host: string | null | undefined;
-		allowedSubdomains?: Array<string | null> | "*";
+	host: string | null | undefined,
+	options?: {
+		/** A list of allowed subdomains */
+		allowedSubdomains?: string[] | "*";
+		allowBaseDomain?: boolean;
 	}
 ): boolean {
-	if (!origin || !options.host) return false;
+	if (!origin || !host) return false;
 	const originHost = safeURL(origin)?.host ?? null;
 	if (!originHost) return false;
-	let host: string | null;
-	if (
-		options.host.startsWith("https//") ||
-		options.host.startsWith("https://")
-	) {
-		host = safeURL(options.host)?.host ?? null;
+	if (host.startsWith("https//") || host.startsWith("https://")) {
+		host = safeURL(host)?.host ?? null;
 	} else {
-		host = options.host.split(":").at(0) ?? null;
+		host = host.split(":").at(0) ?? null;
 	}
 	if (!host) return false;
-	if (!options?.allowedSubdomains) {
+	const allowedSubdomains = options?.allowedSubdomains ?? [];
+	const allowBaseDomain = options?.allowBaseDomain ?? false;
+	if (allowedSubdomains.length === 0) {
 		return originHost === host;
 	}
 	const hostBaseDomain = host.split(".").slice(-2).join(".");
-	if (options.allowedSubdomains === "*") {
-		return (
-			originHost === hostBaseDomain || originHost.endsWith("." + hostBaseDomain)
-		);
+	if (allowBaseDomain && originHost === hostBaseDomain) {
+		return true;
 	}
-	for (const allowedSubdomain of options.allowedSubdomains) {
-		if (allowedSubdomain === null) {
-			if (originHost === hostBaseDomain) {
-				return true;
-			}
-			continue;
-		}
+	if (allowedSubdomains === "*") {
+		return originHost === hostBaseDomain || originHost.endsWith("." + hostBaseDomain);
+	}
+	for (const allowedSubdomain of allowedSubdomains) {
 		if (originHost === allowedSubdomain + "." + hostBaseDomain) {
 			return true;
 		}
