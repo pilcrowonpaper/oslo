@@ -1,7 +1,7 @@
 {
 	"name": "oslo",
 	"type": "module",
-	"version": "0.9.2",
+	"version": "0.9.3",
 	"description": "A collection of auth-related utilities",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
@@ -32,43 +32,43 @@
 	"typesVersions": {
 		"*": {
 			".": [
-				"./dist/index.d.ts"
+				"dist/index.d.ts"
 			],
 			"./cookie": [
-				"./dist/cookie/index.d.ts"
+				"dist/cookie/index.d.ts"
 			],
 			"./encoding": [
-				"./dist/encoding/index.d.ts"
+				"dist/encoding/index.d.ts"
 			],
 			"./oauth2": [
-				"./dist/oauth2/index.d.ts"
+				"dist/oauth2/index.d.ts"
 			],
 			"./oauth2/providers": [
-				"./dist/oauth2/providers/index.d.ts"
+				"dist/oauth2/providers/index.d.ts"
 			],
 			"./oidc": [
-				"./dist/oidc/index.d.ts"
+				"dist/oidc/index.d.ts"
 			],
 			"./otp": [
-				"./dist/otp/index.d.ts"
+				"dist/otp/index.d.ts"
 			],
 			"./password": [
-				"./dist/password/index.d.ts"
+				"dist/password/index.d.ts"
 			],
 			"./random": [
-				"./dist/random/index.d.ts"
+				"dist/random/index.d.ts"
 			],
 			"./request": [
-				"./dist/request/index.d.ts"
+				"dist/request/index.d.ts"
 			],
 			"./session": [
-				"./dist/session/index.d.ts"
+				"dist/session/index.d.ts"
 			],
 			"./token": [
-				"./dist/token/index.d.ts"
+				"dist/token/index.d.ts"
 			],
 			"./webauthn": [
-				"./dist/webauthn/index.d.ts"
+				"dist/webauthn/index.d.ts"
 			]
 		}
 	},
