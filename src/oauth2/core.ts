@@ -1,5 +1,5 @@
 import { encodeBase64, encodeBase64url } from "../encoding/index.js";
-import { authorizationHeader, createURL } from "./request.js";
+import { authorizationHeader } from "./request.js";
 
 export interface OAuth2Tokens {
 	accessToken: string;
@@ -41,14 +41,18 @@ export class OAuth2Controller {
 		scope?: string[];
 	}): Promise<URL> {
 		const scope = options?.scope ?? [];
-		const authorizationUrl = createURL(this.authorizeEndpoint, {
-			response_type: "code",
-			client_id: this.clientId,
-			scope: scope.join(" "),
-			state: options?.state,
-			redirect_uri: this.redirectURI
-		});
-
+		const authorizationUrl = new URL(this.authorizeEndpoint);
+		authorizationUrl.searchParams.set("response_type", "code");
+		authorizationUrl.searchParams.set("client_id", this.clientId);
+		if (scope.length > 0) {
+			authorizationUrl.searchParams.set("scope", scope.join(" "));
+		}
+		if (options?.state !== undefined) {
+			authorizationUrl.searchParams.set("state", options.state);
+		}
+		if (this.redirectURI) {
+			authorizationUrl.searchParams.set("redirect_uri", this.redirectURI);
+		}
 		if (options?.codeVerifier !== undefined) {
 			const codeChallengeBuffer = await crypto.subtle.digest(
 				"SHA-256",
@@ -69,13 +73,17 @@ export class OAuth2Controller {
 			authenticateWith?: "http_basic_auth" | "request_body";
 		}
 	): Promise<_TokenResponseBody> {
-		const body = createURLSearchParams({
-			code: authorizationCode,
-			client_id: this.clientId,
-			grant_type: "authorization_code",
-			redirect_uri: this.redirectURI,
-			code_verifier: options?.codeVerifier
-		});
+		const body = new URLSearchParams();
+		body.set("code", authorizationCode);
+		body.set("client_id", this.clientId);
+		body.set("grant_type", "authorization_code");
+
+		if (this.redirectURI !== null) {
+			body.set("redirect_uri", this.redirectURI);
+		}
+		if (options?.codeVerifier !== undefined) {
+			body.set("code_verifier", options.codeVerifier);
+		}
 		const headers = new Headers({
 			"Content-Type": "application/x-www-form-urlencoded",
 			Accept: "application/json"
@@ -100,7 +108,7 @@ export class OAuth2Controller {
 		});
 		const response = await fetch(request);
 		const result: _TokenResponseBody | TokenErrorResponseBody = await response.json();
-		// github returns status 200 for errors
+		// github returns status 200 for some errors
 		if (!("access_token" in result) && "error" in result) {
 			throw new AccessTokenRequestError(request, result);
 		} else if (!response.ok) {
@@ -128,19 +136,6 @@ export function verifyState(
 ): boolean {
 	if (!state1 || !state2) return false;
 	return state1 === state2;
-}
-
-function createURLSearchParams(
-	params: Record<string, string | number | undefined | null>
-): URLSearchParams {
-	const base = new URLSearchParams();
-	for (const [key, value] of Object.entries(params)) {
-		if (value === null || value === undefined) {
-			continue;
-		}
-		base.set(key, value.toString());
-	}
-	return base;
 }
 
 export class AccessTokenRequestError extends Error {

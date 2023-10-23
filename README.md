@@ -49,9 +49,8 @@ serializeCookie("this is fine =;", "this too =;");
 ```ts
 import { parseCookieHeader } from "oslo/cookie";
 
+// returns Map<string, string>
 const cookies = parseCookieHeader("cookie1=hello; cookie2=bye");
-const cookie1 = cookies.get("cookie1"); // string | null
-const entries = cookies.entries();
 ```
 
 ## `oslo/encoding`

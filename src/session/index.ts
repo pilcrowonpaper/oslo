@@ -1,5 +1,5 @@
 import { expirationDate, isWithinExpirationDate, TimeSpan } from "../index.js";
-import { parseCookieHeader, Cookie } from "../cookie/index.js";
+import { parseCookieHeader, serializeCookie } from "../cookie/index.js";
 
 import type { CookieAttributes } from "../cookie/index.js";
 
@@ -92,16 +92,16 @@ export class SessionCookieController {
 	private sessionExpiresIn: TimeSpan;
 	private baseCookieAttributes: CookieAttributes;
 
-	public createSessionCookie(sessionId: string): Cookie {
-		return new Cookie(this.cookieName, sessionId, {
+	public createSessionCookie(sessionId: string): SessionCookie {
+		return new SessionCookie(this.cookieName, sessionId, {
 			...this.baseCookieAttributes,
 			maxAge: this.sessionExpiresIn.seconds()
 		});
 	}
 
 	/**Creates a new `Cookie` that deletes the existing cookie when set. */
-	public createBlankSessionCookie(): Cookie {
-		return new Cookie(this.cookieName, "", {
+	public createBlankSessionCookie(): SessionCookie {
+		return new SessionCookie(this.cookieName, "", {
 			...this.baseCookieAttributes,
 			maxAge: 0
 		});
@@ -110,5 +110,20 @@ export class SessionCookieController {
 	public parseCookieHeader(header: string | null | undefined): string | null {
 		const cookies = parseCookieHeader(header);
 		return cookies.get(this.cookieName) ?? null;
+	}
+}
+
+export class SessionCookie {
+	constructor(name: string, value: string, attributes: CookieAttributes) {
+		this.name = name;
+		this.value = value;
+		this.attributes = attributes;
+	}
+	public name: string;
+	public value: string;
+	public attributes: CookieAttributes;
+
+	public serialize(): string {
+		return serializeCookie(this.name, this.value, this.attributes);
 	}
 }
