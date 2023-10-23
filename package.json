@@ -1,7 +1,7 @@
 {
 	"name": "oslo",
 	"type": "module",
-	"version": "0.10.0",
+	"version": "0.10.1",
 	"description": "A collection of auth-related utilities",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
@@ -17,6 +17,7 @@
 	"exports": {
 		".": "./dist/index.js",
 		"./cookie": "./dist/cookie/index.js",
+		"./crypto": "./dist/crypto/index.js",
 		"./encoding": "./dist/encoding/index.js",
 		"./oauth2": "./dist/oauth2/index.js",
 		"./oauth2/providers": "./dist/oauth2/providers/index.js",
@@ -36,6 +37,9 @@
 			],
 			"cookie": [
 				"dist/cookie/index.d.ts"
+			],
+			"crypto": [
+				"dist/crypto/index.d.ts"
 			],
 			"encoding": [
 				"dist/encoding/index.d.ts"

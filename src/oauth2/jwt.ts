@@ -1,4 +1,5 @@
-import { decodeBase64, encodeBase64url } from "../encoding/index.js";
+import { ECDSA } from "../crypto/index.js";
+import { encodeBase64url } from "../encoding/index.js";
 
 const encoder = new TextEncoder();
 
@@ -8,31 +9,21 @@ export interface JWTHeader {
 }
 
 export async function createES256SignedJWT(
-	header: JWTHeader,
 	payload: Record<any, any>,
-	privateKey: string
+	privateKey: ArrayBufferLike,
+	options?: {
+		keyId?: string;
+	}
 ): Promise<string> {
-	const cryptoKey = await crypto.subtle.importKey(
-		"pkcs8",
-		decodeBase64(privateKey),
-		{
-			name: "ECDSA",
-			namedCurve: "P-256"
-		},
-		true,
-		["sign"]
-	);
+	const header: JWTHeader = {
+		alg: "ES256",
+		kid: options?.keyId
+	};
 	const base64UrlHeader = encodeBase64url(encoder.encode(JSON.stringify(header)));
 	const base64UrlPayload = encodeBase64url(encoder.encode(JSON.stringify(payload)));
 	const signatureBody = [base64UrlHeader, base64UrlPayload].join(".");
-	const signatureBuffer = await crypto.subtle.sign(
-		{
-			name: "ECDSA",
-			hash: "SHA-256"
-		},
-		cryptoKey,
-		encoder.encode(signatureBody)
-	);
+	const es256 = new ECDSA("SHA-256", "P-256");
+	const signatureBuffer = await es256.sign(privateKey, encoder.encode(signatureBody));
 	const signature = encodeBase64url(signatureBuffer);
 	const jwt = [signatureBody, signature].join(".");
 	return jwt;

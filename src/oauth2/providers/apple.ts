@@ -1,5 +1,6 @@
 import { OAuth2Controller } from "../core.js";
 import { createES256SignedJWT } from "../jwt.js";
+import { decodeBase64 } from "../../encoding/index.js";
 
 import type { OAuth2Provider } from "../core.js";
 
@@ -69,19 +70,14 @@ async function createSecret(credentials: AppleCredentials): Promise<string> {
 	const payload = {
 		iss: credentials.teamId,
 		iat: now,
-		exp: now + 60 * 3,
+		exp: now + 60 * 3, // 3 minutes
 		aud: "https://appleid.apple.com",
 		sub: credentials.clientId
 	};
-	const privateKey = parsePKCS8(credentials.certificate);
-	const jwt = await createES256SignedJWT(
-		{
-			alg: "ES256",
-			kid: credentials.keyId
-		},
-		payload,
-		privateKey
-	);
+	const pkcs8 = parsePKCS8PEM(credentials.certificate);
+	const jwt = await createES256SignedJWT(payload, pkcs8, {
+		keyId: credentials.keyId
+	});
 	return jwt;
 }
 
@@ -92,12 +88,13 @@ export interface AppleTokens {
 	idToken: string;
 }
 
-function parsePKCS8(pkcs8: string): string {
-	return [
+function parsePKCS8PEM(pem: string): Uint8Array {
+	const encoded = [
 		"\n",
-		pkcs8.replace(/-----BEGIN PRIVATE KEY-----/, "").replace(/-----END PRIVATE KEY-----/, ""),
+		pem.replace(/-----BEGIN PRIVATE KEY-----/, "").replace(/-----END PRIVATE KEY-----/, ""),
 		"\n"
 	].join("");
+	return decodeBase64(encoded);
 }
 
 interface TokenResponseBody {

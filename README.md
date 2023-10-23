@@ -5,6 +5,7 @@
 A collection of utilities for auth, including:
 
 - [`oslo/cookie`](#oslocookie): Cookie parsing and serialization
+- [`oslo/crypto`](#oslocrypto): Light wrapper around Web Crypto API for generating hashes and signatures
 - [`oslo/encoding`](#osloencoding): Encode base64, base64url, base32, hex
 - [`oslo/oauth2`](#oslooauth2): OAuth2 helpers
   - [`oslo/oauth2/providers`](#oslooauth2providers): Built in OAuth2 providers (Apple, Github, Google)
@@ -53,13 +54,61 @@ import { parseCookieHeader } from "oslo/cookie";
 const cookies = parseCookieHeader("cookie1=hello; cookie2=bye");
 ```
 
+## `oslo/crypto`
+
+```ts
+import { sha1, sha256, sha384, sha512 } from "oslo/crypto";
+
+const data = new TextEncoder().encode("Hello world");
+const hash = sha1(data);
+```
+
+```ts
+import { HMAC } from "oslo/crypto";
+
+const hs256 = new HMAC("SHA-256");
+const key = await hs256.generateKey();
+const data = new TextEncoder().encode("Hello world");
+const signature = await hs256.sign(key, data);
+const validSignature = await hs256.verify(key, signature, data);
+```
+
+```ts
+import { ECDSA } from "oslo/crypto";
+
+const es256 = new ECDSA("SHA-256", "P-256");
+const key = await es256.generateKey();
+const data = new TextEncoder().encode("Hello world");
+const signature = await es256.sign(key, data);
+const validSignature = await es256.verify(key, signature, data);
+```
+
+```ts
+import { RSASSAPKCS1v1_5 } from "oslo/crypto";
+
+const rs256 = new RSASSAPKCS1v1_5("SHA-256");
+const key = await rs256.generateKey();
+const data = new TextEncoder().encode("Hello world");
+const signature = await rs256.sign(key, data);
+const validSignature = await rs256.verify(key, signature, data);
+```
+
+```ts
+import { RSAPSS } from "oslo/crypto";
+
+const rsaPSS256 = new RSAPSS("SHA-256");
+const key = await rsaPSS256.generateKey();
+const data = new TextEncoder().encode("Hello world");
+const signature = await rsaPSS256.sign(key, data);
+const validSignature = await rsaPSS256.verify(key, signature, data);
+```
+
 ## `oslo/encoding`
 
 ```ts
 import { encodeBase64, decodeBase64 } from "oslo/encoding";
 
-const textEncoder = new TextEncoder();
-const encoded = encodeBase64(textEncoder.encode("hello world"));
+const encoded = encodeBase64(new TextEncoder().encode("hello world"));
 const decoded = decodeBase64(encoded);
 
 import { encodeBase64url, decodeBase64url } from "oslo/encoding";
@@ -468,7 +517,7 @@ try {
 		signature
 	};
 	await webauthn.validateAssertionResponse(
-		"ES256",
+		"ES256", // "RS256"
 		response,
 		publicKey, // `ArrayBufferLike`
 		challenge // `ArrayBufferLike`

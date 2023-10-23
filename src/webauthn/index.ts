@@ -1,5 +1,6 @@
 import { encodeBase64url } from "../encoding/index.js";
 import { compareBytes } from "../bytes.js";
+import { ECDSA, RSASSAPKCS1v1_5 } from "../crypto/index.js";
 
 export interface AttestationResponse {
 	clientDataJSON: ArrayBufferLike;
@@ -38,7 +39,7 @@ export class WebAuthnController {
 	}
 
 	public async validateAssertionResponse(
-		algorithm: "ES256",
+		algorithm: "ES256" | "RS256",
 		response: AssertionResponse,
 		publicKey: ArrayBufferLike,
 		challenge: ArrayBufferLike
@@ -61,30 +62,23 @@ export class WebAuthnController {
 			const signature = convertDERSignatureToECDSASignature(response.signature);
 			const hash = await crypto.subtle.digest("SHA-256", response.clientDataJSON);
 			const data = concatenateArrayBuffer(response.authenticatorData, hash);
-			const key = await crypto.subtle.importKey(
-				"spki",
-				publicKey,
-				{
-					name: "ECDSA",
-					namedCurve: "P-256"
-				},
-				true,
-				["verify"]
-			);
-			const validSignature = await crypto.subtle.verify(
-				{
-					name: "ECDSA",
-					hash: "SHA-256"
-				},
-				key,
-				signature,
-				data
-			);
+			const es256 = new ECDSA("SHA-256", "P-256");
+			const validSignature = await es256.verify(publicKey, signature, data);
 			if (!validSignature) {
 				throw new Error("Failed to validate signature");
 			}
+		} else if (algorithm === "RS256") {
+			const signature = convertDERSignatureToECDSASignature(response.signature);
+			const hash = await crypto.subtle.digest("SHA-256", response.clientDataJSON);
+			const data = concatenateArrayBuffer(response.authenticatorData, hash);
+			const rs256 = new RSASSAPKCS1v1_5("SHA-256");
+			const validSignature = await rs256.verify(publicKey, signature, data);
+			if (!validSignature) {
+				throw new Error("Failed to validate signature");
+			}
+		} else {
+			throw new TypeError(`Unknown algorithm: ${algorithm}`);
 		}
-		throw new TypeError(`Unknown algorithm: ${algorithm}`);
 	}
 
 	private verifyClientDataJSON(
