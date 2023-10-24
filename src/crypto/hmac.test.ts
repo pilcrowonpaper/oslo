@@ -30,7 +30,7 @@ describe.each(testCases)("HMAC($hash)", ({ hash }) => {
 		const signature = await hmac.sign(key, data);
 		await expect(hmac.verify(key, signature, data)).resolves.toBe(true);
 	});
-	test("Fails to verify invalid signature", async () => {
+	test("Fails on invalid signature", async () => {
 		const hmac = new HMAC(hash);
 		const data = new TextEncoder().encode("Hello world!");
 		const keyA = await hmac.generateKey();

@@ -9,7 +9,8 @@
 	"scripts": {
 		"build": "rm -r dist/* && tsc",
 		"format": "prettier -w .",
-		"lint": "eslint src"
+		"lint": "eslint src",
+		"test": "vitest run --sequence.concurrent"
 	},
 	"files": [
 		"/dist/"

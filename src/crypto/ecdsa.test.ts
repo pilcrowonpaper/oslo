@@ -36,7 +36,7 @@ describe.each(testCases)("ECDSA($hash, $curve)", ({ hash, curve }) => {
 		const signature = await ecdsa.sign(privateKey, data);
 		await expect(ecdsa.verify(publicKey, signature, data)).resolves.toBe(true);
 	});
-	test("Fails to verify invalid signature", async () => {
+	test("Fails on invalid signature", async () => {
 		const ecdsa = new ECDSA(hash, curve);
 		const data = new TextEncoder().encode("Hello world!");
 		const keyPairA = await ecdsa.generateKeyPair();

@@ -30,7 +30,7 @@ describe.each(testCases)("RSASSAPKCS1v1_5($hash)", ({ hash }) => {
 		const signature = await rsa.sign(privateKey, data);
 		await expect(rsa.verify(publicKey, signature, data)).resolves.toBe(true);
 	});
-	test("Fails to verify invalid signature", async () => {
+	test("Fails on invalid signature", async () => {
 		const rsa = new RSASSAPKCS1v1_5(hash);
 		const data = new TextEncoder().encode("Hello world!");
 		const keyPairA = await rsa.generateKeyPair();
@@ -48,7 +48,7 @@ describe.each(testCases)("RSASSAPSS($hash)", ({ hash }) => {
 		const signature = await rsa.sign(privateKey, data);
 		await expect(rsa.verify(publicKey, signature, data)).resolves.toBe(true);
 	});
-	test("Fails to verify invalid signature", async () => {
+	test("Fails on invalid signature", async () => {
 		const rsa = new RSASSAPKCS1v1_5(hash);
 		const data = new TextEncoder().encode("Hello world!");
 		const keyPairA = await rsa.generateKeyPair();

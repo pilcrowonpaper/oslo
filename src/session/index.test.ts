@@ -7,30 +7,32 @@ describe("SessionController", () => {
 	describe("SessionController.validateSessionState()", () => {
 		test("checks expiration", () => {
 			const sessionId = "123";
-			expect(sessionController.validateSessionState(sessionId, new Date(Date.now() - 1000))).toBe(
+			const currDateTime = Date.now();
+			expect(sessionController.validateSessionState(sessionId, new Date(currDateTime - 1000))).toBe(
 				null
 			);
 			expect(
 				sessionController.validateSessionState(
 					sessionId,
-					new Date(Date.now() + new TimeSpan(1, "h").milliseconds())
+					new Date(currDateTime + new TimeSpan(1, "h").milliseconds())
 				)
 			).toStrictEqual({
 				sessionId,
-				expiresAt: new Date(Date.now() + new TimeSpan(1, "h").milliseconds()),
+				expiresAt: new Date(currDateTime + new TimeSpan(1, "h").milliseconds()),
 				fresh: false
 			});
 		});
 		test("renews expiration", () => {
 			const sessionId = "123";
+			const currDateTime = Date.now();
 			expect(
 				sessionController.validateSessionState(
 					sessionId,
-					new Date(Date.now() + new TimeSpan(20, "m").milliseconds())
+					new Date(currDateTime + new TimeSpan(20, "m").milliseconds())
 				)
 			).toStrictEqual({
 				sessionId,
-				expiresAt: new Date(Date.now() + new TimeSpan(60, "m").milliseconds()),
+				expiresAt: new Date(currDateTime + new TimeSpan(60, "m").milliseconds()),
 				fresh: true
 			});
 		});
