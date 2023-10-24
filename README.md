@@ -28,6 +28,22 @@ pnpm add oslo
 yarn add oslo
 ```
 
+## Node.js
+
+For Node.js 16 & 18, you need to polyfill the Web Crypto API. This is not required in Node.js 20.
+
+```ts
+import { webcrypto } from "node:crypto";
+
+globalThis.crypto = webcrypto;
+```
+
+Alternatively, add the `--experimental-global-webcrypto` flag when running Node.
+
+```
+node --experimental-global-webcrypto index.js
+```
+
 ## `oslo/cookie`
 
 ```ts
