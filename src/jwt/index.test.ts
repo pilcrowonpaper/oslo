@@ -116,7 +116,7 @@ test("createJWT()", async () => {
 
 test("parseJWT()", async () => {
 	const secretKey = await new HMAC("SHA-256").generateKey();
-    const currDateSeconds = Math.floor(Date.now() / 1000);
+	const currDateSeconds = Math.floor(Date.now() / 1000);
 	const jwt = await createJWT(
 		"HS256",
 		secretKey,

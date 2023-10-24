@@ -5,7 +5,7 @@ import { VerificationTokenController } from "./index.js";
 describe("SessionController", () => {
 	const verificationTokenController = new VerificationTokenController(new TimeSpan(1, "h"));
 	test("verificationTokenController.isTokenReusable()", () => {
-        const currDateTime = Date.now();
+		const currDateTime = Date.now();
 		expect(
 			verificationTokenController.isTokenReusable(
 				new Date(currDateTime + new TimeSpan(40, "m").milliseconds())
