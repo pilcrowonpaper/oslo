@@ -56,10 +56,10 @@ export async function createJWT(
 	const textEncoder = new TextEncoder();
 	const headerPart = encodeBase64url(textEncoder.encode(JSON.stringify(headers)));
 	const payloadPart = encodeBase64url(textEncoder.encode(JSON.stringify(payloadWithClaims)));
-	const signatureBody = textEncoder.encode([headerPart, payloadPart].join("."));
-	const signature = await getAlgorithm(algorithm)!.sign(key, signatureBody);
+	const data = textEncoder.encode([headerPart, payloadPart].join("."));
+	const signature = await getAlgorithm(algorithm)!.sign(key, data);
 	const signaturePart = encodeBase64url(signature);
-	return [signatureBody, signaturePart].join(".");
+	return [headerPart, payloadPart, signaturePart].join(".");
 }
 
 export async function validateJWT(

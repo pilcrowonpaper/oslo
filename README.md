@@ -124,7 +124,7 @@ import { HMAC } from "oslo/crypto";
 import { createJWT, validateJWT, parseJWT } from "oslo/jwt";
 import { TimeSpan } from "oslo";
 
-const secret = new HMAC("SHA-256").generateKey();
+const secret = await new HMAC("SHA-256").generateKey();
 
 const payload = {
 	message: "hello world"
@@ -146,7 +146,7 @@ const jwt = await createJWT("HS256", payload, secret, {
 
 try {
 	// check JWT signature, expiration, and not-before timestamp
-	const { payload, header, expiresAt } = await validateJWT("HS256", jwt, secret);
+	const { payload, header, expiresAt } = await validateJWT("HS256", secret, jwt);
 } catch {
 	// invalid JWT
 }
