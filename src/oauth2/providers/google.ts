@@ -18,7 +18,7 @@ export class Google implements OAuth2Provider<GoogleTokens> {
 			accessType?: "online" | "offline";
 		}
 	) {
-		this.clientSecret = clientId;
+		this.clientSecret = clientSecret;
 		this.scope = options?.scope ?? [];
 		this.accessType = options?.accessType ?? "online";
 		this.controller = new OAuth2Controller(
