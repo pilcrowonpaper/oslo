@@ -41,7 +41,7 @@ export class RSASSAPKCS1v1_5 {
 		return signature;
 	}
 
-	public async generateKey(modulusLength?: 2048 | 4096): Promise<KeyPair> {
+	public async generateKeyPair(modulusLength?: 2048 | 4096): Promise<KeyPair> {
 		const cryptoKeyPair = await crypto.subtle.generateKey(
 			{
 				name: "RSASSA-PKCS1-v1_5",
@@ -61,7 +61,7 @@ export class RSASSAPKCS1v1_5 {
 	}
 }
 
-export class RSAPSS {
+export class RSASSAPSS {
 	private hash: Hash;
 	private saltLength: number;
 	constructor(hash: Hash) {

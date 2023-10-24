@@ -5,8 +5,9 @@
 A collection of utilities for auth, including:
 
 - [`oslo/cookie`](#oslocookie): Cookie parsing and serialization
-- [`oslo/crypto`](#oslocrypto): Light wrapper around Web Crypto API for generating hashes and signatures
+- [`oslo/crypto`](#oslocrypto): Generate hashes and signatures
 - [`oslo/encoding`](#osloencoding): Encode base64, base64url, base32, hex
+- [`oslo/jwt`](#oslojwt): Create and verify JWTs
 - [`oslo/oauth2`](#oslooauth2): OAuth2 helpers
   - [`oslo/oauth2/providers`](#oslooauth2providers): Built in OAuth2 providers (Apple, Github, Google)
 - [`oslo/otp`](#oslootp): HOTP, TOTP
@@ -114,6 +115,44 @@ const decoded = decodeBase64(encoded);
 import { encodeBase64url, decodeBase64url } from "oslo/encoding";
 import { encodeHex, decodeHex } from "oslo/encoding";
 import { encodeBase32, decodeBase32 } from "oslo/encoding";
+```
+
+## `oslo/jwt`
+
+```ts
+import { HMAC } from "oslo/crypto";
+import { createJWT, validateJWT, parseJWT } from "oslo/jwt";
+import { TimeSpan } from "oslo";
+
+const secret = new HMAC("SHA-256").generateKey();
+
+const payload = {
+	message: "hello world"
+};
+const jwt = await createJWT("HS256", payload, secret, {
+	// optional
+	headers: {
+		// custom headers
+		kid
+	},
+	expiresIn: new TimeSpan("30", d),
+	issuer,
+	subject,
+	audience,
+	notBefore: new Date(),
+	includeIssuedTimestamp: true, // include iat
+	jwtId
+});
+
+try {
+	// check JWT signature, expiration, and not-before timestamp
+	const { payload, header, expiresAt } = await validateJWT("HS256", jwt, secret);
+} catch {
+	// invalid JWT
+}
+
+// does not check for signature, expiration, etc
+const maybeJWT = parseJWT(jwt);
 ```
 
 ## `oslo/oauth2`

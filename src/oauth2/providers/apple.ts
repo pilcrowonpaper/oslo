@@ -1,8 +1,8 @@
 import { OAuth2Controller } from "../core.js";
-import { createES256SignedJWT } from "../jwt.js";
 import { decodeBase64 } from "../../encoding/index.js";
 
 import type { OAuth2Provider } from "../core.js";
+import { createJWT } from "../../jwt/index.js";
 
 export interface AppleCredentials {
 	clientId: string;
@@ -75,8 +75,10 @@ async function createSecret(credentials: AppleCredentials): Promise<string> {
 		sub: credentials.clientId
 	};
 	const pkcs8 = parsePKCS8PEM(credentials.certificate);
-	const jwt = await createES256SignedJWT(payload, pkcs8, {
-		keyId: credentials.keyId
+	const jwt = await createJWT("ES256", payload, pkcs8, {
+		headers: {
+			kid: credentials.keyId
+		}
 	});
 	return jwt;
 }

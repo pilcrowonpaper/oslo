@@ -1,13 +1,13 @@
 import type { KeyPair } from "./index.js";
 
-type Hash = "SHA-1" | "SHA-256" | "SHA-384" | "SHA-512";
-type ECDSACurve = "P-256" | "P-384" | "P-521";
+export type ECDSAHash = "SHA-1" | "SHA-256" | "SHA-384" | "SHA-512";
+export type ECDSACurve = "P-256" | "P-384" | "P-521";
 
 export class ECDSA {
-	private hash: Hash;
+	private hash: ECDSAHash;
 	private curve: ECDSACurve;
 
-	constructor(hash: Hash, curve: ECDSACurve) {
+	constructor(hash: ECDSAHash, curve: ECDSACurve) {
 		this.hash = hash;
 		this.curve = curve;
 	}
@@ -60,7 +60,7 @@ export class ECDSA {
 		);
 	}
 
-	public async generateKey(): Promise<KeyPair> {
+	public async generateKeyPair(): Promise<KeyPair> {
 		const cryptoKeyPair = await crypto.subtle.generateKey(
 			{
 				name: "ECDSA",
