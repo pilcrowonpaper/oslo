@@ -1,11 +1,8 @@
 import { encodeBase32 } from "../encoding/index.js";
-
-import type { TimeSpan } from "../index.js";
-
 export { generateHOTP } from "./hotp.js";
 export { TOTPController } from "./totp.js";
 
-export type HOTPAlgorithm = "SHA1" | "SHA256" | "SHA512";
+import type { TimeSpan } from "../index.js";
 
 export function createTOTPKeyURI(
 	issuer: string,
@@ -13,7 +10,6 @@ export function createTOTPKeyURI(
 	secret: ArrayBufferLike,
 	options?: {
 		digits?: number;
-		algorithm?: HOTPAlgorithm;
 		period?: TimeSpan;
 	}
 ): string {
@@ -31,7 +27,6 @@ export function createHOTPKeyURI(
 	options?: {
 		counter?: number;
 		digits?: number;
-		algorithm?: HOTPAlgorithm;
 	}
 ): string {
 	const [baseURI, params] = createKeyURIBase("hotp", issuer, accountName, secret, options);
@@ -47,7 +42,6 @@ function createKeyURIBase(
 	secret: ArrayBufferLike,
 	options?: {
 		digits?: number;
-		algorithm?: HOTPAlgorithm;
 	}
 ): [baseURI: string, params: URLSearchParams] {
 	const encodedIssuer = encodeURIComponent(issuer);
@@ -61,9 +55,6 @@ function createKeyURIBase(
 	});
 	if (options?.digits !== undefined) {
 		params.set("digits", options.digits.toString());
-	}
-	if (options?.algorithm) {
-		params.set("algorithm", options.algorithm);
 	}
 	return [baseURI, params];
 }

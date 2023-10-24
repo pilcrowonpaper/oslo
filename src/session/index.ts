@@ -77,7 +77,7 @@ export class SessionCookieController {
 		if (options?.expires) {
 			this.sessionExpiresIn = sessionExpiresIn;
 		} else {
-			this.sessionExpiresIn = new TimeSpan(52 * 2, "w");
+			this.sessionExpiresIn = new TimeSpan(52 * 2, "w"); // 2 years
 		}
 		this.baseCookieAttributes = {
 			secure: options?.secure ?? true,

@@ -1,13 +1,13 @@
 import type { KeyPair } from "./index.js";
+import type { SHAHash } from "./sha.js";
 
-export type ECDSAHash = "SHA-1" | "SHA-256" | "SHA-384" | "SHA-512";
 export type ECDSACurve = "P-256" | "P-384" | "P-521";
 
 export class ECDSA {
-	private hash: ECDSAHash;
+	private hash: SHAHash;
 	private curve: ECDSACurve;
 
-	constructor(hash: ECDSAHash, curve: ECDSACurve) {
+	constructor(hash: SHAHash, curve: ECDSACurve) {
 		this.hash = hash;
 		this.curve = curve;
 	}

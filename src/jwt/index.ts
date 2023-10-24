@@ -20,8 +20,8 @@ export type JWTAlgorithm =
 
 export async function createJWT(
 	algorithm: JWTAlgorithm,
-	payload: Record<any, any>,
 	key: ArrayBufferLike,
+	payload: Record<any, any>,
 	options?: {
 		headers?: Record<any, any>;
 		expiresIn?: TimeSpan;
@@ -35,7 +35,8 @@ export async function createJWT(
 ): Promise<string> {
 	const headers: JWTHeader = {
 		alg: algorithm,
-		typ: "JWT"
+		typ: "JWT",
+		...options?.headers
 	};
 	const payloadWithClaims: JWTPayload = {
 		...payload,
@@ -77,7 +78,7 @@ export async function validateJWT(
 	if (parsedJWT.expiresAt && !isWithinExpirationDate(parsedJWT.expiresAt)) {
 		throw new Error("Expired JWT");
 	}
-	if (parsedJWT.notBefore && parsedJWT.notBefore.getTime() < Date.now()) {
+	if (parsedJWT.notBefore && Date.now() < parsedJWT.notBefore.getTime()) {
 		throw new Error("Inactive JWT");
 	}
 	const signature = decodeBase64url(parsedJWT.parts[2]);

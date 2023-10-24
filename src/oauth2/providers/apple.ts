@@ -74,8 +74,8 @@ async function createSecret(credentials: AppleCredentials): Promise<string> {
 		aud: "https://appleid.apple.com",
 		sub: credentials.clientId
 	};
-	const pkcs8 = parsePKCS8PEM(credentials.certificate);
-	const jwt = await createJWT("ES256", payload, pkcs8, {
+	const privateKey = parsePKCS8PEM(credentials.certificate);
+	const jwt = await createJWT("ES256", privateKey, payload, {
 		headers: {
 			kid: credentials.keyId
 		}

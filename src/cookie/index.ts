@@ -25,7 +25,7 @@ export function serializeCookie(
 		keyValueEntries.push(["HttpOnly"]);
 	}
 	if (attributes?.maxAge !== undefined) {
-		keyValueEntries.push(["MaxAge", attributes.maxAge]);
+		keyValueEntries.push(["Max-Age", attributes.maxAge]);
 	}
 	if (attributes?.path !== undefined) {
 		keyValueEntries.push(["Path", attributes.path]);
@@ -51,8 +51,8 @@ export function parseCookieHeader(header: string | null | undefined): Map<string
 	for (const item of items) {
 		const pair = item.split("=");
 		const rawKey = pair[0];
-		const rawValue = pair[1];
-		if (!rawKey || !rawValue) continue;
+		const rawValue = pair[1] ?? "";
+		if (!rawKey) continue;
 		cookies.set(decodeURIComponent(rawKey), decodeURIComponent(rawValue));
 	}
 	return cookies;

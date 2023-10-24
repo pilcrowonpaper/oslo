@@ -22,18 +22,16 @@ export function verifyRequestOrigin(
 	if (!originHost) return false;
 	if (host.startsWith("https//") || host.startsWith("https://")) {
 		host = safeURL(host)?.host ?? null;
-	} else {
-		host = host.split(":").at(0) ?? null;
 	}
 	if (!host) return false;
-	const allowedSubdomains = options?.allowedSubdomains ?? [];
 	const allowBaseDomain = options?.allowBaseDomain ?? false;
-	if (allowedSubdomains.length === 0) {
-		return originHost === host;
-	}
 	const hostBaseDomain = host.split(".").slice(-2).join(".");
 	if (allowBaseDomain && originHost === hostBaseDomain) {
 		return true;
+	}
+	const allowedSubdomains = options?.allowedSubdomains ?? [];
+	if (allowedSubdomains.length === 0) {
+		return originHost === host;
 	}
 	if (allowedSubdomains === "*") {
 		return originHost === hostBaseDomain || originHost.endsWith("." + hostBaseDomain);

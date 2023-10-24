@@ -147,7 +147,7 @@ const payload = {
 };
 
 // supports HMAC, ECDSA, RSASSA-PKCS1-v1_5, RSASSA-PSS
-const jwt = await createJWT("HS256", payload, secret, {
+const jwt = await createJWT("HS256", secret, payload, {
 	// optional
 	headers: {
 		// custom headers
@@ -244,15 +244,9 @@ const url = await githubOAuth.createAuthorizationURL(state);
 const tokens = await githubOAuth.validateAuthorizationCode(code);
 ```
 
-## `oslo/oidc`
-
-```ts
-import { parseIdToken } from "oslo/oidc";
-
-const { sub, exp, email } = parseIdToken<{ email: string }>(idToken);
-```
-
 ## `oslo/otp`
+
+Module for HOTP and TOTP. Only supports HMAC with SHA-1.
 
 ```ts
 import { generateHOTP } from "oslo/otp";
@@ -269,6 +263,7 @@ const otp = await generateHOTP(secret, counter, 8); // 8 digits (max)
 ```ts
 import { TOTPController } from "oslo/otp";
 import { TimeSpan } from "oslo";
+import { HMAC } from "oslo/crypto";
 
 const totpController = new TOTPController({
 	// optional
@@ -276,8 +271,8 @@ const totpController = new TOTPController({
 	digits: 6 // default: 6
 });
 
-const secret = new Uint8Array(20);
-crypto.getRandomValues(secret);
+// generate secret key (use "SHA-1" since HOTP uses HMAC with SHA-1)
+const secret = await new HMAC("SHA-1").generateKey();
 
 const otp = await totpController.generate(secret);
 const validOTP = await totpController.verify(otp, secret);
@@ -285,9 +280,10 @@ const validOTP = await totpController.verify(otp, secret);
 
 ```ts
 import { createHOTPKeyURI, createTOTPKeyURI } from "oslo/otp";
+import { HMAC } from "oslo/crypto";
 
-const secret = new Uint8Array(20);
-crypto.getRandomValues(secret);
+// always use sha-1
+const secret = await new HMAC("SHA-1").generateKey();
 
 const issuer = "My website";
 const accountName = "user@example.com";
@@ -295,14 +291,12 @@ const accountName = "user@example.com";
 const uri = createHOTPKeyURI(issuer, accountName, secret, {
 	//optional
 	counter: 0, // default: 0
-	algorithm: "SHA-1", // default: SHA-1
 	digits: 6 // default: 6
 });
 
 const uri = createTOTPKeyURI(issuer, accountName, secret, {
 	//optional
 	period: new TimeSpan(30, "s"), // default: 30s
-	algorithm: "SHA-1", // default: SHA-1
 	digits: 6 // default: 6
 });
 ```

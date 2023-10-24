@@ -1,7 +1,8 @@
-import { bitsToInt, byteToBits } from "../bytes.js";
+import { bitsToInt, byteToBits, bytesToBits } from "../bytes.js";
+import { HMAC } from "../crypto/hmac.js";
 
 export async function generateHOTP(
-	secret: ArrayBufferLike,
+	key: ArrayBufferLike,
 	counter: number,
 	digits: number = 6
 ): Promise<string> {
@@ -9,17 +10,7 @@ export async function generateHOTP(
 		throw new TypeError("Digits must be 8 or smaller");
 	}
 	const counterBytes = intTo8Bytes(counter);
-	const key = await crypto.subtle.importKey(
-		"raw",
-		secret,
-		{
-			name: "HMAC",
-			hash: "SHA-1"
-		},
-		false,
-		["sign"]
-	);
-	const HS = await crypto.subtle.sign("HMAC", key, counterBytes);
+	const HS = await new HMAC("SHA-1").sign(key, counterBytes);
 	const SBites = truncate(new Uint8Array(HS));
 	const SNum = bitsToInt(SBites);
 	const D = SNum % 10 ** digits;
@@ -27,12 +18,8 @@ export async function generateHOTP(
 }
 
 function truncate(data: Uint8Array): string {
-	const offset = bitsToInt(byteToBits(data[19]!).slice(4));
-	const p = data.slice(offset, offset + 3 + 1);
-	return [...p]
-		.map((val) => byteToBits(val))
-		.join("")
-		.slice(1);
+	const offset = bitsToInt(byteToBits(data[data.byteLength - 1]!).slice(4));
+	return bytesToBits(data).slice(offset * 8 + 1, (offset + 4) * 8);
 }
 
 function intTo8Bytes(int: number): Uint8Array {

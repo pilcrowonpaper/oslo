@@ -1,4 +1,5 @@
 {
+	"include": ["src"],
 	"compilerOptions": {
 		"esModuleInterop": true,
 		"skipLibCheck": true,
@@ -13,5 +14,6 @@
 		"module": "NodeNext",
 		"outDir": "dist",
 		"declaration": true
-	}
+	},
+	"exclude": ["src/**/*.test.ts"]
 }

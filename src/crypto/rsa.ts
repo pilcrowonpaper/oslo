@@ -1,10 +1,9 @@
 import type { KeyPair } from "./index.js";
-
-type Hash = "SHA-1" | "SHA-256" | "SHA-384" | "SHA-512";
+import type { SHAHash } from "./sha.js";
 
 export class RSASSAPKCS1v1_5 {
-	private hash: Hash;
-	constructor(hash: Hash) {
+	private hash: SHAHash;
+	constructor(hash: SHAHash) {
 		this.hash = hash;
 	}
 
@@ -62,9 +61,9 @@ export class RSASSAPKCS1v1_5 {
 }
 
 export class RSASSAPSS {
-	private hash: Hash;
+	private hash: SHAHash;
 	private saltLength: number;
-	constructor(hash: Hash) {
+	constructor(hash: SHAHash) {
 		this.hash = hash;
 		if (hash === "SHA-1") {
 			this.saltLength = 20;

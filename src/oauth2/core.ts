@@ -1,3 +1,4 @@
+import { sha256 } from "../crypto/index.js";
 import { encodeBase64, encodeBase64url } from "../encoding/index.js";
 import { authorizationHeader } from "./request.js";
 
@@ -54,10 +55,7 @@ export class OAuth2Controller {
 			authorizationUrl.searchParams.set("redirect_uri", this.redirectURI);
 		}
 		if (options?.codeVerifier !== undefined) {
-			const codeChallengeBuffer = await crypto.subtle.digest(
-				"SHA-256",
-				new TextEncoder().encode(options.codeVerifier)
-			);
+			const codeChallengeBuffer = await sha256(new TextEncoder().encode(options.codeVerifier));
 			const codeChallenge = encodeBase64url(codeChallengeBuffer);
 			authorizationUrl.searchParams.set("code_challenge_method", "ES256");
 			authorizationUrl.searchParams.set("code_challenge", codeChallenge);

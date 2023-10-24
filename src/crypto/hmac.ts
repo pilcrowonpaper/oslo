@@ -1,8 +1,8 @@
-type Hash = "SHA-1" | "SHA-256" | "SHA-384" | "SHA-512";
+import type { SHAHash } from "./sha.js";
 
 export class HMAC {
-	private hash: Hash;
-	constructor(hash: Hash) {
+	private hash: SHAHash;
+	constructor(hash: SHAHash) {
 		this.hash = hash;
 	}
 

@@ -60,11 +60,12 @@ export function encodeBase32(
 	const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
 	let result = "";
 	for (let i = 0; i < Math.ceil(bits.length / 5); i++) {
-		const key = bitsToInt(bits.slice(i * 5, (i + 1) * 5));
+		const key = bitsToInt(bits.slice(i * 5, (i + 1) * 5).padEnd(5, "0"));
 		const val = alphabet[key];
 		result += val;
 	}
-	if (options?.padding) {
+	const padding = options?.padding ?? true;
+	if (padding) {
 		result = result.padEnd(8 * Math.ceil(result.length / 8), "=");
 	}
 	return result;
@@ -76,16 +77,12 @@ export function decodeBase32(data: string): Uint8Array {
 	let bits = "";
 	for (let i = 0; i < data.length; i++) {
 		const key = alphabet.indexOf(data[i]!);
-		if (key === -1) throw new Error("Invalid base32");
-		if (i === data.length - 1) {
-			bits += key.toString(2).padStart(8 - (bits.length % 8), "0");
-		} else {
-			bits += key.toString(2).padStart(5, "0");
-		}
+		if (key === -1) throw new Error("Invalid input");
+		bits += key.toString(2).padStart(5, "0");
 	}
 	const result = new Uint8Array(bits.length / 8);
 	for (let i = 0; i < bits.length / 8; i++) {
-		result[i] = bitsToInt(bits.slice(i * 8, (i + 1) * 8));
+		result[i] = bitsToInt(bits.slice(i * 8, (i + 1) * 8).padStart(8, "0"));
 	}
 	return result;
 }
