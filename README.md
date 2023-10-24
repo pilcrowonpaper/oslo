@@ -78,30 +78,30 @@ const validSignature = await hs256.verify(key, signature, data);
 import { ECDSA } from "oslo/crypto";
 
 const es256 = new ECDSA("SHA-256", "P-256");
-const key = await es256.generateKey();
+const { privateKey, publicKey } = await es256.generateKeyPair();
 const data = new TextEncoder().encode("Hello world");
-const signature = await es256.sign(key, data);
-const validSignature = await es256.verify(key, signature, data);
+const signature = await es256.sign(privateKey, data);
+const validSignature = await es256.verify(publicKey, signature, data);
 ```
 
 ```ts
 import { RSASSAPKCS1v1_5 } from "oslo/crypto";
 
 const rs256 = new RSASSAPKCS1v1_5("SHA-256");
-const key = await rs256.generateKey();
+const { privateKey, publicKey } = await rs256.generateKeyPair();
 const data = new TextEncoder().encode("Hello world");
-const signature = await rs256.sign(key, data);
-const validSignature = await rs256.verify(key, signature, data);
+const signature = await rs256.sign(privateKey, data);
+const validSignature = await rs256.verify(publicKey, signature, data);
 ```
 
 ```ts
 import { RSAPSS } from "oslo/crypto";
 
-const rsaPSS256 = new RSAPSS("SHA-256");
-const key = await rsaPSS256.generateKey();
+const ps256 = new RSAPSS("SHA-256");
+const { privateKey, publicKey } = await ps256.generateKeyPair();
 const data = new TextEncoder().encode("Hello world");
-const signature = await rsaPSS256.sign(key, data);
-const validSignature = await rsaPSS256.verify(key, signature, data);
+const signature = await ps256.sign(privateKey, data);
+const validSignature = await ps256.verify(publicKey, signature, data);
 ```
 
 ## `oslo/encoding`

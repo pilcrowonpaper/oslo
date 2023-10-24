@@ -125,7 +125,7 @@ export class RSASSAPSS {
 		return signature;
 	}
 
-	public async generateKey(modulusLength?: 2048 | 4096): Promise<KeyPair> {
+	public async generateKeyPair(modulusLength?: 2048 | 4096): Promise<KeyPair> {
 		const cryptoKeyPair = await crypto.subtle.generateKey(
 			{
 				name: "RSA-PSS",
