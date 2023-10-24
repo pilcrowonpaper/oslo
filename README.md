@@ -145,6 +145,8 @@ const secret = await new HMAC("SHA-256").generateKey();
 const payload = {
 	message: "hello world"
 };
+
+// supports HMAC, ECDSA, RSASSA-PKCS1-v1_5, RSASSA-PSS
 const jwt = await createJWT("HS256", payload, secret, {
 	// optional
 	headers: {
