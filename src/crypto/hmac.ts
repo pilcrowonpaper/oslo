@@ -7,9 +7,9 @@ export class HMAC {
 	}
 
 	public async verify(
-		key: ArrayBufferLike,
-		signature: ArrayBufferLike,
-		data: ArrayBufferLike
+		key: ArrayBuffer,
+		signature: ArrayBuffer,
+		data: ArrayBuffer
 	): Promise<boolean> {
 		const cryptoKey = await crypto.subtle.importKey(
 			"raw",
@@ -24,7 +24,7 @@ export class HMAC {
 		return await crypto.subtle.verify("HMAC", cryptoKey, signature, data);
 	}
 
-	public async sign(key: ArrayBufferLike, data: ArrayBufferLike): Promise<ArrayBuffer> {
+	public async sign(key: ArrayBuffer, data: ArrayBuffer): Promise<ArrayBuffer> {
 		const cryptoKey = await crypto.subtle.importKey(
 			"raw",
 			key,

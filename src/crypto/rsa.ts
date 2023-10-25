@@ -8,9 +8,9 @@ export class RSASSAPKCS1v1_5 {
 	}
 
 	public async verify(
-		publicKey: ArrayBufferLike,
-		signature: ArrayBufferLike,
-		data: ArrayBufferLike
+		publicKey: ArrayBuffer,
+		signature: ArrayBuffer,
+		data: ArrayBuffer
 	): Promise<boolean> {
 		const cryptoKey = await crypto.subtle.importKey(
 			"spki",
@@ -25,7 +25,7 @@ export class RSASSAPKCS1v1_5 {
 		return await crypto.subtle.verify("RSASSA-PKCS1-v1_5", cryptoKey, signature, data);
 	}
 
-	public async sign(privateKey: ArrayBufferLike, data: ArrayBufferLike): Promise<ArrayBuffer> {
+	public async sign(privateKey: ArrayBuffer, data: ArrayBuffer): Promise<ArrayBuffer> {
 		const cryptoKey = await crypto.subtle.importKey(
 			"pkcs8",
 			privateKey,
@@ -77,9 +77,9 @@ export class RSASSAPSS {
 	}
 
 	public async verify(
-		publicKey: ArrayBufferLike,
-		signature: ArrayBufferLike,
-		data: ArrayBufferLike
+		publicKey: ArrayBuffer,
+		signature: ArrayBuffer,
+		data: ArrayBuffer
 	): Promise<boolean> {
 		const cryptoKey = await crypto.subtle.importKey(
 			"spki",
@@ -102,7 +102,7 @@ export class RSASSAPSS {
 		);
 	}
 
-	public async sign(privateKey: ArrayBufferLike, data: ArrayBufferLike): Promise<ArrayBuffer> {
+	public async sign(privateKey: ArrayBuffer, data: ArrayBuffer): Promise<ArrayBuffer> {
 		const cryptoKey = await crypto.subtle.importKey(
 			"pkcs8",
 			privateKey,

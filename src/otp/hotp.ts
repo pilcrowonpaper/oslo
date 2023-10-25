@@ -2,7 +2,7 @@ import { bitsToInt, byteToBits, bytesToBits } from "../bytes.js";
 import { HMAC } from "../crypto/hmac.js";
 
 export async function generateHOTP(
-	key: ArrayBufferLike,
+	key: ArrayBuffer,
 	counter: number,
 	digits: number = 6
 ): Promise<string> {

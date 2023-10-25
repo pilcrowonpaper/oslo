@@ -7,7 +7,7 @@ import type { TimeSpan } from "../index.js";
 export function createTOTPKeyURI(
 	issuer: string,
 	accountName: string,
-	secret: ArrayBufferLike,
+	secret: ArrayBuffer,
 	options?: {
 		digits?: number;
 		period?: TimeSpan;
@@ -23,7 +23,7 @@ export function createTOTPKeyURI(
 export function createHOTPKeyURI(
 	issuer: string,
 	accountName: string,
-	secret: ArrayBufferLike,
+	secret: ArrayBuffer,
 	options?: {
 		counter?: number;
 		digits?: number;
@@ -39,7 +39,7 @@ function createKeyURIBase(
 	type: "totp" | "hotp",
 	issuer: string,
 	accountName: string,
-	secret: ArrayBufferLike,
+	secret: ArrayBuffer,
 	options?: {
 		digits?: number;
 	}

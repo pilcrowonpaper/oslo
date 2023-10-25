@@ -45,7 +45,7 @@ export function serializeCookie(
 	return keyValueEntries.map((pair) => pair.join("=")).join("; ");
 }
 
-export function parseCookieHeader(header: string | null | undefined): Map<string, string> {
+export function parseCookies(header: string | null | undefined): Map<string, string> {
 	const cookies = new Map<string, string>();
 	const items = header?.split("; ") ?? [];
 	for (const item of items) {

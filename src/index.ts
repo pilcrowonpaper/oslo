@@ -41,6 +41,6 @@ export function isWithinExpirationDate(date: Date): boolean {
 	return Date.now() < date.getTime();
 }
 
-export function expirationDate(timeSpan: TimeSpan): Date {
+export function createDate(timeSpan: TimeSpan): Date {
 	return new Date(Date.now() + timeSpan.milliseconds());
 }
