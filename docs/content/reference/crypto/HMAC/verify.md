@@ -1,0 +1,15 @@
+---
+type: "method"
+---
+
+# `sign()`
+
+Verifies a signature with a public key and returns `true` if the signature is valid. See [`HMAC`](/reference/crypto/HMAC) for an example.
+
+```ts
+function sign(secretKey: ArrayBuffer, signature: ArrayBuffer, data: ArrayBuffer): Promise<boolean>;
+```
+
+- `secretKey`: Secret key in raw format
+- `signature`
+- `data`: The original signed data
