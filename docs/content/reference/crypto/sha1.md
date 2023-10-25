@@ -7,7 +7,7 @@ type: "function"
 Generates a SHA-1 hash.
 
 ```ts
-function sha1(data: ArrayBuffer): Promise<ArrayBuffer>; 
+function sha1(data: ArrayBuffer): Promise<ArrayBuffer>;
 ```
 
 - `data`
