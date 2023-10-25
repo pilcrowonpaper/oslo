@@ -353,12 +353,11 @@ CSRF protection.
 import { verifyRequestOrigin } from "oslo/request";
 
 // only allow same-origin requests
-const validRequestOrigin = verifyRequestOrigin(request.headers.get("Origin"), {
-	host: request.headers.get("Host")
-});
-const validRequestOrigin = verifyRequestOrigin(request.headers.get("Origin"), {
-	host: request.url
-});
+const validRequestOrigin = verifyRequestOrigin(
+	request.headers.get("Origin"),
+	request.headers.get("Host")
+);
+const validRequestOrigin = verifyRequestOrigin(request.headers.get("Origin"), request.url);
 
 if (!validRequestOrigin) {
 	// invalid request origin
@@ -372,19 +371,30 @@ if (!validRequestOrigin) {
 // true
 verifyRequestOrigin("https://example.com", "example.com");
 
+// false
+verifyRequestOrigin("https://foo.example.com", "example.com");
+
+// false
+verifyRequestOrigin("https://example.com:3000", "example.com:5000");
+
 // true
+verifyRequestOrigin("https://foo.example.com", "example.com", {
+	allowedSubdomains: "*" // wild card to allow any nested subdomains
+});
+
+// false
 verifyRequestOrigin("https://foo.example.com", "bar.example.com", {
-	allowedSubdomains: "*" // wild card to allow any subdomains
+	allowedSubdomains: "*"
 });
 
 // true
-verifyRequestOrigin("https://foo.example.com", "bar.example.com", {
+verifyRequestOrigin("https://foo.example.com", "example.com", {
 	allowedSubdomains: ["foo"]
 });
 
-// true
-verifyRequestOrigin("https://example.com", "foo.example.com", {
-	allowBaseDomain: true
+// false
+verifyRequestOrigin("https://foo.example.com", "bar.example.com", {
+	allowedSubdomains: ["foo"]
 });
 ```
 
