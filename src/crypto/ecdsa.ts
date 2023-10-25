@@ -12,7 +12,7 @@ export class ECDSA {
 		this.curve = curve;
 	}
 
-	public async sign(privateKey: ArrayBufferLike, data: ArrayBufferLike): Promise<ArrayBuffer> {
+	public async sign(privateKey: ArrayBuffer, data: ArrayBuffer): Promise<ArrayBuffer> {
 		const cryptoKey = await crypto.subtle.importKey(
 			"pkcs8",
 			privateKey,
@@ -35,9 +35,9 @@ export class ECDSA {
 	}
 
 	public async verify(
-		publicKey: ArrayBufferLike,
-		signature: ArrayBufferLike,
-		data: ArrayBufferLike
+		publicKey: ArrayBuffer,
+		signature: ArrayBuffer,
+		data: ArrayBuffer
 	): Promise<boolean> {
 		const cryptoKey = await crypto.subtle.importKey(
 			"spki",

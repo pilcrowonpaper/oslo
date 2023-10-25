@@ -1,4 +1,4 @@
-import { expirationDate, isWithinExpirationDate } from "../index.js";
+import { createDate, isWithinExpirationDate } from "../index.js";
 import type { TimeSpan } from "../index.js";
 
 export interface VerificationToken {
@@ -25,7 +25,7 @@ export class VerificationTokenController {
 		return {
 			value,
 			userId,
-			expiresAt: expirationDate(this.expiresIn)
+			expiresAt: createDate(this.expiresIn)
 		};
 	}
 }

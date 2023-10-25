@@ -65,10 +65,10 @@ serializeCookie("this is fine =;", "this too =;");
 ```
 
 ```ts
-import { parseCookieHeader } from "oslo/cookie";
+import { parseCookies } from "oslo/cookie";
 
 // returns Map<string, string>
-const cookies = parseCookieHeader("cookie1=hello; cookie2=bye");
+const cookies = parseCookies("cookie1=hello; cookie2=bye");
 ```
 
 ## `oslo/crypto`
@@ -462,7 +462,7 @@ const cookie = sessionCookieController.createSessionCookie(session.sessionId);
 
 ```ts
 // get cookie
-const sessionId = sessionCookieController.parseCookieHeader(headers.get("Cookie"));
+const sessionId = sessionCookieController.parseCookies(headers.get("Cookie"));
 const sessionId = cookies.get(sessionCookieController.cookieName);
 
 if (!sessionId) {
@@ -552,7 +552,7 @@ await sendEmail(`http://localhost:3000/reset-password/${token.value}`);
 
 ## `oslo/webauthn`
 
-`validateAttestationResponse()` does not validate attestation certificates. `validateAssertionResponse()` currently only supports ECDSA using secp256k1 curve and SHA-256 (algorithm ID `-7`).
+`validateAttestationResponse()` does not validate attestation certificates. `validateAssertionResponse()` currently supports ES256 and RS256.
 
 ```ts
 import { WebAuthnController } from "oslo/webauthn";
@@ -561,7 +561,7 @@ const webauthn = new WebAuthnController("http://localhost:3000");
 
 try {
 	const response: AttestationResponse = {
-		// all `ArrayBufferLike` type (`Uint8Array`, `ArrayBuffer` etc)
+		// all `ArrayBuffer` type (`Uint8Array`, `ArrayBuffer` etc)
 		clientDataJSON,
 		authenticatorData
 	};
@@ -572,16 +572,16 @@ try {
 
 try {
 	const response: AssertionResponse = {
-		// all `ArrayBufferLike` type (`Uint8Array`, `ArrayBuffer` etc)
+		// all `ArrayBuffer` type
 		clientDataJSON,
 		authenticatorData,
 		signature
 	};
 	await webauthn.validateAssertionResponse(
 		"ES256", // "RS256"
+		publicKey, // `ArrayBuffer`
 		response,
-		publicKey, // `ArrayBufferLike`
-		challenge // `ArrayBufferLike`
+		challenge // `ArrayBuffer`
 	);
 } catch {
 	// failed to validate

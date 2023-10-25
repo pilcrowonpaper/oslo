@@ -1,5 +1,5 @@
-import { expirationDate, isWithinExpirationDate, TimeSpan } from "../index.js";
-import { parseCookieHeader, serializeCookie } from "../cookie/index.js";
+import { createDate, isWithinExpirationDate, TimeSpan } from "../index.js";
+import { parseCookies, serializeCookie } from "../cookie/index.js";
 
 import type { CookieAttributes } from "../cookie/index.js";
 
@@ -37,7 +37,7 @@ export class SessionController {
 		);
 		if (!isWithinExpirationDate(activePeriodExpirationDate)) {
 			// extend expiration
-			expiresAt = expirationDate(this.expiresIn);
+			expiresAt = createDate(this.expiresIn);
 			fresh = true;
 		}
 		return {
@@ -50,7 +50,7 @@ export class SessionController {
 	public createSession(sessionId: string): Session {
 		return {
 			sessionId,
-			expiresAt: expirationDate(this.expiresIn),
+			expiresAt: createDate(this.expiresIn),
 			fresh: true
 		};
 	}
@@ -107,8 +107,8 @@ export class SessionCookieController {
 		});
 	}
 
-	public parseCookieHeader(header: string | null | undefined): string | null {
-		const cookies = parseCookieHeader(header);
+	public parseCookies(header: string | null | undefined): string | null {
+		const cookies = parseCookies(header);
 		return cookies.get(this.cookieName) ?? null;
 	}
 }

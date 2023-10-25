@@ -20,7 +20,7 @@ export type JWTAlgorithm =
 
 export async function createJWT(
 	algorithm: JWTAlgorithm,
-	key: ArrayBufferLike,
+	key: ArrayBuffer,
 	payload: Record<any, any>,
 	options?: {
 		headers?: Record<any, any>;
@@ -65,7 +65,7 @@ export async function createJWT(
 
 export async function validateJWT(
 	algorithm: JWTAlgorithm,
-	key: ArrayBufferLike,
+	key: ArrayBuffer,
 	jwt: string | JWT
 ): Promise<JWT> {
 	const parsedJWT = typeof jwt === "string" ? parseJWT(jwt) : jwt;

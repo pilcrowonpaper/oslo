@@ -3,14 +3,14 @@ import { compareBytes } from "../bytes.js";
 import { ECDSA, RSASSAPKCS1v1_5 } from "../crypto/index.js";
 
 export interface AttestationResponse {
-	clientDataJSON: ArrayBufferLike;
-	authenticatorData: ArrayBufferLike;
+	clientDataJSON: ArrayBuffer;
+	authenticatorData: ArrayBuffer;
 }
 
 export interface AssertionResponse {
-	clientDataJSON: ArrayBufferLike;
-	authenticatorData: ArrayBufferLike;
-	signature: ArrayBufferLike;
+	clientDataJSON: ArrayBuffer;
+	authenticatorData: ArrayBuffer;
+	signature: ArrayBuffer;
 }
 
 export class WebAuthnController {
@@ -21,7 +21,7 @@ export class WebAuthnController {
 
 	public async validateAttestationResponse(
 		response: AttestationResponse,
-		challenge: ArrayBufferLike
+		challenge: ArrayBuffer
 	): Promise<void> {
 		const validClientDataJSON = this.verifyClientDataJSON(
 			"webauthn.create",
@@ -40,9 +40,9 @@ export class WebAuthnController {
 
 	public async validateAssertionResponse(
 		algorithm: "ES256" | "RS256",
+		publicKey: ArrayBuffer,
 		response: AssertionResponse,
-		publicKey: ArrayBufferLike,
-		challenge: ArrayBufferLike
+		challenge: ArrayBuffer
 	): Promise<void> {
 		const validClientDataJSON = this.verifyClientDataJSON(
 			"webauthn.get",
@@ -83,8 +83,8 @@ export class WebAuthnController {
 
 	private verifyClientDataJSON(
 		type: "webauthn.create" | "webauthn.get",
-		clientDataJSON: ArrayBufferLike,
-		challenge: ArrayBufferLike
+		clientDataJSON: ArrayBuffer,
+		challenge: ArrayBuffer
 	): boolean {
 		const clientData: unknown = JSON.parse(new TextDecoder().decode(clientDataJSON));
 		if (!clientData || typeof clientData !== "object") {
@@ -102,7 +102,7 @@ export class WebAuthnController {
 		return true;
 	}
 
-	private async verifyAuthenticatorData(authenticatorData: ArrayBufferLike): Promise<boolean> {
+	private async verifyAuthenticatorData(authenticatorData: ArrayBuffer): Promise<boolean> {
 		const authData = new Uint8Array(authenticatorData);
 		if (authData.byteLength < 37) {
 			return false;
@@ -122,7 +122,7 @@ export class WebAuthnController {
 	}
 }
 
-function convertDERSignatureToECDSASignature(DERSignature: ArrayBufferLike): ArrayBuffer {
+function convertDERSignatureToECDSASignature(DERSignature: ArrayBuffer): ArrayBuffer {
 	const signatureBytes = new Uint8Array(DERSignature);
 
 	const rStart = 4;
@@ -155,7 +155,7 @@ function decodeDERInteger(integerBytes: Uint8Array, expectedLength: number): Uin
 	return integerBytes.slice(-32);
 }
 
-function concatenateArrayBuffer(buffer1: ArrayBufferLike, buffer2: ArrayBufferLike): ArrayBuffer {
+function concatenateArrayBuffer(buffer1: ArrayBuffer, buffer2: ArrayBuffer): ArrayBuffer {
 	return concatenateUint8Array(new Uint8Array(buffer1), new Uint8Array(buffer2)).buffer;
 }
 
