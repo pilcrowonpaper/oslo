@@ -6,13 +6,17 @@ type: "interface"
 
 Represents a WebAuthn assertion response.
 
+## Definition
+
 ```ts
-interface  AssertionResponse {
+interface AssertionResponse {
 	clientDataJSON: ArrayBuffer;
 	authenticatorData: ArrayBuffer;
 	signature: ArrayBuffer;
 }
 ```
+
+### Properties
 
 - `clientDataJSON`
 - `authenticatorData`

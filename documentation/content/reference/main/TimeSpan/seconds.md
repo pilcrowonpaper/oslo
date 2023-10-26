@@ -6,6 +6,8 @@ type: "method"
 
 Returns the time-span in seconds.
 
+## Definition
+
 ```ts
 function seconds(): number;
 ```
@@ -14,5 +16,5 @@ function seconds(): number;
 
 ```ts
 // 60 * 60 = 3600 s
-new TimeSpan(1,"h").seconds();
+new TimeSpan(1, "h").seconds();
 ```

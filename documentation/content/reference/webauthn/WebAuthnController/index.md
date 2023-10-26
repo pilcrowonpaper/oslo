@@ -12,9 +12,11 @@ Provides methods for validating WebAuthn attestation and assertion responses. Su
 function constructor(origin: string): this;
 ```
 
+### Parameters
+
 - `origin`: Where the frontend is hosted (full url)
 
 ## Methods
 
-- [WebAuthnController.validateAssertionResponse()](ref:webauthn)
-- [WebAuthnController.validateAttestationResponse()](ref:webauthn)
+- [`validateAssertionResponse()`](ref:webauthn/WebAuthnController)
+- [`validateAttestationResponse()`](ref:webauthn/WebAuthnController)

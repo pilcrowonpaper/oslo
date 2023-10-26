@@ -6,9 +6,12 @@ type: "method"
 
 Generates a new TOTP.
 
+## Definition
+
 ```ts
-function generate(secretKey: ArrayBuffer): Promise<string>
+function generate(secretKey: ArrayBuffer): Promise<string>;
 ```
 
-- `secretKey`: HMAC SHA-1 secret key
+### Parameters
 
+- `secretKey`: HMAC SHA-1 secret key

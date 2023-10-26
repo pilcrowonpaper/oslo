@@ -6,9 +6,13 @@ type: "function"
 
 Encodes data into hex string. Use [`decodeHex()`](ref:crypto) to decode hex strings.
 
+## Definition
+
 ```ts
 function encodeHex(data: ArrayBuffer): string;
 ```
+
+### Parameters
 
 - `data`
 

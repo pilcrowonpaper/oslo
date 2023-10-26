@@ -17,13 +17,15 @@ Provides methods for hashing passwords and verifying hashes with [bcrypt](). By 
 function constructor(options?: { cost?: number }): this;
 ```
 
+### Parameters
+
 - `options`
   - `cost` (default: `10`)
 
 ## Methods
 
-- [PasswordHashingAlgorithm.hash](ref:password)
-- [PasswordHashingAlgorithm.verify](ref:password)
+- [`hash()`](ref:password/PasswordHashingAlgorithm)
+- [`verify()`](ref:password/PasswordHashingAlgorithm)
 
 ## Example
 

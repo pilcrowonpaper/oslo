@@ -6,6 +6,8 @@ type: "interface"
 
 Represents a session.
 
+## Definition
+
 ```ts
 interface Session {
 	sessionId: string;
@@ -13,6 +15,8 @@ interface Session {
 	fresh: boolean;
 }
 ```
+
+### Properties
 
 - `sessionId`
 - `expiresAt`

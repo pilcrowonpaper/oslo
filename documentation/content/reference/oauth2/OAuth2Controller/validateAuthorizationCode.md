@@ -4,7 +4,7 @@ type: "method"
 
 # `OAuth2Controller.validateAuthorizationCode()`
 
-Validates the authorization code included in the callback. This sends a POST request (`application/x-www-form-urlencoded`) to the token endpoint defined when initializing [OAuth2Controller](ref:oauth2) and returns the JSON-parsed response body. You can define the request body type with `_TokenResponseBody` type parameter. 
+Validates the authorization code included in the callback. This sends a POST request (`application/x-www-form-urlencoded`) to the token endpoint defined when initializing [`OAuth2Controller`](ref:oauth2) and returns the JSON-parsed response body. You can define the request body type with `_TokenResponseBody` type parameter.
 
 By default, credentials (client secret) is sent via the HTTP basic auth scheme. To send it inside the request body (ie. search params), set `options.authenticateWith` to `"request_body"`.
 

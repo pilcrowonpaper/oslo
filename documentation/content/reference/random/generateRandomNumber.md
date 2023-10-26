@@ -6,9 +6,13 @@ type: "function"
 
 Generates a random integer between 2 integers (including negatives). Uses cryptographically strong random values.
 
+## Definition
+
 ```ts
 function generateRandomNumber(min: number, max: number): number;
 ```
+
+### Parameters
 
 - `min`: Inclusive
 - `max`: Exclusive
@@ -18,6 +22,6 @@ function generateRandomNumber(min: number, max: number): number;
 ```ts
 import { generateRandomNumber } from "oslo/random";
 
-// random number from 0 to 9 
+// random number from 0 to 9
 generateRandomNumber(0, 10);
 ```

@@ -6,10 +6,14 @@ type: "function"
 
 Parses a JWT string. **This does NOT validate the JWT signature and claims** including expiration. Use [validateJWT](ref:jwt) instead.
 
+## Definition
+
 ```ts
 //$ JWT=ref:jwt
 function parseJWT(jwt: string): Promise<$$JWT | null>;
 ```
+
+### Parameters
 
 - `jwt`: JWT string
 

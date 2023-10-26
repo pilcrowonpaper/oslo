@@ -6,6 +6,8 @@ type: "interface"
 
 Represents a JWT payload.
 
+## Definition
+
 ```ts
 interface JWT {
 	exp?: number;
@@ -18,6 +20,8 @@ interface JWT {
 	[claim: string]: unknown;
 }
 ```
+
+### Properties
 
 - `exp`
 - `iss`

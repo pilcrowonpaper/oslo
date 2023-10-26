@@ -12,14 +12,16 @@ Helper for Time-based OTP, as defined in [RFC 6238](https://datatracker.ietf.org
 function constructor(options?: { digits?: number; period?: TimeSpan }): this;
 ```
 
+### Parameters
+
 - `options`
   - `digits` (default: `6`): Number of digits (usually 6~8)
   - `period` (default: `30s`): How long the OTP is valid for at max
 
 ## Methods
 
-- [TOTPController.generate()](ref:otp)
-- [TOTPController.verify()](ref:otp)
+- [`generate()`](ref:otp/TOTPController)
+- [`verify()`](ref:otp/TOTPController)
 
 ## Example
 

@@ -6,9 +6,13 @@ type: "function"
 
 Parses `Cookie` header value and returns a `Map` with the key/value. Cookie names and values are URI-component decoded.
 
+## Definition
+
 ```ts
 function parseCookies(cookieHeader: string | null | undefined): Map<string, string>;
 ```
+
+### Parameters
 
 - `cookieHeader`: `Cookie` HTTP header
 

@@ -6,12 +6,16 @@ type: "function"
 
 Parses a JWT string and validates it, including the signature, expiration, and not-before date. Throws if the JWT is invalid or expired.
 
+## Definition
+
 ```ts
 //$ JWTAlgorithm=ref:jwt
 //$ TimeSpan=ref:main
 //$ JWT=ref:jwt
 function createJWT(algorithm: JWTAlgorithm, key: ArrayBuffer, jwt: string): Promise<$$JWT>;
 ```
+
+### Parameters
 
 - `algorithm`
 - `key`: Secret key for HMAC, and private key for ECDSA and RSA

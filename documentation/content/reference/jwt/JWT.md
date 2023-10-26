@@ -6,6 +6,8 @@ type: "interface"
 
 Represents a JWT.
 
+## Definition
+
 ```ts
 interface JWT {
 	value: string;
@@ -22,6 +24,8 @@ interface JWT {
 	parts: [header: string, payload: string, signature: string];
 }
 ```
+
+### Properties
 
 - `value`: JWT string
 - `header`

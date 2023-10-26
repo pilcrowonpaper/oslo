@@ -4,7 +4,7 @@ type: "class"
 
 # `SessionCookieController`
 
-Provides methods for handling session cookies. We recommend initializing this with [SessionController.sessionCookieController](ref:session). By default, session cookies have a `Secure` flag. This should be disabled when developing locally.
+Provides methods for handling session cookies. By default, session cookies have a `Secure` flag. This should be disabled when developing locally.
 
 ## Constructor
 
@@ -22,6 +22,8 @@ function constructor(
 ): this;
 ```
 
+### Parameters
+
 - `cookieName`
 - `sessionExpiresIn`
 - `options`
@@ -33,9 +35,9 @@ function constructor(
 
 ## Methods
 
-- [SessionCookieController.createBlankSessionCookie()](ref:session)
-- [SessionCookieController.createSessionCookie()](ref:session)
-- [SessionCookieController.parseCookies()](ref:session)
+- [`createBlankSessionCookie()`](ref:session/SessionCookieController)
+- [`createSessionCookie()`](ref:session/SessionCookieController)
+- [`parseCookies()`](ref:session/SessionCookieController)
 
 ## Example
 

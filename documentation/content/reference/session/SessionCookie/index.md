@@ -13,13 +13,15 @@ Represents a session cookie.
 function constructor(name: string, value: string, attributes?: $$CookieAttributes): this;
 ```
 
+### Parameters
+
 - `name`: Cookie name
 - `value`: Session id
 - `attributes`: Cookie attributes
 
 ## Methods
 
-- [SessionCookie.serialize()](ref:session)
+- [`serialize()`](ref:session/SessionCookie)
 
 ## Properties
 

@@ -6,6 +6,8 @@ type: "method"
 
 Returns the time-span in milliseconds.
 
+## Definition
+
 ```ts
 function milliseconds(): number;
 ```

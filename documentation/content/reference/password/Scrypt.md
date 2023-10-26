@@ -19,6 +19,8 @@ The output hash is a combination of the scrypt hash and the 32-bytes salt, in th
 function constructor(options?: { N?: number; r?: number; p?: number; dkLen?: number }): this;
 ```
 
+### Parameters
+
 - `options`
   - `N` (default: `16384`)
   - `r` (default: `16`)
@@ -27,8 +29,8 @@ function constructor(options?: { N?: number; r?: number; p?: number; dkLen?: num
 
 ## Methods
 
-- [PasswordHashingAlgorithm.hash](ref:password)
-- [PasswordHashingAlgorithm.verify](ref:password)
+- [`hash()`](ref:password/PasswordHashingAlgorithm)
+- [`verify()`](ref:password/PasswordHashingAlgorithm)
 
 ## Example
 

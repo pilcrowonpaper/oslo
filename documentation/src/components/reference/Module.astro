@@ -1,0 +1,114 @@
+---
+import { moduleMaps } from "../../utils/reference";
+
+import MarkdownArticle from "../MarkdownArticle.astro";
+
+import type { ReferenceContent } from "../../utils/reference";
+
+interface Props {
+	content: ReferenceContent;
+}
+
+const { content } = Astro.props;
+const moduleMap = moduleMaps.find((val) => val.module === Astro.props.content.module)!;
+---
+
+<html>
+	<head></head>
+	<body>
+		<header class="fixed top-0 w-screen bg-white z-10 border-b">
+			<div class="px-8 border-b py-4">
+				<p class="font-medium text-xl">Oslo</p>
+			</div>
+			<div class="px-8 flex gap-x-4 py-1.5">
+				<a href="/reference" class="hover:underline">Modules</a>
+				<a href={"/reference/" + content.module} class="hover:underline"
+					><code class="text-sm">{content.moduleDisplayName}</code></a
+				>
+			</div>
+		</header>
+		<div>
+			<div class="fixed w-72 border-r h-screen pt-24">
+				<div class="flex flex-col gap-y-4 overflow-auto h-full pt-16 pb-8">
+					{
+						moduleMap.functions.length > 0 && (
+							<div class="px-8">
+								<p class="text-sm font-medium mb-1">Functions</p>
+								<ul>
+									{moduleMap.functions.map((functionRef) => {
+										return (
+											<li class="pl-2 w-full py-0.5">
+												<a href={functionRef.href} class="hover:underline">
+													<code class="text-sm">{functionRef.name + "()"}</code>
+												</a>
+											</li>
+										);
+									})}
+								</ul>
+							</div>
+						)
+					}
+					{
+						moduleMap.classes.length > 0 && (
+							<div class="px-8">
+								<p class="text-sm font-medium mb-1">Classes</p>
+								<ul>
+									{moduleMap.classes.map((classRef) => {
+										return (
+											<li class="pl-2 w-full py-0.5">
+												<a href={classRef.href} class="hover:underline">
+													<code class="text-sm">{classRef.name}</code>
+												</a>
+											</li>
+										);
+									})}
+								</ul>
+							</div>
+						)
+					}
+					{
+						moduleMap.interfaces.length > 0 && (
+							<div class="px-8">
+								<p class="text-sm font-medium mb-1">Interfaces</p>
+								<ul>
+									{moduleMap.interfaces.map((interfaceRef) => {
+										return (
+											<li class="pl-2 w-full py-0.5">
+												<a href={interfaceRef.href} class="hover:underline">
+													<code class="text-sm">{interfaceRef.name}</code>
+												</a>
+											</li>
+										);
+									})}
+								</ul>
+							</div>
+						)
+					}
+					{
+						moduleMap.types.length > 0 && (
+							<div class="px-8">
+								<p class="text-sm font-medium mb-1">Types</p>
+								<ul>
+									{moduleMap.types.map((typeRef) => {
+										return (
+											<li class="pl-2 w-full py-0.5">
+												<a href={typeRef.href} class="hover:underline">
+													<code class="text-sm">{typeRef.name}</code>
+												</a>
+											</li>
+										);
+									})}
+								</ul>
+							</div>
+						)
+					}
+				</div>
+			</div>
+			<main class="ml-72 w-fit px-16 pt-36 pb-16">
+				<MarkdownArticle>
+					<content.Markdown />
+				</MarkdownArticle>
+			</main>
+		</div>
+	</body>
+</html>

@@ -6,6 +6,8 @@ type: "function"
 
 Creates a new [key URI]() for HOTP.
 
+## Definition
+
 ```ts
 function createHOTPKeyURI(
 	issuer: string,
@@ -17,6 +19,8 @@ function createHOTPKeyURI(
 	}
 ): string;
 ```
+
+### Parameters
 
 - `issuer`: Your company/website name
 - `accountName`: Account identifier (e.g. username)

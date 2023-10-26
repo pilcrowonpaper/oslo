@@ -6,6 +6,8 @@ type: "method"
 
 Validates a WebAuthn assertion response, including the signature. Supports ES256 (algorithm id `-7`) and RS256 (algorithm id `-257`). Throws an error on invalid response.
 
+## Definition
+
 ```ts
 //$ AssertionResponse=ref:webauthn
 function validateAssertionResponse(
@@ -15,6 +17,8 @@ function validateAssertionResponse(
 	challenge: ArrayBuffer
 ): Promise<void>;
 ```
+
+### Parameters
 
 - `algorithm`: Algorithm used for creating the signature
 - `publicKey`: User's public key stored in the database

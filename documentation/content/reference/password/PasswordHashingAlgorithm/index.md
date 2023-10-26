@@ -6,6 +6,8 @@ type: "interface"
 
 A generic interface for utilities for hashing and verifying passwords.
 
+## Definition
+
 ```ts
 interface PasswordHashingAlgorithm {
 	hash(password: string): Promise<string>;
@@ -13,10 +15,10 @@ interface PasswordHashingAlgorithm {
 }
 ```
 
-## Methods
+### Methods
 
-- [PasswordHashingAlgorithm.hash](ref:password)
-- [PasswordHashingAlgorithm.verify](ref:password)
+- [`hash()`](ref:password/PasswordHashingAlgorithm)
+- [`verify()`](ref:password/PasswordHashingAlgorithm)
 
 ## Implemented by
 

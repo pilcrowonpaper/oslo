@@ -6,9 +6,13 @@ type: "function"
 
 Encodes data into base64 URL string. Use [`decodeBase64url()`](ref:crypto) to decode base64 URL strings.
 
+## Definition
+
 ```ts
 function encodeBase64url(data: ArrayBuffer): string;
 ```
+
+### Parameters
 
 - `data`
 

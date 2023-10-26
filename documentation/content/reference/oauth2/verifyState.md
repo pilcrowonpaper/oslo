@@ -6,9 +6,13 @@ type: "function"
 
 Verifies the state by comparing it to the state stored. The order for the parameters does not matter. Returns `true` if both parameters are defined and matches.
 
+## Definition
+
 ```ts
 function verifyState(state1: string | null | undefined, state2: string | null | undefined): boolean;
 ```
+
+### Parameters
 
 - `state1`
 - `state2`

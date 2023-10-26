@@ -6,6 +6,8 @@ type: "interface"
 
 Represents a verification token for email verification and password reset.
 
+## Definition
+
 ```ts
 interface VerificationToken {
 	value: string;
@@ -13,6 +15,8 @@ interface VerificationToken {
 	userId: string;
 }
 ```
+
+### Properties
 
 - `value`
 - `expiresAt`

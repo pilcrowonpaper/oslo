@@ -6,6 +6,8 @@ type: "method"
 
 Validates a WebAuthn attestation response, including the signature, but not the attestation certificate. Throws an error on invalid response.
 
+## Definition
+
 ```ts
 //$ AttestationResponse=ref:webauthn
 function validateAttestationResponse(
@@ -13,6 +15,8 @@ function validateAttestationResponse(
 	challenge: ArrayBuffer
 ): Promise<void>;
 ```
+
+### Parameters
 
 - `response`: Attestation response
 - `challenge`: Challenge used for creating the signature

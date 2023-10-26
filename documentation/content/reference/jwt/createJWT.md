@@ -13,6 +13,8 @@ Creates a new JWT. Supports the following algorithms:
 
 Claims are not included by default and must by defined with `options`.
 
+## Definition
+
 ```ts
 //$ JWTAlgorithm=ref:jwt
 //$ TimeSpan=ref:main
@@ -33,6 +35,8 @@ function createJWT(
 	}
 ): Promise<$$JWT>;
 ```
+
+### Parameters
 
 - `algorithm`
 - `key`: Secret key for HMAC, and private key for ECDSA and RSA
@@ -67,10 +71,10 @@ const jwt = await createJWT("HS256", secret, payload, {
 		// custom headers
 		kid
 	},
-	expiresIn: new TimeSpan("30", d),
+	expiresIn: new TimeSpan(30, "d"),
 	issuer,
 	subject,
 	audience,
-	includeIssuedTimestamp: true,
+	includeIssuedTimestamp: true
 });
 ```

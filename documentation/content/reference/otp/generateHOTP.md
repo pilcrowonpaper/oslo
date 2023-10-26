@@ -6,9 +6,13 @@ type: "function"
 
 Generates a new HOTP, as defined in [RFC 4226](https://www.ietf.org/rfc/rfc4226.txt).
 
+## Definition
+
 ```ts
 function generateHOTP(secretKey: ArrayBuffer, counter: number, digits?: number): Promise<string>;
 ```
+
+### Parameters
 
 - `secretKey`: HMAC SHA-1 secret key
 - `counter`

@@ -4,7 +4,7 @@ type: "function"
 
 # `alphabet()`
 
-Generates a string with all the characters defined in the provided pattern. Mostly used for [generateRandomString](ref:random). Ignores duplicates.
+Generates a string with all the characters defined in the provided pattern. Mostly used for [`generateRandomString()`](ref:random). Ignores duplicates.
 
 - `a-z`: `abcdefghijklmnopqrstuvwxyz`
 - `A-Z`: `ABCDEFGHIJKLMNOPqRSTUVWXYZ`
@@ -12,9 +12,13 @@ Generates a string with all the characters defined in the provided pattern. Most
 - `-`: Character `-`
 - `_`: Character `_`
 
+## Definition
+
 ```ts
 function alphabet(...patterns: "a-z" | "A-Z" | "0-9" | "-" | "_"): string;
 ```
+
+### Parameters
 
 - `patterns`
 

@@ -4,9 +4,13 @@ type: "function"
 
 Decodes hex-encoded strings. Use [`encodeHex()`](ref:crypto) to encode into hex strings.
 
+## Definition
+
 ```ts
 function decodeHex(encoded: string): Uint8Array;
 ```
+
+### Parameters
 
 - `encoded`
 

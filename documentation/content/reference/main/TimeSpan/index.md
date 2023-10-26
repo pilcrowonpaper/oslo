@@ -12,6 +12,8 @@ Represents a time-span. Supports negative values.
 function constructor(value: number, unit: "ms" | "s" | "m" | "h" | "d" | "w"): this;
 ```
 
+### Parameters
+
 - `value`
 - `unit`: `ms` for milliseconds, `s` for seconds, etc
 

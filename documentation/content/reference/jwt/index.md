@@ -1,3 +1,7 @@
+---
+type: "module"
+---
+
 # `oslo/jwt`
 
 Supports the following algorithms:

@@ -1,3 +1,7 @@
+---
+type: "module"
+---
+
 ## Example
 
 ```ts

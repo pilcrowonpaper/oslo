@@ -6,6 +6,8 @@ type: "type"
 
 Represents the algorithm supported by Oslo for signing JWTs.
 
+## Definition
+
 ```ts
 type JWTAlgorithm =
 	| "HS256"

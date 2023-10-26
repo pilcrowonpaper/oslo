@@ -6,9 +6,13 @@ type: "method"
 
 Verifies the password with the hash.
 
+## Definition
+
 ```ts
 function verify(hash: string, password: string): Promise<boolean>;
 ```
+
+### Parameters
 
 - `hash`
 - `password`

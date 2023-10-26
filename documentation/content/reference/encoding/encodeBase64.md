@@ -6,6 +6,8 @@ type: "function"
 
 Encodes data into base64 string. Use [`decodeBase64()`](ref:crypto) to decode base64 strings.
 
+## Definition
+
 ```ts
 function encodeBase64(
 	data: ArrayBuffer,
@@ -14,6 +16,8 @@ function encodeBase64(
 	}
 ): string;
 ```
+
+### Parameters
 
 - `data`
 - `options.padding` (default: `true`): Set to `false` to remove padding

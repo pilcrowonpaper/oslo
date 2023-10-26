@@ -18,8 +18,8 @@ function constructor(expiresIn: TimeSpan): this;
 
 ## Methods
 
-- [SessionController.createSession()](ref:session)
-- [SessionController.validateSessionState()](ref:session)
+- [`createSession()`](ref:sessio/SessionController)
+- [`validateSessionState()`](ref:session/SessionController)
 
 ## Example
 

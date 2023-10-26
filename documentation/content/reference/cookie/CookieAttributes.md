@@ -6,6 +6,8 @@ type: "interface"
 
 Cookie attributes for `Set-Cookie` header.
 
+## Definition
+
 ```ts
 interface CookieAttributes {
 	secure?: boolean;
@@ -17,6 +19,8 @@ interface CookieAttributes {
 	expires?: Date;
 }
 ```
+
+### Properties
 
 - `secure`
 - `path`

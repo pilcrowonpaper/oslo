@@ -17,9 +17,9 @@ function constructor(hash: $$SHAHash): this;
 
 ## Methods
 
-- [`generateKey()`](/referece/crypto/HMAC/generateKey)
-- [`sign()`](/referece/crypto/HMAC/sign)
-- [`verify()`](/referece/crypto/HMAC/verify)
+- [`generateKeyPair()`](ref:crypto/HMAC)
+- [`sign()`](ref:crypto/HMAC)
+- [`verify()`](ref:crypto/HMAC)
 
 ## Example
 

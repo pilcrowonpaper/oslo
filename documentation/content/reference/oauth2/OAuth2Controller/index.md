@@ -19,6 +19,8 @@ function constructor(
 ): this;
 ```
 
+### Parameters
+
 - `clientId`
 - `authorizeEndpoint`
 - `tokenEndpoint`
@@ -27,5 +29,5 @@ function constructor(
 
 ## Methods
 
-- [OAuth2Controller.createAuthorizationURL](ref:oauth2)
-- [OAuth2Controller.validateAuthorizationCode](ref:oauth2)
+- [`createAuthorizationURL()`](ref:oauth2/OAuth2Controller)
+- [`validateAuthorizationCode()`](ref:oauth2/OAuth2Controller)

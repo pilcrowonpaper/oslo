@@ -8,6 +8,8 @@ Verifies the request originates from a trusted origin by comparing the `Origin` 
 
 You can allow specific or all subdomains (with `"*"`) with `options.allowedSubdomains`. The base domain is the domain of the `host`, regardless of it already has a subdomain or not.
 
+## Definition
+
 ```ts
 function verifyRequestOrigin(
 	origin: string | null | undefined,
@@ -17,6 +19,8 @@ function verifyRequestOrigin(
 	}
 ): boolean;
 ```
+
+### Parameters
 
 - `origin`: `Origin` header
 - `host`: `Host` header, [host]() of the server url, or the server URL

@@ -16,7 +16,7 @@ function constructor(expiresIn: TimeSpan): this;
 
 ## Methods
 
-- [VerificationTokenController.createToken()](ref:token)
-- [VerificationTokenController.isTokenReusable()](ref:token)
+- [`createToken()`](ref:token/VerificationTokenController)
+- [`isTokenReusable()`](ref:token/VerificationTokenController)
 
 ## Example

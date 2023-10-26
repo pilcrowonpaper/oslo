@@ -22,6 +22,8 @@ function constructor(options?: {
 }): this;
 ```
 
+### Parameters
+
 - `options`
   - `memorySize` (default: `19456`)
   - `iterations` (default: `2`)
@@ -32,8 +34,8 @@ function constructor(options?: {
 
 ## Methods
 
-- [PasswordHashingAlgorithm.hash](ref:password)
-- [PasswordHashingAlgorithm.verify](ref:password)
+- [`hash()`](ref:password/PasswordHashingAlgorithm)
+- [`verify()`](ref:password/PasswordHashingAlgorithm)
 
 ## Example
 

@@ -6,6 +6,8 @@ type: "function"
 
 Creates a new [key URI]() for TOTP. Only supports HMAC SHA-1.
 
+## Definition
+
 ```ts
 function createTOTPKeyURI(
 	issuer: string,
@@ -17,6 +19,8 @@ function createTOTPKeyURI(
 	}
 ): string;
 ```
+
+### Parameters
 
 - `issuer`: Your company/website name
 - `accountName`: Account identifier (e.g. username)

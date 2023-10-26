@@ -6,9 +6,13 @@ type: "function"
 
 Generates a SHA-1 hash.
 
+## Definition
+
 ```ts
 function sha1(data: ArrayBuffer): Promise<ArrayBuffer>;
 ```
+
+### Parameters
 
 - `data`
 

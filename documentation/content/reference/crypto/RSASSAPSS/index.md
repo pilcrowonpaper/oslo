@@ -17,9 +17,9 @@ function constructor(hash: $$SHAHash): this;
 
 ## Method
 
-- [`generateKeyPair()`](/referece/crypto/RSASSAPSS/generateKeyPair)
-- [`sign()`](/referece/crypto/RSASSAPSS/sign)
-- [`verify()`](/referece/crypto/RSASSAPSS/verify)
+- [`generateKeyPair()`](ref:crypto/RSASSAPSS)
+- [`sign()`](ref:crypto/RSASSAPSS)
+- [`verify()`](ref:crypto/RSASSAPSS)
 
 ## Example
 

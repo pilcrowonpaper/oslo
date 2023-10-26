@@ -1,3 +1,7 @@
+---
+type: "module"
+---
+
 ## Example
 
 ```ts
@@ -42,7 +46,7 @@ const url = await createAuthorizationURL({
 
 ### Validate authorization code
 
-By default [OAuth2Controller.validateAuthorizationCode()](ref:oauth2) sends credentials with the HTTP basic auth scheme.
+By default [`OAuth2Controller.validateAuthorizationCode()`](ref:oauth2) sends credentials with the HTTP basic auth scheme.
 
 ```ts
 import { verifyState, AccessTokenRequestError } from "oslo/oauth2";

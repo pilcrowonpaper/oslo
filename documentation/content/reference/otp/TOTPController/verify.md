@@ -6,10 +6,13 @@ type: "method"
 
 Verifies the TOTP.
 
+## Definition
+
 ```ts
-function verify(secretKey: ArrayBuffer, totp: string): Promise<boolean>
+function verify(secretKey: ArrayBuffer, totp: string): Promise<boolean>;
 ```
+
+### Parameters
 
 - `secretKey`: HMAC secret key
 - `totp`: TOTP
-

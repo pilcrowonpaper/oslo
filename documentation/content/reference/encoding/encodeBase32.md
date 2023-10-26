@@ -4,7 +4,9 @@ type: "function"
 
 # `encodeBase32()`
 
-Encodes data into base32 string. Use [`decodeBase32()`](ref:crypto) to decode base32 strings.
+Encodes data into base32 string. Use [`decodeBase32()`](ref:encoding) to decode base32 strings.
+
+## Definition
 
 ```ts
 function encodeBase32(
@@ -14,6 +16,8 @@ function encodeBase32(
 	}
 ): string;
 ```
+
+### Parameters
 
 - `data`
 - `options.padding` (default: `true`): Set to `false` to remove padding
