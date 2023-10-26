@@ -40,8 +40,11 @@ const sessionState = sessionController.validateSessionState(
 	storedSession.id,
 	storedSession.expires
 );
+
 // check if session expiration was updated
 if (sessionState.fresh) {
-	await db.updateSession(sessionState.sessionId, {});
+	await db.updateSession(sessionState.sessionId, {
+		expires: sessionState.expiresAt
+	});
 }
 ```

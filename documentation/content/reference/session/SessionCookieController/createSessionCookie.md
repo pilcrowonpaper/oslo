@@ -9,7 +9,7 @@ Creates a new session cookie. Use [`SessionCookieController.createBlankSessionCo
 ## Definition
 
 ```ts
-//$ SessionCookie=ref:cookie
+//$ SessionCookie=ref:session
 function createSessionCookie(sessionId: string): $$SessionCookie;
 ```
 
