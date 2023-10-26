@@ -1,0 +1,95 @@
+---
+import type { ReferenceContent } from "../utils/reference";
+
+interface Props {
+	levels: NavigationLevel[];
+	sideBar: SideBarItem[];
+	sideBarTitle?: SideBarTitle;
+}
+
+interface SideBarTitle {
+	value: string;
+	href: string;
+}
+interface NavigationLevel {
+	name: string;
+	href: string;
+}
+
+interface SideBarItem {
+	name: string;
+	links: SideBarLinkItem[];
+}
+
+interface SideBarLinkItem {
+	name: string;
+	href: string;
+}
+
+const { sideBar, levels, sideBarTitle } = Astro.props;
+---
+
+<html>
+	<head></head>
+	<body>
+		<header class="fixed top-0 w-screen bg-white z-10 border-b">
+			<div class="px-8 border-b py-4">
+				<p class="font-medium text-xl">Oslo</p>
+			</div>
+			<div class="px-8 flex gap-x-4 py-1.5">
+				<a href="/reference" class="hover:underline">Modules</a>
+				{
+					levels.map((lvl) => {
+						return (
+							<a href={lvl.href} class="hover:underline">
+								<code class="text-sm">{lvl.name}</code>
+							</a>
+						);
+					})
+				}
+			</div>
+		</header>
+		<div>
+			<div class="fixed w-72 border-r h-screen pt-24">
+				<div class="flex flex-col gap-y-4 overflow-auto h-full pt-16 pb-8">
+					{
+						sideBarTitle && (
+							<div class="px-8">
+								<p class="font-medium">
+									<a href={sideBarTitle.href} class="hover:underline">
+										<code>{sideBarTitle.value}</code>
+									</a>
+								</p>
+							</div>
+						)
+					}
+
+					{
+						sideBar.map((sideBarItem) => {
+							if (sideBarItem.links.length === 0) return null;
+							return (
+								<div class="px-8">
+									<p class="text-sm font-medium mb-1">{sideBarItem.name}</p>
+									<ul>
+										{sideBarItem.links.map((link) => {
+											return (
+												<li class="pl-2 w-full py-0.5">
+													<a href={link.href} class="hover:underline">
+														<code class="text-sm">{link.name}</code>
+													</a>
+												</li>
+											);
+										})}
+									</ul>
+								</div>
+							);
+						})
+					}
+				</div>
+			</div>
+			<main class="ml-72 flex flex-col px-16 pt-36 pb-16">
+				<slot />
+			</main>
+		</div>
+	</body>
+</html>

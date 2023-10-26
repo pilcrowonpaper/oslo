@@ -13,6 +13,8 @@ Helper for RSASSA-PKCS1-v1_5.
 function constructor(hash: $$SHAHash): this;
 ```
 
+### Parameters
+
 - `hash`
 
 ## Method

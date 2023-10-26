@@ -7,9 +7,9 @@ implements_link: "ref:password"
 
 # `Scrypt`
 
-Provides methods for hashing passwords and verifying hashes with [scrypt](). By default, the configuration is set to [the recommended values](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html).
+Provides methods for hashing passwords and verifying hashes with [scrypt](https://datatracker.ietf.org/doc/html/rfc7914). By default, the configuration is set to [the recommended values](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html).
 
-We recommend using [Argon2id]() if possible.
+We recommend using [`Argon2id`](ref:password) if possible.
 
 The output hash is a combination of the scrypt hash and the 32-bytes salt, in the format of `<salt>:<hash>`.
 

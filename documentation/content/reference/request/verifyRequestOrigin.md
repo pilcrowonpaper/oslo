@@ -23,7 +23,7 @@ function verifyRequestOrigin(
 ### Parameters
 
 - `origin`: `Origin` header
-- `host`: `Host` header, [host]() of the server url, or the server URL
+- `host`: `Host` header, [host](https://developer.mozilla.org/en-US/docs/Web/API/URL/host) of the server url, or the server URL
 - `options`
   - `allowedSubdomains`: A list of subdomains to allow
 

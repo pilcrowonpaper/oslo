@@ -4,7 +4,7 @@ type: "function"
 
 # `createTOTPKeyURI()`
 
-Creates a new [key URI]() for TOTP. Only supports HMAC SHA-1.
+Creates a new [key URI](https://github.com/google/google-authenticator/wiki/Key-Uri-Format) for TOTP. Only supports HMAC SHA-1.
 
 ## Definition
 

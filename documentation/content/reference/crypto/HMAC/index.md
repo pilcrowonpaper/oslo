@@ -13,6 +13,8 @@ Helper for HMAC.
 function constructor(hash: $$SHAHash): this;
 ```
 
+### Parameters
+
 - `hash`
 
 ## Methods

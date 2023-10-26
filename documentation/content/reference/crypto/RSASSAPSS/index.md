@@ -13,6 +13,8 @@ Helper for RSASSA-PSS.
 function constructor(hash: $$SHAHash): this;
 ```
 
+### Parameters
+
 - `hash`
 
 ## Method

@@ -7,7 +7,7 @@ implements_link: "ref:password"
 
 # `Argon2id`
 
-Provides methods for hashing passwords and verifying hashes with [argon2id](). By default, the configuration is set to [the recommended values](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html).
+Provides methods for hashing passwords and verifying hashes with [argon2id](https://datatracker.ietf.org/doc/rfc9106/). By default, the configuration is set to [the recommended values](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html).
 
 ## Constructor
 

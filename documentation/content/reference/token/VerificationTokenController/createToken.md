@@ -4,7 +4,7 @@ type: "method"
 
 # `VerificationTokenController.createToken()`
 
-Creates a new token. See [VerificationTokenController]() for a full example.
+Creates a new token. See [`VerificationTokenController`](ref:token) for a full example.
 
 ## Definition
 

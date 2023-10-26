@@ -4,7 +4,7 @@ type: "function"
 
 # `createHOTPKeyURI()`
 
-Creates a new [key URI]() for HOTP.
+Creates a new [key URI](https://github.com/google/google-authenticator/wiki/Key-Uri-Format) for HOTP.
 
 ## Definition
 

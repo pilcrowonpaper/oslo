@@ -2,7 +2,7 @@
 type: "method"
 ---
 
-# `sign()`
+# `verify()`
 
 Verifies a signature with a public key and returns `true` if the signature is valid. See [`RSASSAPKCS1v1_5`](/reference/crypto/RSASSAPKCS1v1_5) for an example.
 

@@ -4,7 +4,7 @@ type: "module"
 
 # `oslo/crypto`
 
-Provides light-wrappers around the Web Crypto API for generating hashes and signatures. To generate crypto-graphically secure random values, see [`oslo/random`]().
+Provides light-wrappers around the Web Crypto API for generating hashes and signatures. To generate crypto-graphically secure random values, see [`oslo/random`](/reference/random).
 
 ## Functions
 

@@ -1,9 +1,9 @@
 ---
 import { referenceContent } from "../../utils/reference";
+import type { ReferenceContent } from "../../utils/reference";
 
 import MarkdownArticle from "../MarkdownArticle.astro";
-
-import type { ReferenceContent } from "../../utils/reference";
+import ReferenceLayout from "../../layouts/ReferenceLayout.astro";
 
 interface Props {
 	content: ReferenceContent;
@@ -16,57 +16,38 @@ const methods = referenceContent.filter((val) => {
 });
 ---
 
-<html>
-	<head></head>
-	<body>
-		<header class="fixed top-0 w-screen bg-white z-10 border-b">
-			<div class="px-8 border-b py-4">
-				<p class="font-medium text-xl">Oslo</p>
-			</div>
-			<div class="px-8 flex gap-x-4 py-1.5">
-				<a href="/reference" class="hover:underline">Modules</a>
-				<a href={"/reference/" + content.module} class="hover:underline"
-					><code class="text-sm">{content.moduleDisplayName}</code></a
-				>
-				<a href={"/reference/" + content.module + "/" + content.displayName} class="hover:underline"
-					><code class="text-sm">{className}</code></a
-				>
-				<a href={"/reference/" + content.module + "/" + content.name} class="hover:underline"
-					><code class="text-sm">{content.displayName}</code></a
-				>
-			</div>
-		</header>
-		<div>
-			<div class="fixed w-72 border-r h-screen pt-24">
-				<div class="flex flex-col gap-y-4 overflow-auto h-full pt-16 pb-8">
-					<div class="px-8">
-						<p class="font-medium"><a href={content.href.split("/").slice(0, -1).join("/")} class="hover:underline"><code>{className}</code></a></p>
-					</div>
-					{
-						methods.length > 0 && (
-							<div class="px-8">
-								<p class="text-sm font-medium mb-1">Methods</p>
-								<ul>
-									{methods.map((methodContent) => {
-										return (
-											<li class="pl-2 w-full py-0.5">
-												<a href={methodContent.href} class="hover:underline">
-													<code class="text-sm">{methodContent.displayName}</code>
-												</a>
-											</li>
-										);
-									})}
-								</ul>
-							</div>
-						)
-					}
-				</div>
-			</div>
-			<main class="ml-72 w-fit px-16 pt-36 pb-16">
-				<MarkdownArticle>
-					<content.Markdown />
-				</MarkdownArticle>
-			</main>
-		</div>
-	</body>
-</html>
+<ReferenceLayout
+	sideBar={[
+		{
+			name: "Methods",
+			links: methods.map((val) => {
+				return {
+					name: val.displayName,
+					href: val.href
+				};
+			})
+		}
+	]}
+	sideBarTitle={{
+		value: className,
+		href: "/reference/" + content.module + "/" + className
+	}}
+	levels={[
+		{
+			href: "/reference/" + content.module,
+			name: content.moduleDisplayName
+		},
+		{
+			href: "/reference/" + content.module + "/" + className,
+			name: className
+		},
+		{
+			href: "/reference/" + content.path,
+			name: content.displayName
+		}
+	]}
+>
+	<MarkdownArticle>
+		<content.Markdown />
+	</MarkdownArticle>
+</ReferenceLayout>

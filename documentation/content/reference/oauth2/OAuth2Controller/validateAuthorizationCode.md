@@ -8,7 +8,7 @@ Validates the authorization code included in the callback. This sends a POST req
 
 By default, credentials (client secret) is sent via the HTTP basic auth scheme. To send it inside the request body (ie. search params), set `options.authenticateWith` to `"request_body"`.
 
-This throws a [`AccessTokenRequestError`]() on error responses, and `fetch()` error when it fails to connect to the endpoint.
+This throws a [`AccessTokenRequestError`](ref:oauth2) on error responses, and `fetch()` error when it fails to connect to the endpoint.
 
 See [`oslo/oauth2`](/reference/oauth2) for a full example.
 

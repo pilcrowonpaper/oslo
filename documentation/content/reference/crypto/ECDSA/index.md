@@ -13,6 +13,8 @@ Helper for ECDSA.
 function constructor(hash: $$SHAHash, curve: "P-256" | "P-384" | "P-521"): this;
 ```
 
+### Parameters
+
 - `hash`
 - `curve`
 
