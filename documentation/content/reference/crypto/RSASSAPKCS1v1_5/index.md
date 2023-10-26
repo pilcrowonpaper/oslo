@@ -9,7 +9,7 @@ Helper for RSASSA-PKCS1-v1_5.
 ## Constructor
 
 ```ts
-//$ SHAHash:crypto
+//$ SHAHash=ref:crypto
 function constructor(hash: $$SHAHash): this;
 ```
 

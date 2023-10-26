@@ -6,7 +6,7 @@ title: "serializeCookie()"
 Serializes cookie for `Set-Cookie` header. The cookie name and value are URI-component encoded.
 
 ```ts
-//$ CookieAttributes:/reference/cookie/CookieAttributes
+//$ CookieAttributes=ref:cookie
 function serializeCookie(name: string, value: string, attributes?: $$CookieAttributes): string;
 ```
 

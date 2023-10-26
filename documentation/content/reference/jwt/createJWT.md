@@ -14,9 +14,9 @@ Creates a new JWT. Supports the following algorithms:
 Claims are not included by default and must by defined with `options`.
 
 ```ts
-//$ JWTAlgorithm:jwt
-//$ TimeSpan:main
-//$ JWT:jwt
+//$ JWTAlgorithm=ref:jwt
+//$ TimeSpan=ref:main
+//$ JWT=ref:jwt
 function createJWT(
 	algorithm: $$JWTAlgorithm,
 	key: ArrayBuffer,

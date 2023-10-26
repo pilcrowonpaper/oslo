@@ -9,7 +9,7 @@ Helper for HMAC.
 ## Constructor
 
 ```ts
-//$ SHAHash:crypto
+//$ SHAHash=ref:crypto
 function constructor(hash: $$SHAHash): this;
 ```
 

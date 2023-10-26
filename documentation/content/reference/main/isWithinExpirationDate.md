@@ -7,7 +7,7 @@ type: "function"
 Checks if the current time is before the provided expiration `Date`.
 
 ```ts
-//$ TimeSpan:main
+//$ TimeSpan=ref:main
 function isWithinExpirationDate(expirationDate: Date): boolean;
 ```
 

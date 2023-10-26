@@ -7,7 +7,7 @@ type: "interface"
 Represents a JWT header.
 
 ```ts
-//$ JWTAlgorithm:jwt
+//$ JWTAlgorithm=ref:jwt
 interface JWT {
 	typ: "JWT";
 	alg: $$JWTAlgorithm;

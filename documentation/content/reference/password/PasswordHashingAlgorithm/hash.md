@@ -1,6 +1,5 @@
 ---
 type: "method"
-node: true
 ---
 
 # `PasswordHashingAlgorithm.hash()`

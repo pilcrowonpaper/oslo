@@ -7,9 +7,9 @@ type: "function"
 Parses a JWT string and validates it, including the signature, expiration, and not-before date. Throws if the JWT is invalid or expired.
 
 ```ts
-//$ JWTAlgorithm:jwt
-//$ TimeSpan:main
-//$ JWT:jwt
+//$ JWTAlgorithm=ref:jwt
+//$ TimeSpan=ref:main
+//$ JWT=ref:jwt
 function createJWT(algorithm: JWTAlgorithm, key: ArrayBuffer, jwt: string): Promise<$$JWT>;
 ```
 
