@@ -21,6 +21,6 @@ function createSession(sessionId: string): $$Session;
 
 ```ts
 //$ sessionController=/reference/session/SessionController
-const sessionId = "x3lPE3nFfl"
-const session = $$sessionController.createSession(sessionId)
+const sessionId = "x3lPE3nFfl";
+const session = $$sessionController.createSession(sessionId);
 ```

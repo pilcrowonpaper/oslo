@@ -66,7 +66,7 @@ async function generatePasswordResetToken(userId: string): Promise<VerificationT
 
 async function validatePasswordResetToken(token: string): Promise<string> {
 	const storedToken = await db.transaction().execute(async (trx) => {
-        // run transaction
+		// run transaction
 		// get token from db
 		const storedToken = await trx.table("password_reset_token").where("id", "=", token).get();
 		if (!storedToken) return null;

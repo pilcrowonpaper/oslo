@@ -1,5 +1,26 @@
 ---
+import { getHighlighter } from "shiki";
 
+import MarkdownArticle from "../components/MarkdownArticle.astro";
+
+const highlighter = await getHighlighter({
+	theme: "css-variables",
+	langs: ["ts"]
+});
+
+const code = `import { webcrypto } from "node:crypto";
+
+globalThis.crypto = webcrypto;`;
+
+const codeHtml = highlighter
+	.codeToHtml(code, {
+		lang: "ts"
+	})
+	.replace(
+		'<pre class="shiki css-variables" style="background-color: var(--shiki-color-background)" tabindex="0">',
+		""
+	)
+	.replace("</pre>", "");
 ---
 
 <html lang="en">
@@ -10,7 +31,43 @@
 		<meta name="generator" content={Astro.generator} />
 		<title>Astro</title>
 	</head>
-	<body>
-		<h1>Astro</h1>
+	<body class="w-full">
+		<div class="mx-auto max-w-lg mt-20 w-fit mb-20">
+			<div>
+				<h1 class="font-semibold text-5xl">Oslo</h1>
+				<MarkdownArticle>
+					<p>Oslo provides a bunch of auth utilities, including APIs for:</p>
+					<ul>
+						<li>Managing sessions</li>
+						<li>Creating JWTs</li>
+						<li>Handling OAuth 2.0</li>
+						<li>Hashing passwords</li>
+						<li>Generating cryptographically string random values</li>
+						<li>Signing data</li>
+						<li>Verifying WebAuthn responses</li>
+						<li>Encoding data</li>
+					</ul>
+					<p>Lightweight, runtime agnostic, fully typed</p>
+					<p><a href="/reference">Reference</a></p>
+					<p><a href="https://github.com/pilcrowonpaper/oslo">Github repository</a></p>
+					<h2>Installation</h2>
+					<pre><code>npm install oslo</code></pre>
+					<p>
+						This module relies on the <a>Web Crypto API</a>, which is not available by default in
+						Node.js 16 and 18. Make sure to polyfill them:
+					</p>
+					<pre
+						set:html={codeHtml}
+						class="shiki css-variables"
+						style="background-color: var(--shiki-color-background)"
+					/>
+					<p>Or alternatively, enable the flag when running Node.js:</p>
+					<pre><code>node --experimental-global-webcrypto index.js</code></pre>
+				</MarkdownArticle>
+			</div>
+			<p class="text-zinc-500 text-sm mt-8 mx-auto w-fit">
+				An open source project made by pilcrow.
+			</p>
+		</div>
 	</body>
 </html>
