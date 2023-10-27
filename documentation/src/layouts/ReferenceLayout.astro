@@ -1,5 +1,5 @@
 ---
-import Header from "../components/Header.astro";
+import ReferenceHeader from "../components/ReferenceHeader.astro";
 
 interface Props {
 	levels: NavigationLevel[];
@@ -39,20 +39,9 @@ const pagePathname = Astro.url.pathname.replace(/\/$/, "");
 		<title>Oslo reference</title>
 	</head>
 	<body>
-		<Header>
-			<a href="/reference" class="hover:underline">Modules</a>
-			{
-				levels.map((lvl) => {
-					return (
-						<a href={lvl.href} class="hover:underline">
-							<code class="text-sm">{lvl.name}</code>
-						</a>
-					);
-				})
-			}
-		</Header>
+		<ReferenceHeader levels={levels}/>
 		<div>
-			<div class="fixed w-80 border-r h-screen pt-24">
+			<div class="hidden lg:block lg:fixed w-80 border-r h-screen pt-24">
 				<div class="flex flex-col gap-y-4 overflow-auto h-full pt-16 pb-8">
 					{
 						sideBarTitle && (
@@ -103,7 +92,7 @@ const pagePathname = Astro.url.pathname.replace(/\/$/, "");
 					}
 				</div>
 			</div>
-			<main class="ml-80 flex flex-col px-16 pt-36 pb-16">
+			<main class="lg:ml-80 flex flex-col px-4 sm:px-8 md:px-16 pt-36 pb-16">
 				<slot />
 			</main>
 		</div>

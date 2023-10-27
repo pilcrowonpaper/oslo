@@ -32,19 +32,25 @@ export async function createJWT(
 		includeIssuedTimestamp?: boolean;
 		jwtId?: string;
 	}
-): Promise<string> {
-	const headers: JWTHeader = {
+): Promise<JWT> {
+	const header: JWTHeader = {
 		alg: algorithm,
 		typ: "JWT",
 		...options?.headers
 	};
-	const payloadWithClaims: JWTPayload = {
-		...payload,
-		aud: options?.audience,
-		iss: options?.issuer,
-		sub: options?.subject,
-		jti: options?.jwtId
-	};
+	const payloadWithClaims: JWTPayload = payload;
+	if (options?.audience !== undefined) {
+		payloadWithClaims.aud = options.audience;
+	}
+	if (options?.subject !== undefined) {
+		payloadWithClaims.sub = options.subject;
+	}
+	if (options?.issuer !== undefined) {
+		payloadWithClaims.iss = options.issuer;
+	}
+	if (options?.jwtId !== undefined) {
+		payloadWithClaims.jti = options.jwtId;
+	}
 	if (options?.expiresIn !== undefined) {
 		payloadWithClaims.exp = Math.floor(Date.now() / 1000) + options.expiresIn.seconds();
 	}
@@ -55,12 +61,26 @@ export async function createJWT(
 		payloadWithClaims.iat = Math.floor(Date.now() / 1000);
 	}
 	const textEncoder = new TextEncoder();
-	const headerPart = encodeBase64url(textEncoder.encode(JSON.stringify(headers)));
+	const headerPart = encodeBase64url(textEncoder.encode(JSON.stringify(header)));
 	const payloadPart = encodeBase64url(textEncoder.encode(JSON.stringify(payloadWithClaims)));
 	const data = textEncoder.encode([headerPart, payloadPart].join("."));
-	const signature = await getAlgorithm(algorithm)!.sign(key, data);
+	const signature = await getAlgorithm(algorithm).sign(key, data);
 	const signaturePart = encodeBase64url(signature);
-	return [headerPart, payloadPart, signaturePart].join(".");
+	const value = [headerPart, payloadPart, signaturePart].join(".");
+	return {
+		value,
+		header,
+		payload: payloadWithClaims,
+		parts: [headerPart, payloadPart, signaturePart],
+		algorithm: header.alg,
+		expiresAt: payloadWithClaims.exp ? new Date(payloadWithClaims.exp * 1000) : null,
+		subject: options?.subject ?? null,
+		issuedAt: payloadWithClaims.iat ? new Date(payloadWithClaims.iat * 1000) : null,
+		issuer: options?.issuer ?? null,
+		jwtId: options?.jwtId ?? null,
+		audience: options?.audience ?? null,
+		notBefore: payloadWithClaims.nbf ? new Date(payloadWithClaims.nbf * 1000) : null
+	};
 }
 
 export async function validateJWT(

@@ -1,0 +1,34 @@
+---
+interface NavigationLevel {
+	name: string;
+	href: string;
+}
+
+interface Props {
+	levels?: NavigationLevel[];
+}
+
+const levels = Astro.props.levels ?? [];
+---
+
+<header class="fixed top-0 w-screen bg-white z-10 border-b">
+	<div class="px-4 sm:px-8 border-b py-4">
+		<a href="/" class="font-medium text-xl">Oslo</a>
+	</div>
+	<div class="px-4 sm:px-8 flex flex-wrap gap-x-2 py-1.5">
+		<a href="/reference" class="hover:underline">Modules</a>
+		{levels.length > 0 ? "▸" : null}
+		{
+			levels.map((lvl, i) => {
+				return (
+					<>
+						<a href={lvl.href} class="hover:underline">
+							<code class="text-sm">{lvl.name}</code>
+						</a>
+						{i + 1 !== levels.length ? "▸" : null}
+					</>
+				);
+			})
+		}
+	</div>
+</header>

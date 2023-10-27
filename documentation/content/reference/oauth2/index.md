@@ -15,7 +15,7 @@ Provides utilities for working OAuth 2.0.
 ## Classes
 
 - [`OAuth2Controller`](ref:oauth2)
-- [`AccessTokenRequestError`](ref:oauth2)
+- [`TokenRequestError`](ref:oauth2)
 
 ## Interfaces
 
@@ -67,7 +67,7 @@ const url = await createAuthorizationURL({
 By default [`OAuth2Controller.validateAuthorizationCode()`](ref:oauth2) sends credentials with the HTTP basic auth scheme.
 
 ```ts
-import { verifyState, AccessTokenRequestError } from "oslo/oauth2";
+import { verifyState, TokenRequestError } from "oslo/oauth2";
 
 if (!verifyState(storedState, state)) {
 	// error
@@ -83,7 +83,7 @@ try {
 		authenticateWith: "request_body"
 	});
 } catch (e) {
-	if (e instanceof AccessTokenRequestError) {
+	if (e instanceof TokenRequestError) {
 		// see https://www.rfc-editor.org/rfc/rfc6749#section-5.2
 		const { request, message, description } = e;
 	}

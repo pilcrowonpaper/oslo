@@ -2,7 +2,7 @@
 type: "method"
 ---
 
-# `generateKey()`
+# `HMAC.generateKey()`
 
 Generates a new secret key in raw format. See [`HMAC`](/reference/crypto/HMAC) for an example.
 

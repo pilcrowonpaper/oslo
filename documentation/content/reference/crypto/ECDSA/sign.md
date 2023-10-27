@@ -2,7 +2,7 @@
 type: "method"
 ---
 
-# `sign()`
+# `ECDSA.sign()`
 
 Signs data with a private key and returns the signature. See [`ECDSA`](/reference/crypto/ECDSA) for an example.
 

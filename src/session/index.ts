@@ -54,13 +54,6 @@ export class SessionController {
 			fresh: true
 		};
 	}
-
-	public sessionCookieController(
-		cookieName: string,
-		options?: SessionCookieOptions
-	): SessionCookieController {
-		return new SessionCookieController(cookieName, this.expiresIn, options);
-	}
 }
 
 interface SessionCookieOptions {

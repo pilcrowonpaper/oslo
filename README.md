@@ -42,4 +42,3 @@ Alternatively, add the `--experimental-global-webcrypto` flag when running Node.
 ```
 node --experimental-global-webcrypto index.js
 ```
-

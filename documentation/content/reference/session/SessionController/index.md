@@ -25,6 +25,17 @@ function constructor(expiresIn: TimeSpan): this;
 - [`createSession()`](ref:sessio/SessionController)
 - [`validateSessionState()`](ref:session/SessionController)
 
+## Properties
+
+```ts
+//$ TimeSpan=ref:main
+interface Properties {
+	expiresIn: $$TimeSpan;
+}
+```
+
+- `expiresIn`
+
 ## Example
 
 ```ts

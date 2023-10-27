@@ -89,29 +89,82 @@ test.each(["HS256", "HS384", "HS512"] as const)(
 	}
 );
 
-test("createJWT()", async () => {
-	const secretKey = new Uint8Array([
-		203, 235, 77, 145, 110, 2, 129, 141, 128, 180, 255, 15, 3, 14, 223, 233, 122, 146, 173, 255, 3,
-		123, 189, 8, 241, 6, 236, 39, 98, 46, 72, 248, 176, 63, 185, 31, 239, 92, 110, 209, 74, 66, 3,
-		44, 10, 164, 141, 166, 178, 92, 162, 181, 183, 45, 101, 104, 96, 54, 171, 46, 204, 61, 163, 19
-	]);
-	const result = await createJWT(
-		"HS256",
-		secretKey,
-		{
-			message: "hello",
-			count: 100
-		},
-		{
+describe("createJWT()", () => {
+	test("Creates the correct JWT value", async () => {
+		const secretKey = new Uint8Array([
+			8, 138, 53, 76, 210, 41, 194, 216, 13, 70, 56, 196, 237, 57, 69, 41, 152, 114, 223, 150, 169,
+			154, 191, 89, 202, 118, 249, 18, 34, 208, 18, 101, 70, 236, 76, 178, 117, 129, 106, 71, 253,
+			79, 99, 9, 64, 208, 102, 50, 118, 72, 107, 46, 120, 2, 240, 217, 103, 66, 63, 52, 248, 23,
+			140, 46
+		]);
+		const result = await createJWT(
+			"HS256",
+			secretKey,
+			{
+				message: "hello",
+				count: 100
+			},
+			{
+				audience: "_audience",
+				issuer: "_issuer",
+				subject: "_subject",
+				jwtId: "_jwtId"
+			}
+		);
+		const expected =
+			"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZXNzYWdlIjoiaGVsbG8iLCJjb3VudCI6MTAwLCJhdWQiOiJfYXVkaWVuY2UiLCJzdWIiOiJfc3ViamVjdCIsImlzcyI6Il9pc3N1ZXIiLCJqdGkiOiJfand0SWQifQ.xquflAkOGwGp5OxVmnNRZn97sACTBcey1KEcVQfnQks";
+		expect(result.value).toBe(expected);
+	});
+	test("Returns the correct JWT", async () => {
+		const secretKey = await new HMAC("SHA-256").generateKey();
+		const currDateSeconds = Math.floor(Date.now() / 1000);
+		const result = await createJWT(
+			"HS256",
+			secretKey,
+			{
+				message: "hello"
+			},
+			{
+				audience: "_audience",
+				issuer: "_issuer",
+				subject: "_subject",
+				jwtId: "_jwtId",
+				expiresIn: new TimeSpan(1, "h"),
+				notBefore: new Date(),
+				includeIssuedTimestamp: true,
+				headers: {
+					kid: "_kid"
+				}
+			}
+		);
+		expect(result).toEqual({
+			algorithm: "HS256",
+			value: result.value,
+			expiresAt: new Date((currDateSeconds + new TimeSpan(1, "h").seconds()) * 1000),
+			notBefore: new Date(currDateSeconds * 1000),
+			issuedAt: new Date(currDateSeconds * 1000),
 			audience: "_audience",
 			issuer: "_issuer",
 			subject: "_subject",
-			jwtId: "_jwtId"
-		}
-	);
-	const expected =
-		"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZXNzYWdlIjoiaGVsbG8iLCJjb3VudCI6MTAwLCJhdWQiOiJfYXVkaWVuY2UiLCJpc3MiOiJfaXNzdWVyIiwic3ViIjoiX3N1YmplY3QiLCJqdGkiOiJfand0SWQifQ.aDGihD3SjAawl4MNkS7dD8-ZncZB766rjrrD_12IkKs";
-	expect(result).toBe(expected);
+			jwtId: "_jwtId",
+			parts: result.value.split("."),
+			header: {
+				kid: "_kid",
+				typ: "JWT",
+				alg: "HS256"
+			},
+			payload: {
+				message: "hello",
+				aud: "_audience",
+				iss: "_issuer",
+				sub: "_subject",
+				jti: "_jwtId",
+				exp: currDateSeconds + new TimeSpan(1, "h").seconds(),
+				iat: currDateSeconds,
+				nbf: currDateSeconds
+			}
+		});
+	});
 });
 
 test("parseJWT()", async () => {
@@ -136,7 +189,7 @@ test("parseJWT()", async () => {
 			}
 		}
 	);
-	expect(parseJWT(jwt)).toEqual({
+	expect(parseJWT(jwt.value)).toEqual({
 		algorithm: "HS256",
 		expiresAt: new Date((currDateSeconds + new TimeSpan(1, "h").seconds()) * 1000),
 		notBefore: new Date(currDateSeconds * 1000),
@@ -145,8 +198,8 @@ test("parseJWT()", async () => {
 		issuer: "_issuer",
 		subject: "_subject",
 		jwtId: "_jwtId",
-		value: jwt,
-		parts: jwt.split("."),
+		value: jwt.value,
+		parts: jwt.value.split("."),
 		header: {
 			kid: "_kid",
 			typ: "JWT",

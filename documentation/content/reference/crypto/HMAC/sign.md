@@ -2,7 +2,7 @@
 type: "method"
 ---
 
-# `sign()`
+# `HMAC.sign()`
 
 Signs data with a private key and returns the signature. See [`HMAC`](/reference/crypto/HMAC) for an example.
 

@@ -2,6 +2,8 @@
 type: "function"
 ---
 
+# `decodeBase64url()`
+
 Decodes base64 URL strings. Use [`encodeBase64url()`](ref:crypto) to encode into base64 URL strings.
 
 ## Definition

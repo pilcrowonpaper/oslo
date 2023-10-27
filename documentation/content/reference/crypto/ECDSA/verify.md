@@ -2,7 +2,7 @@
 type: "method"
 ---
 
-# `verify()`
+# `ECDSA.verify()`
 
 Verifies a signature with a public key and returns `true` if the signature is valid. See [`ECDSA`](/reference/crypto/ECDSA) for an example.
 

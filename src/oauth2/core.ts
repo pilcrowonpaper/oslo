@@ -6,16 +6,6 @@ export interface OAuth2Tokens {
 	accessToken: string;
 }
 
-export interface OAuth2Provider<_Tokens extends OAuth2Tokens> {
-	createAuthorizationURL(state?: string): Promise<URL>;
-	validateAuthorizationCode(code: string): Promise<_Tokens>;
-}
-
-export interface OAuth2ProviderWithPKCE<_Tokens extends OAuth2Tokens> {
-	createAuthorizationURL(codeVerifier: string, state?: string): Promise<URL>;
-	validateAuthorizationCode(code: string, codeVerifier: string): Promise<_Tokens>;
-}
-
 export class OAuth2Controller {
 	private clientId: string;
 	private authorizeEndpoint: string;

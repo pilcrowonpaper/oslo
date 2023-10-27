@@ -2,6 +2,8 @@
 type: "function"
 ---
 
+# `decodeHex()`
+
 Decodes hex-encoded strings. Use [`encodeHex()`](ref:crypto) to encode into hex strings.
 
 ## Definition

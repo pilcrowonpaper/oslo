@@ -8,7 +8,7 @@ Validates the authorization code included in the callback. This sends a POST req
 
 By default, credentials (client secret) is sent via the HTTP basic auth scheme. To send it inside the request body (ie. search params), set `options.authenticateWith` to `"request_body"`.
 
-This throws a [`AccessTokenRequestError`](ref:oauth2) on error responses, and `fetch()` error when it fails to connect to the endpoint.
+This throws a [`TokenRequestError`](ref:oauth2) on error responses, and `fetch()` error when it fails to connect to the endpoint.
 
 See [`oslo/oauth2`](/reference/oauth2) for a full example.
 
@@ -36,3 +36,29 @@ function validateAuthorizationCode<_TokenResponseBody extends TokenResponseBody>
 ### Type parameters
 
 - `_TokenResponseBody`: JSON-parsed success response body from the token endpoint
+
+## Example
+
+```ts
+//$ TokenRequestError=ref:oauth2
+//$ TokenResponseBody=ref:oauth2
+//$ oauth2Controller=/reference/oauth2/OAuth2Controller
+import { $$TokenRequestError } from "oslo/oauth2";
+import type { $$TokenResponseBody } from "oslo/oauth2";
+
+interface ResponseBody extends TokenResponseBody {
+	refresh_token: string;
+}
+try {
+	const tokens = await $$oauth2Controller.validateAuthorizationCode<ResponseBody>(code, {
+		codeVerifier: storedCodeVerifier,
+		credentials: clientSecret,
+		authenticateWith: "request_body" // send client secret inside body
+	});
+} catch (e) {
+	if (e instanceof TokenRequestError) {
+		// invalid credentials etc
+	}
+	// unknown error
+}
+```

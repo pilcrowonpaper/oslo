@@ -2,6 +2,8 @@
 type: "function"
 ---
 
+# `decodeBase64()`
+
 Decodes base64 strings. This does not check the length and ignores padding.Use [`encodeBase64()`](ref:crypto) to encode into base64 strings.
 
 ## Definition

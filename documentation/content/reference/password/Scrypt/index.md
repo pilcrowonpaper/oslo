@@ -29,8 +29,8 @@ function constructor(options?: { N?: number; r?: number; p?: number; dkLen?: num
 
 ## Methods
 
-- [`hash()`](ref:password/PasswordHashingAlgorithm)
-- [`verify()`](ref:password/PasswordHashingAlgorithm)
+- [`hash()`](ref:password/Argon2id)
+- [`verify()`](ref:password/Argon2id)
 
 ## Example
 

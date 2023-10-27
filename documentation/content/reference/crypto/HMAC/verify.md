@@ -2,7 +2,7 @@
 type: "method"
 ---
 
-# `verify()`
+# `HMAC.verify()`
 
 Verifies a signature with a public key and returns `true` if the signature is valid. See [`HMAC`](/reference/crypto/HMAC) for an example.
 

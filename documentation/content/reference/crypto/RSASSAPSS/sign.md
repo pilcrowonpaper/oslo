@@ -2,7 +2,7 @@
 type: "method"
 ---
 
-# `sign()`
+# `RSASSAPSS.sign()`
 
 Signs data with a private key and returns the signature. See [`RSASSAPSS`](/reference/crypto/RSASSAPSS) for an example.
 

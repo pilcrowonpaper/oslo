@@ -24,8 +24,8 @@ function constructor(options?: { cost?: number }): this;
 
 ## Methods
 
-- [`hash()`](ref:password/PasswordHashingAlgorithm)
-- [`verify()`](ref:password/PasswordHashingAlgorithm)
+- [`hash()`](ref:password/Argon2id)
+- [`verify()`](ref:password/Argon2id)
 
 ## Example
 

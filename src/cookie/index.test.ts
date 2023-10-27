@@ -26,7 +26,7 @@ describe("serializeCookie()", () => {
 	});
 });
 
-describe("parseCookieHeader()", () => {
+describe("parseCookies()", () => {
 	test("parse cookie header", () => {
 		const cookies = parseCookies("message1=hello; message2=bye");
 		expect(cookies.get("message1")).toBe("hello");
