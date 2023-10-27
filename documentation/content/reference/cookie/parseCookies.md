@@ -4,7 +4,7 @@ type: "function"
 
 # `parseCookies()`
 
-Parses `Cookie` header value and returns a `Map` with the key/value. Cookie names and values are URI-component decoded.
+Parses `Cookie` header value and returns a `Map` with the cookie names as the key. Cookie names and values are URI-component decoded.
 
 ## Definition
 
