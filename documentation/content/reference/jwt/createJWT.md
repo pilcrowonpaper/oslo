@@ -57,11 +57,8 @@ const payload = {
 	message: "hello, world"
 };
 
-// supports HMAC, ECDSA, RSASSA-PKCS1-v1_5, RSASSA-PSS
 const jwt = await createJWT("HS256", secret, payload, {
-	// optional
 	headers: {
-		// custom headers
 		kid
 	},
 	expiresIn: new TimeSpan(30, "d"),

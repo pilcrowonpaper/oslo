@@ -30,7 +30,6 @@ const authorizeEndpoint = "https://github.com/login/oauth/authorize";
 const tokenEndpoint = "https://github.com/login/oauth/access_token";
 
 const oauth2Controller = new OAuth2Controller(clientId, authorizeEndpoint, tokenEndpoint, {
-	// optional
 	redirectURI: "http://localhost:3000/login/github/callback"
 });
 ```
