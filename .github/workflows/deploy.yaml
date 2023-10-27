@@ -1,4 +1,4 @@
-ame: Deploy to GitHub Pages
+name: Deploy to GitHub Pages
 
 on:
   # Trigger the workflow every time you push to the `main` branch
