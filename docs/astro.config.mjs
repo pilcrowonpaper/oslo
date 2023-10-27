@@ -12,5 +12,7 @@ export default defineConfig({
 		rehypePlugins: [codeBlockRehype],
 		remarkPlugins: [codeBlockRemark, codeRefLinkRemark],
 		syntaxHighlight: false
-	}
+	},
+	site: "https://pilcrowonpaper.github.io",
+	base: "/oslo"
 });
