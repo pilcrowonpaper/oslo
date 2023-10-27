@@ -19,6 +19,8 @@ A collection of utilities for auth, including:
 
 Aside from `oslo/password`, every module works in any environment, including Node.js, Cloudflare Workers, Deno, and Bun.
 
+Documentation: https://oslo.js.org
+
 ## Installation
 
 ```
