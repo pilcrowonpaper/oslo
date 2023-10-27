@@ -4,13 +4,15 @@ type: "function"
 
 # `alphabet()`
 
-Generates a string with all the characters defined in the provided pattern. Mostly used for [`generateRandomString()`](ref:random). Ignores duplicates.
+Generates a string with all the characters defined in the provided pattern:
 
 - `a-z`: `abcdefghijklmnopqrstuvwxyz`
 - `A-Z`: `ABCDEFGHIJKLMNOPqRSTUVWXYZ`
 - `0-9`: `0123456789`
 - `-`: Character `-`
 - `_`: Character `_`
+
+Mostly used for [`generateRandomString()`](ref:random). Ignores duplicate patterns.
 
 ## Definition
 

@@ -21,28 +21,22 @@ function validateAssertionResponse(
 ### Parameters
 
 - `algorithm`: Algorithm used for creating the signature
-- `publicKey`: User's public key stored in the database
+- `publicKey`: Users's public key stored in the database
 - `response`: Attestation response
 - `challenge`: Challenge used for creating the signature
 
 ## Example
 
 ```ts
-const webauthnController: WebAuthnController;
-
+//$ AssertionResponse=ref:webauthn
+//$ webAuthnController=/reference/webauthn/WebAuthnController
 try {
-	const response: AssertionResponse = {
-		// all `ArrayBuffer` type
+	const response: $$AssertionResponse = {
 		clientDataJSON,
 		authenticatorData,
 		signature
 	};
-	await webauthnController.validateAssertionResponse(
-		"ES256", // "RS256"
-		publicKey, // `ArrayBuffer`
-		response,
-		challenge // `ArrayBuffer`
-	);
+	await $$webAuthnController.validateAssertionResponse("ES256", publicKey, response, challenge);
 } catch {
 	// failed to validate
 }

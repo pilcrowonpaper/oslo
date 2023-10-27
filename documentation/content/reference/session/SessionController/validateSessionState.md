@@ -10,10 +10,23 @@ Validates the state of a stored session and returns `null` if the session is inv
 
 ```ts
 //$ Session=ref:session
-function validateSessionState(sessionId: string, expiresAt: Date): Session | null;
+function validateSessionState(sessionId: string, expiresAt: Date): $$Session | null;
 ```
 
 ### Parameters
 
 - `sessionId`
 - `expiresAt`: Session expiration
+
+## Example
+
+```ts
+//$ sessionController=/reference/session/SessionController
+const sessionId = "x3lPE3nFfl";
+const session = $$sessionController.validateSessionState(sessionId, new Date(unix));
+if (session) {
+	// valid session
+} else {
+	// invalid session
+}
+```

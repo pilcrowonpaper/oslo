@@ -4,7 +4,7 @@ type: "class"
 
 # `SessionCookieController`
 
-Provides methods for handling session cookies. By default, session cookies have a `Secure` flag. This should be disabled when developing locally.
+Provides methods for handling session cookies. By default, session cookies have a `Secure` flag. This should be disabled when developing locally. See [`oslo/session`](/reference/session) for a full example.
 
 ## Constructor
 

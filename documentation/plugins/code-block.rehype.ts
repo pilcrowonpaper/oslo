@@ -6,24 +6,24 @@ export default (): Transformer => {
 	return transformer;
 };
 
-type Transformer = (root: Root) => Promise<void>;
+type Transformer = (root: Root) => void;
 
-async function transformer(root: Root): Promise<void> {
-	await walkTree(root);
+function transformer(root: Root): void {
+	walkTree(root);
 }
 
-async function walkTree(node: Element | Root): Promise<void> {
-	const promises: Promise<void>[] = [];
+const highlighter = await getHighlighter({
+	theme: "css-variables",
+	langs: ["ts"]
+});
+
+function walkTree(node: Element | Root): void {
 	for (let i = 0; i < node.children.length; i++) {
 		const childNode = node.children[i];
 		if (childNode.type === "element") {
 			if (childNode.tagName === "pre") {
 				const grandChildNode = childNode.children[0];
 				if (isCodeBlockCodeElement(grandChildNode)) {
-					const highlighter = await getHighlighter({
-						theme: "css-variables",
-						langs: ["ts"]
-					});
 					let rawCodeHTML = highlighter.codeToHtml(grandChildNode.children[0].value, {
 						lang: "ts"
 					});
@@ -40,10 +40,9 @@ async function walkTree(node: Element | Root): Promise<void> {
 					continue;
 				}
 			}
-			promises.push(walkTree(childNode));
+			walkTree(childNode);
 		}
 	}
-	await Promise.all(promises);
 }
 
 function isCodeBlockCodeElement(node: ElementContent): node is CodeBlockCodeElement {

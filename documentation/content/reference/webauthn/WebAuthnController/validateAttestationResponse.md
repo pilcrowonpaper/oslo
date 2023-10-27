@@ -24,15 +24,15 @@ function validateAttestationResponse(
 ## Example
 
 ```ts
-const webauthnController: WebAuthnController;
-
+//$ AttestationResponse=ref:webauthn
+//$ webAuthnController=/reference/webauthn/WebAuthnController
 try {
-	const response: AttestationResponse = {
+	const response: $$AttestationResponse = {
 		// all `ArrayBuffer` type (`Uint8Array`, `ArrayBuffer` etc)
 		clientDataJSON,
 		authenticatorData
 	};
-	await webauthn.validateAttestationResponse(response, challenge);
+	await $$webAuthnController.validateAttestationResponse(response, challenge);
 } catch {
 	// failed to validate
 }

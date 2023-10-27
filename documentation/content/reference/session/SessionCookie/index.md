@@ -43,10 +43,11 @@ interface Properties {
 ```ts
 import { SessionCookie } from "oslo/session";
 
-const cookie = new SessionCookie(name, value);
-const response = new Response();
-
-response.headers.set("Set-Cookie", cookie.serialize());
+const cookieName = "session";
+const sessionCookie = new SessionCookie(cookieName, sessionId, {
+	maxAge: 60 * 60 * 24 // 1 day
+});
+response.headers.set("Set-Cookie", sessionCookie.serialize());
 ```
 
 If your framework provides an API for setting cookies:
@@ -54,7 +55,7 @@ If your framework provides an API for setting cookies:
 ```ts
 import { SessionCookie } from "oslo/session";
 
-const cookie = new SessionCookie(name, value);
+const sessionCookie = new SessionCookie(cookieName, sessionId);
 
-setCookie(cookie.name, cookie.value, cookie.attributes);
+setCookie(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
 ```

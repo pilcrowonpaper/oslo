@@ -2,6 +2,25 @@
 type: "module"
 ---
 
+# `oslo/oauth2`
+
+Provides utilities for working OAuth 2.0.
+
+## Functions
+
+- [`generateCodeVerifier()`](ref:oauth2)
+- [`generateState()`](ref:oauth2)
+- [`verifyState()`](ref:oauth2)
+
+## Classes
+
+- [`OAuth2Controller`](ref:oauth2)
+- [`AccessTokenRequestError`](ref:oauth2)
+
+## Interfaces
+
+- [`TokenResponseBody`](ref:oauth2)
+
 ## Example
 
 ```ts
