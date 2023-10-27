@@ -1,0 +1,48 @@
+---
+import { referenceContent } from "../../utils/reference";
+import type { ReferenceContent } from "../../utils/reference";
+
+import MarkdownArticle from "../MarkdownArticle.astro";
+import ReferenceLayout from "../../layouts/ReferenceLayout.astro";
+
+interface Props {
+	content: ReferenceContent;
+}
+
+const { content } = Astro.props;
+const methods = referenceContent.filter((val) => {
+	return val.type === "method" && val.path.startsWith(content.path + "/");
+});
+---
+
+<ReferenceLayout
+	sideBar={[
+		{
+			name: "Methods",
+			links: methods.map((val) => {
+				return {
+					name: val.displayName,
+					href: val.href
+				};
+			})
+		}
+	]}
+	sideBarTitle={{
+		value: content.displayName,
+		href: content.href
+	}}
+	levels={[
+		{
+			href: "/reference/" + content.module,
+			name: content.moduleDisplayName
+		},
+		{
+			href: "/reference/" + content.module + "/" + content.displayName,
+			name: content.displayName
+		}
+	]}
+>
+	<MarkdownArticle>
+		<content.Markdown />
+	</MarkdownArticle>
+</ReferenceLayout>

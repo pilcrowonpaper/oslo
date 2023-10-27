@@ -1,0 +1,100 @@
+---
+import ReferenceHeader from "../components/ReferenceHeader.astro";
+
+interface Props {
+	levels: NavigationLevel[];
+	sideBar: SideBarItem[];
+	sideBarTitle?: SideBarTitle;
+}
+
+interface SideBarTitle {
+	value: string;
+	href: string;
+}
+interface NavigationLevel {
+	name: string;
+	href: string;
+}
+
+interface SideBarItem {
+	name: string;
+	links: SideBarLinkItem[];
+}
+
+interface SideBarLinkItem {
+	name: string;
+	href: string;
+}
+
+const { sideBar, levels, sideBarTitle } = Astro.props;
+
+const pagePathname = Astro.url.pathname.replace(/\/$/, "");
+---
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Oslo reference</title>
+	</head>
+	<body>
+		<ReferenceHeader levels={levels}/>
+		<div>
+			<div class="hidden lg:block lg:fixed w-80 border-r h-screen pt-24">
+				<div class="flex flex-col gap-y-4 overflow-auto h-full pt-16 pb-8">
+					{
+						sideBarTitle && (
+							<div
+								class="px-8 py-1"
+								class:list={[
+									{
+										"bg-indigo-100": sideBarTitle.href === pagePathname
+									}
+								]}
+							>
+								<p class="font-medium">
+									<a href={sideBarTitle.href} class="hover:underline">
+										<code>{sideBarTitle.value}</code>
+									</a>
+								</p>
+							</div>
+						)
+					}
+
+					{
+						sideBar.map((sideBarItem) => {
+							if (sideBarItem.links.length === 0) return null;
+							return (
+								<div class="">
+									<p class="text-sm font-medium mb-1 px-8">{sideBarItem.name}</p>
+									<ul>
+										{sideBarItem.links.map((link) => {
+											return (
+												<li
+													class="pl-10 w-full py-0.5 pr-8"
+													class:list={[
+														{
+															"bg-indigo-100": pagePathname === link.href
+														}
+													]}
+												>
+													<a href={link.href} class="hover:underline">
+														<code class="text-sm">{link.name}</code>
+													</a>
+												</li>
+											);
+										})}
+									</ul>
+								</div>
+							);
+						})
+					}
+				</div>
+			</div>
+			<main class="lg:ml-80 flex flex-col px-4 sm:px-8 md:px-16 pt-36 pb-16">
+				<slot />
+			</main>
+		</div>
+	</body>
+</html>
