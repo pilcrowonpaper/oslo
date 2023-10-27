@@ -1,7 +1,8 @@
 ---
 type: "function"
-title: "serializeCookie()"
 ---
+
+# `serializeCookie()`
 
 Serializes cookie for `Set-Cookie` header. The cookie name and value are URI-component encoded.
 
