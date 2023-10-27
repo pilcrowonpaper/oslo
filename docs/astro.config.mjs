@@ -13,6 +13,5 @@ export default defineConfig({
 		remarkPlugins: [codeBlockRemark, codeRefLinkRemark],
 		syntaxHighlight: false
 	},
-	site: "https://pilcrowonpaper.github.io",
-	base: "/oslo"
+	site: "https://pilcrowonpaper.github.io"
 });
