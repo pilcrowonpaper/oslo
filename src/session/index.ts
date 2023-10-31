@@ -3,12 +3,6 @@ import { parseCookies, serializeCookie } from "../cookie/index.js";
 
 import type { CookieAttributes } from "../cookie/index.js";
 
-export interface Session {
-	sessionId: string;
-	expiresAt: Date;
-	fresh: boolean;
-}
-
 export type SessionState = "expired" | "valid" | "renewal_required";
 
 export class SessionController {
