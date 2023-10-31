@@ -37,14 +37,17 @@ const sessionCookieController = new SessionCookieController(
 
 ### Create a session
 
-[`SessionController.createSession()`](ref:session) creates the a new [`Session`](ref:session) that should be stored in your database. You can of course store additional data as well. [`SessionCookieController.createSessionCookie()`](ref:session) can then be used to set session cookies.
+[`SessionController.createExpirationDate()`](ref:session) creates a new expiration date that should be stored in your database alongside the session ID. [`SessionCookieController.createSessionCookie()`](ref:session) can then be used to set session cookies.
 
 ```ts
-const session = sessionController.createSession(userId);
+import { generateRandomString, alphabet } from "oslo/random";
+
+const sessionId = generateRandomString(15, alphabet("a-z", "0-9"));
+const expirationDate = sessionController.createExpirationDate();
 
 await db.storeSession({
 	id: session.sessionId,
-	expires: session.expiresAt,
+	expires: expirationDate,
 	user_id: userId
 });
 
@@ -55,7 +58,13 @@ response.headers.set("Set-Cookie", cookie.serialize());
 
 ### Validate a session
 
-You can get the session cookie from the `Cookie` header with [`SessionCookieController.parseCookies()`](ref:session). You should get the stored session, and if it exists, validate the state with [`SessionController.validateSessionState()`](ref:session). This returns a `Session` where the expiration may be different from the input, indicated by `Session.fresh`. If so, the stored data should be updated and a new cookie with an extended expiration should be set.
+You can get the session cookie from the `Cookie` header with [`SessionCookieController.parseCookies()`](ref:session). You should get the stored session, and if it exists, validate the state with [`SessionController.getSessionState()`](ref:session). This returns:
+
+- `"expired"` if expired
+- `"valid"` if valid
+- `"renewal_required"` if the session expiration needs to be renewed
+
+If the session needs to be renewed, the session expiration needs to be extended and the database updated. You can get the new expiration date with `SessionController.createExpirationDate()`.
 
 ```ts
 const sessionCookie = sessionCookieController.parseCookies(request.headers.get("Cookie"));
@@ -69,11 +78,8 @@ if (storedSession) {
 	throw new Error("Invalid session");
 }
 
-const sessionState = sessionController.validateSessionState(
-	storedSession.id,
-	storedSession.expires
-);
-if (!sessionState) {
+const sessionState = sessionController.validateSessionState(storedSession.expires);
+if (sessionState === "expired") {
 	// see next section on invalidating session
 	await db.deleteSession(storedSession.id);
 	const blankCookie = sessionCookieController.createBlankSessionCookie();
@@ -82,13 +88,15 @@ if (!sessionState) {
 }
 
 // check if session expiration was updated
-if (sessionState.fresh) {
-	await db.updateSession(sessionState.sessionId, {
-		expires: sessionState.expiresAt
+if (sessionState === "renewal_required") {
+	await db.updateSession(storedSession.id, {
+		expires: sessionCookieController.createExpirationDate()
 	});
-	const updatedCookie = sessionCookieController.createSessionCookie(session.sessionId);
+	const updatedCookie = sessionCookieController.createSessionCookie(storedSession.id);
 	response.headers.set("Set-Cookie", updatedCookie.serialize());
 }
+
+// valid session
 ```
 
 If you cannot set cookies on every request (due to framework constraints), set `expires` option to `false` when initializing `SessionCookieController`. This will create cookies with long expiration time (2 years).

@@ -9,6 +9,8 @@ export interface Session {
 	fresh: boolean;
 }
 
+export type SessionState = "expired" | "valid" | "renewal_required";
+
 export class SessionController {
 	/**
 	 * @param expiresIn How long the session is valid for
@@ -20,39 +22,21 @@ export class SessionController {
 	/** How long the session is valid for */
 	public expiresIn: TimeSpan;
 
-	/**
-	 * Checks the session expiration and extends the expiration if necessary.
-	 * As such, the date in the returned `Session` may not match the provided date.
-	 *
-	 * @param sessionId
-	 * @param expiresAt Session expiration stored in the database
-	 */
-	public validateSessionState(sessionId: string, expiresAt: Date): Session | null {
+	public getSessionState(expiresAt: Date): SessionState {
 		if (!isWithinExpirationDate(expiresAt)) {
-			return null;
+			return "expired";
 		}
-		let fresh = false;
 		const activePeriodExpirationDate = new Date(
 			expiresAt.getTime() - this.expiresIn.milliseconds() / 2
 		);
 		if (!isWithinExpirationDate(activePeriodExpirationDate)) {
-			// extend expiration
-			expiresAt = createDate(this.expiresIn);
-			fresh = true;
+			return "renewal_required";
 		}
-		return {
-			sessionId,
-			expiresAt,
-			fresh
-		};
+		return "valid";
 	}
 
-	public createSession(sessionId: string): Session {
-		return {
-			sessionId,
-			expiresAt: createDate(this.expiresIn),
-			fresh: true
-		};
+	public createExpirationDate(): Date {
+		return createDate(this.expiresIn);
 	}
 }
 

@@ -22,8 +22,8 @@ function constructor(expiresIn: TimeSpan): this;
 
 ## Methods
 
-- [`createSession()`](ref:sessio/SessionController)
-- [`validateSessionState()`](ref:session/SessionController)
+- [`createExpirationDate()`](ref:sessio/SessionController)
+- [`getSessionState()`](ref:session/SessionController)
 
 ## Properties
 
