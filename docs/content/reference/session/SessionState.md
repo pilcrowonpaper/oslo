@@ -9,9 +9,9 @@ Represents a session state.
 ## Definition
 
 ```ts
-type SessionState = "expired" | "renewal_required" | "valid";
+type SessionState = "expired" | "idle" | "active";
 ```
 
 - `"expired"`: Expired
-- `"renewal_required"`: Valid, but renew required
-- `"valid"`: Valid
+- `"idle"`: Valid, but renew required
+- `"active"`: Valid

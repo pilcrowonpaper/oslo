@@ -25,7 +25,7 @@ const sessionId = "x3lPE3nFfl";
 const sessionState = $$sessionController.getSessionState(new Date(unix));
 if (sessionState === "valid") {
 	// valid session
-} else if (sessionState === "renewal_required") {
+} else if (sessionState === "idle") {
 	// valid but renewal required
 } else {
 	// invalid session

@@ -61,8 +61,8 @@ response.headers.set("Set-Cookie", cookie.serialize());
 You can get the session cookie from the `Cookie` header with [`SessionCookieController.parseCookies()`](ref:session). You should get the stored session, and if it exists, validate the state with [`SessionController.getSessionState()`](ref:session). This returns:
 
 - `"expired"` if expired
-- `"valid"` if valid
-- `"renewal_required"` if the session expiration needs to be renewed
+- `"active"` if valid
+- `"idle"` if the session expiration needs to be renewed
 
 If the session needs to be renewed, the session expiration needs to be extended and the database updated. You can get the new expiration date with `SessionController.createExpirationDate()`.
 
@@ -88,7 +88,7 @@ if (sessionState === "expired") {
 }
 
 // check if session expiration was updated
-if (sessionState === "renewal_required") {
+if (sessionState === "idle") {
 	await db.updateSession(storedSession.id, {
 		expires: sessionCookieController.createExpirationDate()
 	});

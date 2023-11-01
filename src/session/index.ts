@@ -3,7 +3,7 @@ import { parseCookies, serializeCookie } from "../cookie/index.js";
 
 import type { CookieAttributes } from "../cookie/index.js";
 
-export type SessionState = "expired" | "valid" | "renewal_required";
+export type SessionState = "expired" | "active" | "idle";
 
 export class SessionController {
 	/**
@@ -24,9 +24,9 @@ export class SessionController {
 			expiresAt.getTime() - this.expiresIn.milliseconds() / 2
 		);
 		if (!isWithinExpirationDate(activePeriodExpirationDate)) {
-			return "renewal_required";
+			return "idle";
 		}
-		return "valid";
+		return "active";
 	}
 
 	public createExpirationDate(): Date {
