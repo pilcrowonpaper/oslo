@@ -6,11 +6,14 @@ export interface OAuth2Tokens {
 	accessToken: string;
 }
 
+type ResponseMode = "query" | "form_post" | "fragment";
+
 export class OAuth2Controller {
 	private clientId: string;
 	private authorizeEndpoint: string;
 	private tokenEndpoint: string;
 	private redirectURI: string | null;
+	private responseMode: ResponseMode;
 
 	constructor(
 		clientId: string,
@@ -18,12 +21,14 @@ export class OAuth2Controller {
 		tokenEndpoint: string,
 		options?: {
 			redirectURI?: string;
+			responseMode?: ResponseMode;
 		}
 	) {
 		this.clientId = clientId;
 		this.authorizeEndpoint = authorizeEndpoint;
 		this.tokenEndpoint = tokenEndpoint;
 		this.redirectURI = options?.redirectURI ?? null;
+		this.responseMode = options?.responseMode ?? "query";
 	}
 
 	public async createAuthorizationURL(options?: {
@@ -34,6 +39,7 @@ export class OAuth2Controller {
 		const scope = options?.scope ?? [];
 		const authorizationUrl = new URL(this.authorizeEndpoint);
 		authorizationUrl.searchParams.set("response_type", "code");
+		authorizationUrl.searchParams.set("response_mode", this.responseMode);
 		authorizationUrl.searchParams.set("client_id", this.clientId);
 		if (scope.length > 0) {
 			authorizationUrl.searchParams.set("scope", scope.join(" "));

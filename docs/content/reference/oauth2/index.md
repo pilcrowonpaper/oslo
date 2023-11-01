@@ -21,6 +21,10 @@ Provides utilities for working OAuth 2.0.
 
 - [`TokenResponseBody`](ref:oauth2)
 
+## Types
+
+- [`ResponseMode`](ref:oauth2)
+
 ## Example
 
 ```ts
