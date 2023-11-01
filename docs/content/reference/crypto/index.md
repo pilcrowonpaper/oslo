@@ -8,6 +8,7 @@ Provides light-wrappers around the Web Crypto API for generating hashes and sign
 
 ## Functions
 
+- [`constantTimeEqual()`](ref:crypto)
 - [`sha1()`](ref:crypto)
 - [`sha256()`](ref:crypto)
 - [`sha384()`](ref:crypto)
