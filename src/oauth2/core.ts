@@ -9,7 +9,8 @@ export interface OAuth2Tokens {
 type ResponseMode = "query" | "form_post" | "fragment";
 
 export class OAuth2Controller {
-	private clientId: string;
+	public clientId: string;
+	
 	private authorizeEndpoint: string;
 	private tokenEndpoint: string;
 	private redirectURI: string | null;

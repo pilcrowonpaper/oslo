@@ -33,3 +33,13 @@ function constructor(
 
 - [`createAuthorizationURL()`](ref:oauth2/OAuth2Controller)
 - [`validateAuthorizationCode()`](ref:oauth2/OAuth2Controller)
+
+## Properties
+
+```ts
+interface Properties {
+	clientId: string;
+}
+```
+
+- `clientId`
