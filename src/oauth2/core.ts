@@ -68,17 +68,42 @@ export class OAuth2Controller {
 			authenticateWith?: "http_basic_auth" | "request_body";
 		}
 	): Promise<_TokenResponseBody> {
-		const body = new URLSearchParams();
-		body.set("code", authorizationCode);
-		body.set("client_id", this.clientId);
-		body.set("grant_type", "authorization_code");
-
+		const body = new URLSearchParams({
+			code: authorizationCode,
+			client_id: this.clientId,
+			grant_type: "authorization_code"
+		});
 		if (this.redirectURI !== null) {
 			body.set("redirect_uri", this.redirectURI);
 		}
 		if (options?.codeVerifier !== undefined) {
 			body.set("code_verifier", options.codeVerifier);
 		}
+		return await this.sendTokenRequest<_TokenResponseBody>(body, options);
+	}
+
+	public async refreshAccessToken<_TokenResponseBody extends TokenResponseBody>(
+		refreshToken: string,
+		options?: {
+			credentials?: string;
+			authenticateWith?: "http_basic_auth" | "request_body";
+		}
+	): Promise<_TokenResponseBody> {
+		const body = new URLSearchParams({
+			refresh_token: refreshToken,
+			client_id: this.clientId,
+			grant_type: "refresh_token"
+		});
+		return await this.sendTokenRequest<_TokenResponseBody>(body, options);
+	}
+
+	private async sendTokenRequest<_TokenResponseBody extends TokenResponseBody>(
+		body: URLSearchParams,
+		options?: {
+			credentials?: string;
+			authenticateWith?: "http_basic_auth" | "request_body";
+		}
+	): Promise<_TokenResponseBody> {
 		const headers = new Headers({
 			"Content-Type": "application/x-www-form-urlencoded",
 			Accept: "application/json"
@@ -103,11 +128,12 @@ export class OAuth2Controller {
 		});
 		const response = await fetch(request);
 		const result: _TokenResponseBody | TokenErrorResponseBody = await response.json();
-		// github returns status 200 for some errors
+		// providers are allowed to return non-400 status code for error
+		// why github
 		if (!("access_token" in result) && "error" in result) {
-			throw new AccessTokenRequestError(request, result);
+			throw new OAuth2RequestError(request, result);
 		} else if (!response.ok) {
-			throw new AccessTokenRequestError(request, {});
+			throw new OAuth2RequestError(request, {});
 		}
 		return result;
 	}
@@ -133,7 +159,7 @@ export function verifyState(
 	return state1 === state2;
 }
 
-export class AccessTokenRequestError extends Error {
+export class OAuth2RequestError extends Error {
 	public request: Request;
 	public description: string | null;
 	constructor(request: Request, body: Partial<TokenErrorResponseBody>) {

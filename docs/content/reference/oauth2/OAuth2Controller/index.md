@@ -32,6 +32,7 @@ function constructor(
 ## Methods
 
 - [`createAuthorizationURL()`](ref:oauth2/OAuth2Controller)
+- [`refreshAccessToken()`](ref:oauth2/OAuth2Controller)
 - [`validateAuthorizationCode()`](ref:oauth2/OAuth2Controller)
 
 ## Properties

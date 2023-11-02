@@ -1,7 +1,7 @@
 export {
 	OAuth2Controller,
 	generateCodeVerifier,
-	AccessTokenRequestError,
+	OAuth2RequestError,
 	generateState,
 	verifyState
 } from "./core.js";

@@ -2,9 +2,9 @@
 type: "method"
 ---
 
-# `OAuth2Controller.validateAuthorizationCode()`
+# `OAuth2Controller.refreshAccessToken()`
 
-Validates the authorization code included in the callback. This sends a POST request (`application/x-www-form-urlencoded`) to the token endpoint defined when initializing [`OAuth2Controller`](ref:oauth2) and returns the JSON-parsed response body. You can define the request body type with `_TokenResponseBody` type parameter.
+Refreshes access tokens with the refresh token. This sends a POST request (`application/x-www-form-urlencoded`) to the token endpoint defined when initializing [`OAuth2Controller`](ref:oauth2) and returns the JSON-parsed response body. You can define the request body type with `_TokenResponseBody` type parameter.
 
 By default, credentials (client secret) is sent via the HTTP basic auth scheme. To send it inside the request body (ie. search params), set `options.authenticateWith` to `"request_body"`.
 
@@ -15,10 +15,9 @@ See [`oslo/oauth2`](/reference/oauth2) for a full example.
 ## Definition
 
 ```ts
-function validateAuthorizationCode<_TokenResponseBody extends TokenResponseBody>(
-	authorizationCode: string,
+function refreshAccessToken<_TokenResponseBody extends TokenResponseBody>(
+	refreshToken: string,
 	options?: {
-		codeVerifier?: string;
 		credentials?: string;
 		authenticateWith?: "http_basic_auth" | "request_body";
 	}
@@ -27,9 +26,8 @@ function validateAuthorizationCode<_TokenResponseBody extends TokenResponseBody>
 
 ### Parameters
 
-- `authorizationCode`: `code` param in callback request
+- `refreshToken`: Refresh token
 - `options`
-  - `codeVerifier`: Stored code verifier for PKCE flow
   - `credentials`: Client password or secret for authenticated requests
   - `authenticateWith` (default: `"http_basic_auth"`): How the credentials should be sent
 
@@ -50,8 +48,7 @@ interface ResponseBody extends TokenResponseBody {
 	refresh_token: string;
 }
 try {
-	const tokens = await $$oauth2Controller.validateAuthorizationCode<ResponseBody>(code, {
-		codeVerifier: storedCodeVerifier,
+	const tokens = await $$oauth2Controller.refreshAccessToken<ResponseBody>(code, {
 		credentials: clientSecret,
 		authenticateWith: "request_body" // send client secret inside body
 	});

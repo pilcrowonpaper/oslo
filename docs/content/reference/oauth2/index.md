@@ -15,7 +15,7 @@ Provides utilities for working OAuth 2.0.
 ## Classes
 
 - [`OAuth2Controller`](ref:oauth2)
-- [`TokenRequestError`](ref:oauth2)
+- [`OAuth2RequestError`](ref:oauth2)
 
 ## Interfaces
 
@@ -38,7 +38,7 @@ const oauth2Controller = new OAuth2Controller(clientId, authorizeEndpoint, token
 });
 ```
 
-### Create authorization URL
+### Create an authorization URL
 
 ```ts
 import { generateState } from "oslo/oauth2";
@@ -66,12 +66,12 @@ const url = await createAuthorizationURL({
 });
 ```
 
-### Validate authorization code
+### Validate an authorization code
 
 By default [`OAuth2Controller.validateAuthorizationCode()`](ref:oauth2) sends credentials with the HTTP basic auth scheme.
 
 ```ts
-import { verifyState, TokenRequestError } from "oslo/oauth2";
+import { verifyState, OAuth2RequestError } from "oslo/oauth2";
 
 if (!verifyState(storedState, state)) {
 	// error
@@ -87,7 +87,7 @@ try {
 		authenticateWith: "request_body"
 	});
 } catch (e) {
-	if (e instanceof TokenRequestError) {
+	if (e instanceof OAuth2RequestError) {
 		// see https://www.rfc-editor.org/rfc/rfc6749#section-5.2
 		const { request, message, description } = e;
 	}
@@ -104,4 +104,25 @@ await oauth2Controller.validateAuthorizationCode<{
 	credentials: clientSecret,
 	codeVerifier
 });
+```
+
+### Refresh an access token
+
+```ts
+import { OAuth2RequestError } from "oslo/oauth2";
+
+try {
+	const { accessToken, refreshToken } = await oauth2Controller.refreshAccessToken<{
+		refreshToken: string;
+	}>(code, {
+		credentials: clientSecret,
+		authenticateWith: "request_body"
+	});
+} catch (e) {
+	if (e instanceof OAuth2RequestError) {
+		// see https://www.rfc-editor.org/rfc/rfc6749#section-5.2
+		const { request, message, description } = e;
+	}
+	// unknown error
+}
 ```
