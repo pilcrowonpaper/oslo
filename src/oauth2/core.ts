@@ -10,7 +10,7 @@ type ResponseMode = "query" | "form_post" | "fragment";
 
 export class OAuth2Controller {
 	public clientId: string;
-	
+
 	private authorizeEndpoint: string;
 	private tokenEndpoint: string;
 	private redirectURI: string | null;
