@@ -27,6 +27,11 @@ describe("verifyRequestOrigin()", () => {
 				allowedSubdomains: ["foo"]
 			})
 		).toBe(true);
+		expect(
+			verifyRequestOrigin("http://xn--zckzah.xn--zckzah", "テスト", {
+				allowedSubdomains: ["テスト"]
+			})
+		).toBe(true);
 	});
 
 	test("ignores base domain by default", () => {

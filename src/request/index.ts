@@ -24,7 +24,7 @@ export function verifyRequestOrigin(
 		return originHost === host;
 	}
 	for (const allowedSubdomain of allowedSubdomains) {
-		if (originHost === allowedSubdomain + "." + host) {
+		if (originHost === safeURL(allowedSubdomain + "." + host)?.host) {
 			return true;
 		}
 	}
