@@ -1,34 +1,18 @@
-export function verifyRequestOrigin(
-	origin: string | null | undefined,
-	host: string | null | undefined,
-	options?: {
-		/** A list of allowed subdomains */
-		allowedSubdomains?: string[] | "*";
-	}
-): boolean {
-	if (!origin || !host) return false;
+export function verifyRequestOrigin(origin: string, allowedDomains: string[]): boolean {
+	if (!origin || allowedDomains.length === 0) return false;
 	const originHost = safeURL(origin)?.host ?? null;
 	if (!originHost) return false;
-	if (host.startsWith("http://") || host.startsWith("https://")) {
-		host = safeURL(host)?.host ?? null;
-	} else {
-		// handle IDNs
-		host = safeURL("https://" + host)?.host ?? null;
-	}
-	if (!host) return false;
-	if (options?.allowedSubdomains === "*") {
-		return originHost === host || originHost.endsWith("." + host);
-	}
-	const allowedSubdomains = options?.allowedSubdomains ?? [];
-	if (allowedSubdomains.length === 0) {
-		return originHost === host;
-	}
-	for (const allowedSubdomain of allowedSubdomains) {
-		if (originHost === allowedSubdomain + "." + host) {
-			return true;
+	for (const domain of allowedDomains) {
+		let host: string | null;
+		if (domain.startsWith("http://") || domain.startsWith("https://")) {
+			host = safeURL(domain)?.host ?? null;
+		} else {
+			// handle IDNs
+			host = safeURL("https://" + domain)?.host ?? null;
 		}
+		if (originHost === host) return true;
 	}
-	return originHost === host;
+	return false;
 }
 
 function safeURL(url: URL | string): URL | null {
