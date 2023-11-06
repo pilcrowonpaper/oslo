@@ -10,7 +10,6 @@ Provides utilities for working OAuth 2.0.
 
 - [`generateCodeVerifier()`](ref:oauth2)
 - [`generateState()`](ref:oauth2)
-- [`verifyState()`](ref:oauth2)
 
 ## Classes
 
@@ -71,9 +70,9 @@ const url = await createAuthorizationURL({
 By default [`OAuth2Controller.validateAuthorizationCode()`](ref:oauth2) sends credentials with the HTTP basic auth scheme.
 
 ```ts
-import { verifyState, OAuth2RequestError } from "oslo/oauth2";
+import { OAuth2RequestError } from "oslo/oauth2";
 
-if (!verifyState(storedState, state)) {
+if (!storedState || !state || storedState !== state) {
 	// error
 }
 

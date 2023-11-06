@@ -2,6 +2,5 @@ export {
 	OAuth2Controller,
 	generateCodeVerifier,
 	OAuth2RequestError,
-	generateState,
-	verifyState
+	generateState
 } from "./core.js";

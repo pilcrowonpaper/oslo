@@ -9,7 +9,7 @@ Parses `Cookie` header value and returns a `Map` with the cookie names as the ke
 ## Definition
 
 ```ts
-function parseCookies(cookieHeader: string | null | undefined): Map<string, string>;
+function parseCookies(cookieHeader: string): Map<string, string>;
 ```
 
 ### Parameters

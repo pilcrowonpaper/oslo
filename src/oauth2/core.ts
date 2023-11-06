@@ -151,14 +151,6 @@ export function generateState(): string {
 	return encodeBase64url(randomValues);
 }
 
-export function verifyState(
-	state1: string | null | undefined,
-	state2: string | null | undefined
-): boolean {
-	if (!state1 || !state2) return false;
-	return state1 === state2;
-}
-
 export class OAuth2RequestError extends Error {
 	public request: Request;
 	public description: string | null;

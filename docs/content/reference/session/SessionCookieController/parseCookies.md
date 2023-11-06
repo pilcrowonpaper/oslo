@@ -10,7 +10,7 @@ Parses a `Cookie` header and returns the session cookie value.
 
 ```ts
 //$ SessionCookie=ref:session
-function parseCookies(header: string | null | undefined): string | null;
+function parseCookies(header: string): string | null;
 ```
 
 ### Parameters

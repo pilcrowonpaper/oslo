@@ -80,7 +80,7 @@ export class SessionCookieController {
 		});
 	}
 
-	public parseCookies(header: string | null | undefined): string | null {
+	public parseCookies(header: string): string | null {
 		const cookies = parseCookies(header);
 		return cookies.get(this.cookieName) ?? null;
 	}
