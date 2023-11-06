@@ -34,16 +34,18 @@ export class SessionController {
 	}
 }
 
-interface SessionCookieOptions {
-	expires?: boolean;
-	secure?: boolean;
-	path?: string;
-	domain?: string;
-	sameSite?: "lax" | "strict";
-}
-
 export class SessionCookieController {
-	constructor(cookieName: string, sessionExpiresIn: TimeSpan, options?: SessionCookieOptions) {
+	constructor(
+		cookieName: string,
+		sessionExpiresIn: TimeSpan,
+		options?: {
+			expires?: boolean;
+			secure?: boolean;
+			path?: string;
+			domain?: string;
+			sameSite?: "lax" | "strict";
+		}
+	) {
 		this.cookieName = cookieName;
 		if (options?.expires) {
 			this.sessionExpiresIn = sessionExpiresIn;
