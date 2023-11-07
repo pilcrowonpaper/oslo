@@ -47,7 +47,7 @@ const expirationDate = sessionController.createExpirationDate();
 
 await db.storeSession({
 	id: session.sessionId,
-	expires: expirationDate,
+	expires_at: expirationDate,
 	user_id: userId
 });
 
@@ -90,25 +90,13 @@ if (sessionState === "expired") {
 // check if session expiration was updated
 if (sessionState === "idle") {
 	await db.updateSession(storedSession.id, {
-		expires: sessionCookieController.createExpirationDate()
+		expires_at: sessionCookieController.createExpirationDate()
 	});
 	const updatedCookie = sessionCookieController.createSessionCookie(storedSession.id);
 	response.headers.set("Set-Cookie", updatedCookie.serialize());
 }
 
 // valid session
-```
-
-If you cannot set cookies on every request (due to framework constraints), set `expires` option to `false` when initializing `SessionCookieController`. This will create cookies with long expiration time (2 years).
-
-```ts
-const sessionCookieController = new SessionCookieController(
-	"session",
-	sessionController.expiresIn,
-	{
-		expires: false
-	}
-);
 ```
 
 ### Invalidate a session

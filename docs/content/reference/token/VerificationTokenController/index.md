@@ -57,7 +57,7 @@ async function generatePasswordResetToken(userId: string): Promise<VerificationT
 		.insertInto("password_reset_token")
 		.values({
 			id: token.value,
-			expires: token.expiresAt,
+			expires_at: token.expiresAt,
 			user_id: token.userId
 		})
 		.executeTakeFirst();

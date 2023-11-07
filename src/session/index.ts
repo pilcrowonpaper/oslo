@@ -6,14 +6,10 @@ import type { CookieAttributes } from "../cookie/index.js";
 export type SessionState = "expired" | "active" | "idle";
 
 export class SessionController {
-	/**
-	 * @param expiresIn How long the session is valid for
-	 */
 	constructor(expiresIn: TimeSpan) {
 		this.expiresIn = expiresIn;
 	}
 
-	/** How long the session is valid for */
 	public expiresIn: TimeSpan;
 
 	public getSessionState(expiresAt: Date): SessionState {
@@ -37,9 +33,8 @@ export class SessionController {
 export class SessionCookieController {
 	constructor(
 		cookieName: string,
-		sessionExpiresIn: TimeSpan,
+		expiresIn: TimeSpan,
 		options?: {
-			expires?: boolean;
 			secure?: boolean;
 			path?: string;
 			domain?: string;
@@ -47,11 +42,7 @@ export class SessionCookieController {
 		}
 	) {
 		this.cookieName = cookieName;
-		if (options?.expires) {
-			this.sessionExpiresIn = sessionExpiresIn;
-		} else {
-			this.sessionExpiresIn = new TimeSpan(52 * 2, "w"); // 2 years
-		}
+		this.expiresIn = expiresIn;
 		this.baseCookieAttributes = {
 			secure: options?.secure ?? true,
 			sameSite: options?.sameSite ?? "lax",
@@ -62,17 +53,16 @@ export class SessionCookieController {
 	}
 
 	public cookieName: string;
-	private sessionExpiresIn: TimeSpan;
+	public expiresIn: TimeSpan;
 	private baseCookieAttributes: CookieAttributes;
 
 	public createSessionCookie(sessionId: string): SessionCookie {
 		return new SessionCookie(this.cookieName, sessionId, {
 			...this.baseCookieAttributes,
-			maxAge: this.sessionExpiresIn.seconds()
+			maxAge: this.expiresIn.seconds()
 		});
 	}
 
-	/**Creates a new `Cookie` that deletes the existing cookie when set. */
 	public createBlankSessionCookie(): SessionCookie {
 		return new SessionCookie(this.cookieName, "", {
 			...this.baseCookieAttributes,

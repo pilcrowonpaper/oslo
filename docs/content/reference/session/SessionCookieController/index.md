@@ -11,9 +11,8 @@ Provides methods for handling session cookies. By default, session cookies have 
 ```ts
 function constructor(
 	cookieName: string,
-	sessionExpiresIn: TimeSpan,
+	expiresIn: TimeSpan,
 	options?: {
-		expires?: boolean;
 		secure?: boolean;
 		path?: string;
 		domain?: string;
@@ -25,9 +24,8 @@ function constructor(
 ### Parameters
 
 - `cookieName`
-- `sessionExpiresIn`
+- `expiresIn`
 - `options`
-  - `expires` (default: `false`): Set to `true` to set cookies expiration to indefinite
   - `secure` (default: `true`): `Secure` cookie attribute
   - `path` (default: `/`): `Path` cookie attribute
   - `domain`: `Domain` cookie attribute
