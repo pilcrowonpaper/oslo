@@ -113,7 +113,7 @@ describe("createJWT()", () => {
 		);
 		const expected =
 			"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZXNzYWdlIjoiaGVsbG8iLCJjb3VudCI6MTAwLCJhdWQiOiJfYXVkaWVuY2UiLCJzdWIiOiJfc3ViamVjdCIsImlzcyI6Il9pc3N1ZXIiLCJqdGkiOiJfand0SWQifQ.xquflAkOGwGp5OxVmnNRZn97sACTBcey1KEcVQfnQks";
-		expect(result.value).toBe(expected);
+		expect(result).toBe(expected);
 	});
 	test("Returns the correct JWT", async () => {
 		const secretKey = await new HMAC("SHA-256").generateKey();
@@ -139,7 +139,7 @@ describe("createJWT()", () => {
 		);
 		expect(result).toEqual({
 			algorithm: "HS256",
-			value: result.value,
+			value: result,
 			expiresAt: new Date((currDateSeconds + new TimeSpan(1, "h").seconds()) * 1000),
 			notBefore: new Date(currDateSeconds * 1000),
 			issuedAt: new Date(currDateSeconds * 1000),
@@ -147,7 +147,7 @@ describe("createJWT()", () => {
 			issuer: "_issuer",
 			subject: "_subject",
 			jwtId: "_jwtId",
-			parts: result.value.split("."),
+			parts: result.split("."),
 			header: {
 				kid: "_kid",
 				typ: "JWT",
@@ -189,7 +189,7 @@ test("parseJWT()", async () => {
 			}
 		}
 	);
-	expect(parseJWT(jwt.value)).toEqual({
+	expect(parseJWT(jwt)).toEqual({
 		algorithm: "HS256",
 		expiresAt: new Date((currDateSeconds + new TimeSpan(1, "h").seconds()) * 1000),
 		notBefore: new Date(currDateSeconds * 1000),
@@ -198,8 +198,8 @@ test("parseJWT()", async () => {
 		issuer: "_issuer",
 		subject: "_subject",
 		jwtId: "_jwtId",
-		value: jwt.value,
-		parts: jwt.value.split("."),
+		value: jwt,
+		parts: jwt.split("."),
 		header: {
 			kid: "_kid",
 			typ: "JWT",

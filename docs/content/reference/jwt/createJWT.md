@@ -11,11 +11,10 @@ Creates a new JWT. Claims are not included by default and must by defined with `
 ```ts
 //$ JWTAlgorithm=ref:jwt
 //$ TimeSpan=ref:main
-//$ JWT=ref:jwt
 function createJWT(
 	algorithm: $$JWTAlgorithm,
 	key: ArrayBuffer,
-	payload: Record<any, any>,
+	payloadClaims: Record<any, any>,
 	options?: {
 		headers?: Record<any, any>;
 		expiresIn?: $$TimeSpan;
@@ -26,14 +25,14 @@ function createJWT(
 		includeIssuedTimestamp?: boolean;
 		jwtId?: string;
 	}
-): Promise<$$JWT>;
+): Promise<string>;
 ```
 
 ### Parameters
 
 - `algorithm`
 - `key`: Secret key for HMAC, and private key for ECDSA and RSA
-- `payload`
+- `payloadClaims`
 - `options`:
   - `headers`: Custom headers
   - `expiresIn`: How long the JWT is valid for (for `exp` claim)

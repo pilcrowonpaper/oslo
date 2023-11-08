@@ -21,7 +21,7 @@ export type JWTAlgorithm =
 export async function createJWT(
 	algorithm: JWTAlgorithm,
 	key: ArrayBuffer,
-	payload: Record<any, any>,
+	payloadClaims: Record<any, any>,
 	options?: {
 		headers?: Record<any, any>;
 		expiresIn?: TimeSpan;
@@ -32,63 +32,52 @@ export async function createJWT(
 		includeIssuedTimestamp?: boolean;
 		jwtId?: string;
 	}
-): Promise<JWT> {
+): Promise<string> {
 	const header: JWTHeader = {
 		alg: algorithm,
 		typ: "JWT",
 		...options?.headers
 	};
-	const payloadWithClaims: JWTPayload = payload;
+	const payload: JWTPayload = {
+		...payloadClaims
+	};
 	if (options?.audience !== undefined) {
-		payloadWithClaims.aud = options.audience;
+		payload.aud = options.audience;
 	}
 	if (options?.subject !== undefined) {
-		payloadWithClaims.sub = options.subject;
+		payload.sub = options.subject;
 	}
 	if (options?.issuer !== undefined) {
-		payloadWithClaims.iss = options.issuer;
+		payload.iss = options.issuer;
 	}
 	if (options?.jwtId !== undefined) {
-		payloadWithClaims.jti = options.jwtId;
+		payload.jti = options.jwtId;
 	}
 	if (options?.expiresIn !== undefined) {
-		payloadWithClaims.exp = Math.floor(Date.now() / 1000) + options.expiresIn.seconds();
+		payload.exp = Math.floor(Date.now() / 1000) + options.expiresIn.seconds();
 	}
 	if (options?.notBefore !== undefined) {
-		payloadWithClaims.nbf = Math.floor(options.notBefore.getTime() / 1000);
+		payload.nbf = Math.floor(options.notBefore.getTime() / 1000);
 	}
 	if (options?.includeIssuedTimestamp === true) {
-		payloadWithClaims.iat = Math.floor(Date.now() / 1000);
+		payload.iat = Math.floor(Date.now() / 1000);
 	}
 	const textEncoder = new TextEncoder();
 	const headerPart = encodeBase64url(textEncoder.encode(JSON.stringify(header)));
-	const payloadPart = encodeBase64url(textEncoder.encode(JSON.stringify(payloadWithClaims)));
+	const payloadPart = encodeBase64url(textEncoder.encode(JSON.stringify(payload)));
 	const data = textEncoder.encode([headerPart, payloadPart].join("."));
 	const signature = await getAlgorithm(algorithm).sign(key, data);
 	const signaturePart = encodeBase64url(signature);
 	const value = [headerPart, payloadPart, signaturePart].join(".");
-	return {
-		value,
-		header,
-		payload: payloadWithClaims,
-		parts: [headerPart, payloadPart, signaturePart],
-		algorithm: header.alg,
-		expiresAt: payloadWithClaims.exp ? new Date(payloadWithClaims.exp * 1000) : null,
-		subject: options?.subject ?? null,
-		issuedAt: payloadWithClaims.iat ? new Date(payloadWithClaims.iat * 1000) : null,
-		issuer: options?.issuer ?? null,
-		jwtId: options?.jwtId ?? null,
-		audience: options?.audience ?? null,
-		notBefore: payloadWithClaims.nbf ? new Date(payloadWithClaims.nbf * 1000) : null
-	};
+	return value;
 }
 
 export async function validateJWT(
 	algorithm: JWTAlgorithm,
 	key: ArrayBuffer,
-	jwt: string | JWT
+	jwt: string
 ): Promise<JWT> {
-	const parsedJWT = typeof jwt === "string" ? parseJWT(jwt) : jwt;
+	const parsedJWT = parseJWT(jwt);
 	if (!parsedJWT) {
 		throw new Error("Invalid JWT");
 	}
@@ -220,8 +209,8 @@ interface JWTProperties {
 
 export interface JWT extends JWTProperties {
 	value: string;
-	header: JWTHeader;
-	payload: JWTPayload;
+	header: object;
+	payload: object;
 	parts: [header: string, payload: string, signature: string];
 }
 
@@ -262,6 +251,7 @@ function isValidAlgorithm(maybeValidAlgorithm: unknown): maybeValidAlgorithm is 
 interface JWTHeader {
 	typ: "JWT";
 	alg: JWTAlgorithm;
+	[header: string]: any;
 }
 
 interface JWTPayload {
@@ -272,7 +262,7 @@ interface JWTPayload {
 	nbf?: number;
 	sub?: string;
 	iat?: number;
-	[claim: string]: unknown;
+	[claim: string]: any;
 }
 
 const ecdsaDictionary = {

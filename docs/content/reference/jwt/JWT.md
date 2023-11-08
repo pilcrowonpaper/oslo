@@ -9,10 +9,11 @@ Represents a JWT.
 ## Definition
 
 ```ts
+//$ JWTAlgorithm=ref:jwt
 interface JWT {
 	value: string;
-	headers: $$JWTHeader;
-	payload: $$JWTPayload;
+	headers: object;
+	payload: object;
 	algorithm: $$JWTAlgorithm;
 	expiresAt: Date | null;
 	issuer: string | null;

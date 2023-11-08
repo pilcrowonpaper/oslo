@@ -10,7 +10,7 @@ Parses a JWT string. **This does NOT validate the JWT signature and claims** inc
 
 ```ts
 //$ JWT=ref:jwt
-function parseJWT(jwt: string): Promise<$$JWT | null>;
+function parseJWT(jwt: string): $$JWT | null;
 ```
 
 ### Parameters

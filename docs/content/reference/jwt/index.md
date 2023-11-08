@@ -20,8 +20,6 @@ Provides utilities for working with JWTs. Supports the following algorithms:
 ## Interfaces
 
 - [`JWT`](ref:jwt)
-- [`JWTHeader`](ref:jwt)
-- [`JWTPayload`](ref:jwt)
 
 ## Types
 
