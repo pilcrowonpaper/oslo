@@ -12,7 +12,6 @@ A collection of utilities for auth, including:
 - `oslo/otp`: HOTP, TOTP
 - `oslo/password`: Password hashing
 - `oslo/random`: Generate cryptographically strong random values
-- `oslo/token`: Verification tokens (email verification, password reset, etc)
 - `oslo/request`: CSRF protection
 - `oslo/session`: Session management
 - `oslo/webauthn`: Verify Web Authentication API attestations and assertions
