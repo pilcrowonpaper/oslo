@@ -119,10 +119,10 @@ export function parseJWT(jwt: string): JWT | null {
 	if (typeof header !== "object" || header === null) {
 		return null;
 	}
-	if (!("typ" in header) || !("alg" in header)) {
+	if (!("alg" in header) || !isValidAlgorithm(header.alg)) {
 		return null;
 	}
-	if (!isValidAlgorithm(header.alg) || header.typ !== "JWT") {
+	if ("typ" in header && header.typ !== "JWT") {
 		return null;
 	}
 	const payload: unknown = JSON.parse(textDecoder.decode(rawPayload));
