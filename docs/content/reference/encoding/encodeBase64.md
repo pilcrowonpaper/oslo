@@ -4,7 +4,7 @@ type: "function"
 
 # `encodeBase64()`
 
-Encodes data into base64 string. Use [`decodeBase64()`](ref:crypto) to decode base64 strings.
+Encodes data into base64 string. Use [`decodeBase64()`](ref:encoding) to decode base64 strings.
 
 ## Definition
 

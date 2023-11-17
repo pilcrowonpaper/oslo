@@ -4,7 +4,7 @@ type: "function"
 
 # `decodeHex()`
 
-Decodes hex-encoded strings. Use [`encodeHex()`](ref:crypto) to encode into hex strings.
+Decodes hex-encoded strings. Use [`encodeHex()`](ref:encoding) to encode into hex strings.
 
 ## Definition
 
