@@ -54,7 +54,7 @@ export class OAuth2Client {
 		if (options?.codeVerifier !== undefined) {
 			const codeChallengeBuffer = await sha256(new TextEncoder().encode(options.codeVerifier));
 			const codeChallenge = encodeBase64url(codeChallengeBuffer);
-			authorizationUrl.searchParams.set("code_challenge_method", "ES256");
+			authorizationUrl.searchParams.set("code_challenge_method", "S256");
 			authorizationUrl.searchParams.set("code_challenge", codeChallenge);
 		}
 		return authorizationUrl;
