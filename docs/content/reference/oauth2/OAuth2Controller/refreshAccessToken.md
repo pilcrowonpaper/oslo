@@ -2,9 +2,9 @@
 type: "method"
 ---
 
-# `OAuth2Controller.refreshAccessToken()`
+# `OAuth2Client.refreshAccessToken()`
 
-Refreshes an access tokens with the refresh token. This sends a POST request (`application/x-www-form-urlencoded`) to the token endpoint defined when initializing [`OAuth2Controller`](ref:oauth2) and returns the JSON-parsed response body. You can define the request body type with `_TokenResponseBody` type parameter.
+Refreshes an access tokens with the refresh token. This sends a POST request (`application/x-www-form-urlencoded`) to the token endpoint defined when initializing [`OAuth2Client`](ref:oauth2) and returns the JSON-parsed response body. You can define the request body type with `_TokenResponseBody` type parameter.
 
 By default, credentials (client secret) is sent via the HTTP basic auth scheme. To send it inside the request body (ie. search params), set `options.authenticateWith` to `"request_body"`.
 
@@ -40,7 +40,7 @@ function refreshAccessToken<_TokenResponseBody extends TokenResponseBody>(
 ```ts
 //$ OAuth2RequestError=ref:oauth2
 //$ TokenResponseBody=ref:oauth2
-//$ oauth2Controller=/reference/oauth2/OAuth2Controller
+//$ oauth2Client=/reference/oauth2/OAuth2Client
 import { $$OAuth2RequestError } from "oslo/oauth2";
 import type { $$TokenResponseBody } from "oslo/oauth2";
 
@@ -48,7 +48,7 @@ interface ResponseBody extends TokenResponseBody {
 	refresh_token: string;
 }
 try {
-	const tokens = await $$oauth2Controller.refreshAccessToken<ResponseBody>(code, {
+	const tokens = await $$oauth2Client.refreshAccessToken<ResponseBody>(code, {
 		credentials: clientSecret,
 		authenticateWith: "request_body" // send client secret inside body
 	});

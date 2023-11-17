@@ -1,5 +1,5 @@
 export {
-	OAuth2Controller,
+	OAuth2Client,
 	generateCodeVerifier,
 	OAuth2RequestError,
 	generateState

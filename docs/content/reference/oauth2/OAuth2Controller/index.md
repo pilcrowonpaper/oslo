@@ -2,7 +2,7 @@
 type: "class"
 ---
 
-# `OAuth2Controller`
+# `OAuth2Client`
 
 Helper for OAuth 2.0, as defined in [RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749). See [`oslo/oauth2`](/reference/oauth2) for a full example.
 
@@ -31,9 +31,9 @@ function constructor(
 
 ## Methods
 
-- [`createAuthorizationURL()`](ref:oauth2/OAuth2Controller)
-- [`refreshAccessToken()`](ref:oauth2/OAuth2Controller)
-- [`validateAuthorizationCode()`](ref:oauth2/OAuth2Controller)
+- [`createAuthorizationURL()`](ref:oauth2/OAuth2Client)
+- [`refreshAccessToken()`](ref:oauth2/OAuth2Client)
+- [`validateAuthorizationCode()`](ref:oauth2/OAuth2Client)
 
 ## Properties
 

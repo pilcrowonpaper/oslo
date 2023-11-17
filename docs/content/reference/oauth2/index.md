@@ -13,7 +13,7 @@ Provides utilities for working OAuth 2.0.
 
 ## Classes
 
-- [`OAuth2Controller`](ref:oauth2)
+- [`OAuth2Client`](ref:oauth2)
 - [`OAuth2RequestError`](ref:oauth2)
 
 ## Interfaces
@@ -27,12 +27,12 @@ Provides utilities for working OAuth 2.0.
 ## Example
 
 ```ts
-import { OAuth2Controller } from "oslo/oauth2";
+import { OAuth2Client } from "oslo/oauth2";
 
 const authorizeEndpoint = "https://github.com/login/oauth/authorize";
 const tokenEndpoint = "https://github.com/login/oauth/access_token";
 
-const oauth2Controller = new OAuth2Controller(clientId, authorizeEndpoint, tokenEndpoint, {
+const oauth2Client = new OAuth2Client(clientId, authorizeEndpoint, tokenEndpoint, {
 	redirectURI: "http://localhost:3000/login/github/callback"
 });
 ```
@@ -67,7 +67,7 @@ const url = await createAuthorizationURL({
 
 ### Validate an authorization code
 
-By default [`OAuth2Controller.validateAuthorizationCode()`](ref:oauth2) sends credentials with the HTTP basic auth scheme.
+By default [`OAuth2Client.validateAuthorizationCode()`](ref:oauth2) sends credentials with the HTTP basic auth scheme.
 
 ```ts
 import { OAuth2RequestError } from "oslo/oauth2";
@@ -79,7 +79,7 @@ if (!storedState || !state || storedState !== state) {
 // ...
 
 try {
-	const { accessToken, refreshToken } = await oauth2Controller.validateAuthorizationCode<{
+	const { accessToken, refreshToken } = await oauth2Client.validateAuthorizationCode<{
 		refreshToken: string;
 	}>(code, {
 		credentials: clientSecret,
@@ -97,7 +97,7 @@ try {
 This also supports the PKCE flow:
 
 ```ts
-await oauth2Controller.validateAuthorizationCode<{
+await oauth2Client.validateAuthorizationCode<{
 	refreshToken: string;
 }>(code, {
 	credentials: clientSecret,
@@ -111,7 +111,7 @@ await oauth2Controller.validateAuthorizationCode<{
 import { OAuth2RequestError } from "oslo/oauth2";
 
 try {
-	const { accessToken, refreshToken } = await oauth2Controller.refreshAccessToken<{
+	const { accessToken, refreshToken } = await oauth2Client.refreshAccessToken<{
 		refreshToken: string;
 	}>(code, {
 		credentials: clientSecret,

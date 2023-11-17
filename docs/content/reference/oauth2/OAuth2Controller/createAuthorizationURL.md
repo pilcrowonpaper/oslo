@@ -2,7 +2,7 @@
 type: "method"
 ---
 
-# `OAuth2Controller.createAuthorizationURL()`
+# `OAuth2Client.createAuthorizationURL()`
 
 Creates a new authorization URL. This method only supports `$256` PKCE code challenge method. By default, no scopes are included.
 
@@ -28,8 +28,8 @@ function createAuthorizationURL(options?: {
 ## Example
 
 ```ts
-//$ oauth2Controller=ref:/reference/oauth2/OAuth2Controller
-const url = await $$oauth2Controller.createAuthorizationURL({
+//$ oauth2Client=ref:/reference/oauth2/OAuth2Client
+const url = await $$oauth2Client.createAuthorizationURL({
 	state,
 	codeVerifier,
 	scope: ["profile", "openid"]
