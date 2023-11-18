@@ -77,10 +77,10 @@ export class SessionCookieController {
 }
 
 export class SessionCookie {
-	constructor(name: string, value: string, attributes: CookieAttributes) {
+	constructor(name: string, value: string, attributes?: CookieAttributes) {
 		this.name = name;
 		this.value = value;
-		this.attributes = attributes;
+		this.attributes = attributes ?? {};
 	}
 	public name: string;
 	public value: string;
