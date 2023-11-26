@@ -37,7 +37,7 @@ export class OAuth2Client {
 		codeVerifier?: string;
 		scope?: string[];
 	}): Promise<URL> {
-		const scope = options?.scope ?? [];
+		const scope = Array.from(new Set(options?.scope ?? [])); // remove duplicates
 		const authorizationUrl = new URL(this.authorizeEndpoint);
 		authorizationUrl.searchParams.set("response_type", "code");
 		authorizationUrl.searchParams.set("response_mode", this.responseMode);
