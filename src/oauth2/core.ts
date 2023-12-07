@@ -106,7 +106,8 @@ export class OAuth2Client {
 	): Promise<_TokenResponseBody> {
 		const headers = new Headers({
 			"Content-Type": "application/x-www-form-urlencoded",
-			Accept: "application/json"
+			Accept: "application/json",
+			"User-Agent": "oslo"
 		});
 
 		if (options?.credentials !== undefined) {
