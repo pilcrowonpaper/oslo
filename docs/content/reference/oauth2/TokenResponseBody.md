@@ -11,6 +11,10 @@ Represents the JSON-parsed success response body from the token endpoint. You ca
 ```ts
 interface TokenResponseBody {
 	access_token: string;
+	token_type?: string;
+	expires_in?: number,
+	refresh_token?: string
+	scope?: string[]
 }
 ```
 
