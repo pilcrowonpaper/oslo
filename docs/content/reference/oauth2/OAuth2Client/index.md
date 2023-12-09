@@ -15,7 +15,6 @@ function constructor(
 	tokenEndpoint: string,
 	options?: {
 		redirectURI?: string;
-		responseMode?: "form_post" | "query" | "fragment";
 	}
 ): this;
 ```
@@ -27,7 +26,6 @@ function constructor(
 - `tokenEndpoint`
 - `options`
   - `redirectURI`
-  - `responseMode` (default: `"query"`)
 
 ## Methods
 

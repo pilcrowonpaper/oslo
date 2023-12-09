@@ -45,9 +45,9 @@ import { generateState } from "oslo/oauth2";
 const state = generateState();
 
 const url = await createAuthorizationURL({
-	state,
 	scope: ["user:email"]
 });
+url.searchParams.set("state", state);
 ```
 
 It also supports the PKCE flow:
@@ -55,14 +55,14 @@ It also supports the PKCE flow:
 ```ts
 import { generateState, generateCodeVerifier } from "oslo/oauth2";
 
-const state = generateState();
 const codeVerifier = generateCodeVerifier(); // for PKCE flow
+const state = generateState();
 
 const url = await createAuthorizationURL({
-	state,
 	scope: ["user:email"],
 	codeVerifier
 });
+url.searchParams.set("state", state);
 ```
 
 ### Validate an authorization code

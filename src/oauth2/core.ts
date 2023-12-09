@@ -6,15 +6,12 @@ export interface OAuth2Tokens {
 	accessToken: string;
 }
 
-type ResponseMode = "query" | "form_post" | "fragment";
-
 export class OAuth2Client {
 	public clientId: string;
 
 	private authorizeEndpoint: string;
 	private tokenEndpoint: string;
 	private redirectURI: string | null;
-	private responseMode: ResponseMode;
 
 	constructor(
 		clientId: string,
@@ -22,31 +19,24 @@ export class OAuth2Client {
 		tokenEndpoint: string,
 		options?: {
 			redirectURI?: string;
-			responseMode?: ResponseMode;
 		}
 	) {
 		this.clientId = clientId;
 		this.authorizeEndpoint = authorizeEndpoint;
 		this.tokenEndpoint = tokenEndpoint;
 		this.redirectURI = options?.redirectURI ?? null;
-		this.responseMode = options?.responseMode ?? "query";
 	}
 
 	public async createAuthorizationURL(options?: {
-		state?: string;
 		codeVerifier?: string;
-		scope?: string[];
+		scopes?: string[];
 	}): Promise<URL> {
-		const scope = Array.from(new Set(options?.scope ?? [])); // remove duplicates
+		const scopes = Array.from(new Set(options?.scopes ?? [])); // remove duplicates
 		const authorizationUrl = new URL(this.authorizeEndpoint);
 		authorizationUrl.searchParams.set("response_type", "code");
-		authorizationUrl.searchParams.set("response_mode", this.responseMode);
 		authorizationUrl.searchParams.set("client_id", this.clientId);
-		if (scope.length > 0) {
-			authorizationUrl.searchParams.set("scope", scope.join(" "));
-		}
-		if (options?.state !== undefined) {
-			authorizationUrl.searchParams.set("state", options.state);
+		if (scopes.length > 0) {
+			authorizationUrl.searchParams.set("scope", scopes.join(" "));
 		}
 		if (this.redirectURI) {
 			authorizationUrl.searchParams.set("redirect_uri", this.redirectURI);
@@ -129,8 +119,7 @@ export class OAuth2Client {
 		});
 		const response = await fetch(request);
 		const result: _TokenResponseBody | TokenErrorResponseBody = await response.json();
-		// providers are allowed to return non-400 status code for error
-		// why github
+		// providers are allowed to return non-400 status code for errors
 		if (!("access_token" in result) && "error" in result) {
 			throw new OAuth2RequestError(request, result);
 		} else if (!response.ok) {
@@ -170,7 +159,7 @@ interface TokenErrorResponseBody {
 interface TokenResponseBody {
 	access_token: string;
 	token_type?: string;
-	expires_in?: number,
-	refresh_token?: string
-	scope?: string
+	expires_in?: number;
+	refresh_token?: string;
+	scope?: string;
 }
