@@ -17,3 +17,16 @@ Provides utilities for hashing passwords and verifying hashes. Argon2id is recom
 ## Interfaces
 
 - [`PasswordHashingAlgorithm`](/reference/password/PasswordHashingAlgorithm)
+
+## Next.js
+
+In Next.js specifically, you must update your config to prevent the package from the getting bundeld.
+
+```ts
+// next.config.ts
+const config = {
+	experimental: {
+		serverComponentsExternalPackages: ["oslo"]
+	}
+};
+```
