@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v3
       - name: install malta
         working-directory: docs
-        run: |s
+        run: |
           curl -o malta.tgz -L https://github.com/pilcrowonpaper/malta/releases/latest/download/linux-amd64.tgz
           tar -xvzf malta.tgz
       - name: build
