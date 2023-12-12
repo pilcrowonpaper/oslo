@@ -1,0 +1,31 @@
+{
+	"name": "Oslo",
+	"description": "A collection of auth utilities ",
+	"domain": "https://oslo.js.org",
+	"twitter": "@pilcrowonpaper",
+	"sidebar": [
+		{
+			"title": "API reference",
+			"pages": [
+				["oslo", "/api-reference/main"],
+				["oslo/cookie", "/api-reference/cookie"],
+				["oslo/crypto", "/api-reference/crypto"],
+				["oslo/encoding", "/api-reference/encoding"],
+				["oslo/oauth2", "/api-reference/oauth2"],
+				["oslo/otp", "/api-reference/otp"],
+				["oslo/password", "/api-reference/password"],
+				["oslo/random", "/api-reference/random"],
+				["oslo/request", "/api-reference/request"],
+				["oslo/session", "/api-reference/session"],
+				["oslo/webauthn", "/api-reference/webauthn"]
+			]
+		},
+		{
+			"title": "See also",
+			"pages": [
+				["GitHub", "https://github.com/pilcrowonpaper/oslo"],
+				["Twitter", "https://twitter.com/pilcrowonpaper"]
+			]
+		}
+	]
+}
