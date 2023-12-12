@@ -9,6 +9,6 @@ Creates a new expiration date. See [`oslo/session`](/reference/session) for a fu
 ## Definition
 
 ```ts
-//$ Session=ref:session
+//$ Session=/reference/session/Session
 function createExpirationDate(): Date;
 ```

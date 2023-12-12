@@ -8,7 +8,7 @@ Provides utilities for generating random values. Uses cryptographically strong r
 
 ## Functions
 
-- [`alphabet()`](ref:random)
-- [`generateRandomNumber()`](ref:random)
-- [`generateRandomString()`](ref:random)
-- [`random()`](ref:random)
+- [`alphabet()`](/reference/random/alphabet)
+- [`generateRandomNumber()`](/reference/random/generateRandomNumber)
+- [`generateRandomString()`](/reference/random/generateRandomString)
+- [`random()`](/reference/random/random)

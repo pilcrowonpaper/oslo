@@ -4,12 +4,12 @@ title: "parseJWT()"
 
 # `parseJWT()`
 
-Parses a JWT string. **This does NOT validate the JWT signature and claims** including expiration. Use [validateJWT](ref:jwt) instead.
+Parses a JWT string. **This does NOT validate the JWT signature and claims** including expiration. Use [`validateJWT()`](/reference/jwt/validateJWT) instead.
 
 ## Definition
 
 ```ts
-//$ JWT=ref:jwt
+//$ JWT=/reference/jwt/JWT
 function parseJWT(jwt: string): $$JWT | null;
 ```
 

@@ -9,7 +9,7 @@ Helper for RSASSA-PKCS1-v1_5.
 ## Constructor
 
 ```ts
-//$ SHAHash=ref:crypto
+//$ SHAHash=/reference/crypto/SHAHash
 function constructor(hash: $$SHAHash): this;
 ```
 
@@ -19,9 +19,9 @@ function constructor(hash: $$SHAHash): this;
 
 ## Method
 
-- [`generateKeyPair()`](ref:crypto/RSASSAPKCS1v1_5)
-- [`sign()`](ref:crypto/RSASSAPKCS1v1_5)
-- [`verify()`](ref:crypto/RSASSAPKCS1v1_5)
+- [`generateKeyPair()`](/reference/crypto/RSASSAPKCS1v1_5/generateKeyPair)
+- [`sign()`](/reference/crypto/RSASSAPKCS1v1_5/sign)
+- [`verify()`](/reference/crypto/RSASSAPKCS1v1_5/verify)
 
 ## Example
 

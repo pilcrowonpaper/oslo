@@ -8,10 +8,10 @@ Provides utilities for working with HOTP (HMAC-based one-time password) and TOTP
 
 ## Functions
 
-- [`createHOTPKeyURI()`](ref:otp)
-- [`createTOTPKeyURI()`](ref:otp)
-- [`generateHOTP()`](ref:otp)
+- [`createHOTPKeyURI()`](/reference/otp/createHOTPKeyURI)
+- [`createTOTPKeyURI()`](/reference/otp/createTOTPKeyURI)
+- [`generateHOTP()`](/reference/otp/generateHOTP)
 
 ## Classes
 
-- [`TOTPController`](ref:otp)
+- [`TOTPController`](/reference/otp/TOTPController)

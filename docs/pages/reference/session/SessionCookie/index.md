@@ -9,7 +9,7 @@ Represents a session cookie.
 ## Constructor
 
 ```ts
-//$ CookieAttributes=ref:cookie
+//$ CookieAttributes=/reference/cookie/CookieAttributes
 function constructor(name: string, value: string, attributes?: $$CookieAttributes): this;
 ```
 
@@ -21,12 +21,12 @@ function constructor(name: string, value: string, attributes?: $$CookieAttribute
 
 ## Methods
 
-- [`serialize()`](ref:session/SessionCookie)
+- [`serialize()`](/reference/session/SessionCookie)
 
 ## Properties
 
 ```ts
-//$ CookieAttributes=ref:cookie
+//$ CookieAttributes=/reference/cookie/CookieAttributes
 interface Properties {
 	name: string;
 	value: string;

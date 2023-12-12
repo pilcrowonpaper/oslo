@@ -22,6 +22,6 @@ interface PasswordHashingAlgorithm {
 
 ## Implemented by
 
-- [`Argon2id`](ref:password)
-- [`Bcrypt`](ref:password)
-- [`Scrypt`](ref:password)
+- [`Argon2id`](/reference/password/Argon2id)
+- [`Bcrypt`](/reference/password/Bcrypt)
+- [`Scrypt`](/reference/password/Scrypt)

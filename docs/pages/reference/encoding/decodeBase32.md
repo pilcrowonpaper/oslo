@@ -4,7 +4,7 @@ title: "decodeBase32()"
 
 # `decodeBase32()`
 
-Decodes base32 strings. This does not check the length and ignores padding. Use [`encodeBase32()`](ref:encoding) to encode into base32 strings.
+Decodes base32 strings. This does not check the length and ignores padding. Use [`encodeBase32()`](/reference/encoding/encodeBase32) to encode into base32 strings.
 
 ## Definition
 

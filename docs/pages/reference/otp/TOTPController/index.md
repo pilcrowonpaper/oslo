@@ -20,8 +20,8 @@ function constructor(options?: { digits?: number; period?: TimeSpan }): this;
 
 ## Methods
 
-- [`generate()`](ref:otp/TOTPController)
-- [`verify()`](ref:otp/TOTPController)
+- [`generate()`](/reference/otp/TOTPController/generate)
+- [`verify()`](/reference/otp/TOTPController/verify)
 
 ## Example
 

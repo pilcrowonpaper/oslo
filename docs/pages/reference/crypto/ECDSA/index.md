@@ -9,7 +9,7 @@ Helper for ECDSA.
 ## Constructor
 
 ```ts
-//$ SHAHash=ref:crypto
+//$ SHAHash=/reference/crypto/SHAHash
 function constructor(hash: $$SHAHash, curve: "P-256" | "P-384" | "P-521"): this;
 ```
 
@@ -20,9 +20,9 @@ function constructor(hash: $$SHAHash, curve: "P-256" | "P-384" | "P-521"): this;
 
 ## Method
 
-- [`generateKeyPair()`](ref:crypto/ECDSA)
-- [`sign()`](ref:crypto/ECDSA)
-- [`verify()`](ref:crypto/ECDSA)
+- [`generateKeyPair()`](/reference/crypto/ECDSA/generateKeyPair)
+- [`sign()`](/reference/crypto/ECDSA/sign)
+- [`verify()`](/reference/crypto/ECDSA/verify)
 
 ## Example
 

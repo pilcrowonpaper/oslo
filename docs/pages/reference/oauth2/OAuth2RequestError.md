@@ -5,7 +5,7 @@ extends: "Error"
 
 # `OAuth2RequestError`
 
-Error thrown by [`OAuth2Client.validateAuthorizationCode()`](ref:oauth2) when the token endpoint returns an error response. See [RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749#section-5.2) for a full reference on error messages.
+Error thrown by [`OAuth2Client.validateAuthorizationCode()`](/reference/oauth/OAuth2Client2/validateAuthorizationCode) when the token endpoint returns an error response. See [RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749#section-5.2) for a full reference on error messages.
 
 ## Definition
 

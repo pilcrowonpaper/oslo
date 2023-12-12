@@ -4,7 +4,7 @@ title: "encodeHex()"
 
 # `encodeHex()`
 
-Encodes data into hex string. Use [`decodeHex()`](ref:encoding) to decode hex strings.
+Encodes data into hex string. Use [`decodeHex()`](/reference/encoding/decodeHex) to decode hex strings.
 
 ## Definition
 

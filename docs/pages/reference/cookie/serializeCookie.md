@@ -9,7 +9,7 @@ Serializes cookie for `Set-Cookie` header. The cookie name and value are URI-com
 ## Definition
 
 ```ts
-//$ CookieAttributes=ref:cookie
+//$ CookieAttributes=/reference/cookie/CookieAttributes
 function serializeCookie(name: string, value: string, attributes?: $$CookieAttributes): string;
 ```
 

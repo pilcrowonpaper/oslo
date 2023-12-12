@@ -8,9 +8,9 @@ Provides utilities for working with HTTP cookies.
 
 ## Functions
 
-- [`parseCookies()`](ref:cookie)
-- [`serializeCookie()`](ref:cookie)
+- [`parseCookies()`](/reference/cookie/parseCookies)
+- [`serializeCookie()`](/reference/cookie/serializeCookie)
 
 ## Interfaces
 
-- [`CookieAttributes`](ref:cookie)
+- [`CookieAttributes`](/reference/cookie/CookieAttributes)

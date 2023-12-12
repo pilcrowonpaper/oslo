@@ -9,7 +9,7 @@ Validates a WebAuthn assertion response, including the signature. Supports ES256
 ## Definition
 
 ```ts
-//$ AssertionResponse=ref:webauthn
+//$ AssertionResponse=/reference/webauthn/AssertionResponse
 function validateAssertionResponse(
 	algorithm: "ES256" | "RS256",
 	publicKey: ArrayBuffer,
@@ -28,7 +28,7 @@ function validateAssertionResponse(
 ## Example
 
 ```ts
-//$ AssertionResponse=ref:webauthn
+//$ AssertionResponse=/reference/webauthn/AssertionResponse
 //$ webAuthnController=/reference/webauthn/WebAuthnController
 try {
 	const response: $$AssertionResponse = {

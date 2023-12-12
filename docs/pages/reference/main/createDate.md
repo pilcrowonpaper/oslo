@@ -9,7 +9,7 @@ Creates a new `Date` by adding the provided time-span to the current time. Mostl
 ## Definition
 
 ```ts
-//$ TimeSpan=ref:main
+//$ TimeSpan=/reference/main/TimeSpan
 function createDate(timeSpan: $$TimeSpan): Date;
 ```
 

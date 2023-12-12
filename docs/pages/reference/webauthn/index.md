@@ -8,9 +8,9 @@ Provides utilities for working with Web Authentication, including Passkeys.
 
 ## Classes
 
-- [`WebAuthnController`](ref:webauthn)
+- [`WebAuthnController`](/reference/webauthn/WebAuthnController)
 
 ## Interfaces
 
-- [`AssertionResponse`](ref:webauthn)
-- [`AttestationResponse`](ref:webauthn)
+- [`AssertionResponse`](/reference/webauthn/AssertionResponse)
+- [`AttestationResponse`](/reference/webauthn/AttestationResponse)

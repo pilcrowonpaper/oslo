@@ -8,20 +8,20 @@ This module provides utilities for creating and validating sessions, as well as 
 
 ## Classes
 
-- [`SessionController`](ref:session)
-- [`SessionCookie`](ref:session)
-- [`SessionCookieController`](ref:session)
+- [`SessionController`](/reference/session/SessionController)
+- [`SessionCookie`](/reference/session/SessionCookie)
+- [`SessionCookieController`](/reference/session/SessionCookieController)
 
 ## Interfaces
 
-- [`Session`](ref:session)
+- [`Session`](/reference/session/Session)
 
 ## Example
 
 ```ts
-//$ SessionController=ref:session
-//$ SessionCookieController=ref:session
-//$ TimeSpan=ref:main
+//$ SessionController=/reference/session/SessionController
+//$ SessionCookieController=/reference/session/SessionCookieController
+//$ TimeSpan=/reference/main/TimeSpan
 import { $$SessionController, $$SessionCookieController } from "oslo/session";
 import { $$TimeSpan } from "oslo";
 
@@ -37,7 +37,7 @@ const sessionCookieController = new SessionCookieController(
 
 ### Create a session
 
-[`SessionController.createExpirationDate()`](ref:session) creates a new expiration date that should be stored in your database alongside the session ID. [`SessionCookieController.createSessionCookie()`](ref:session) can then be used to set session cookies.
+[`SessionController.createExpirationDate()`](/reference/session/SessionController/createExpirationDate) creates a new expiration date that should be stored in your database alongside the session ID. [`SessionCookieController.createSessionCookie()`](/reference/session/SessionCookieController/createSessionCookie) can then be used to set session cookies.
 
 ```ts
 import { generateRandomString, alphabet } from "oslo/random";
@@ -58,7 +58,7 @@ response.headers.set("Set-Cookie", cookie.serialize());
 
 ### Validate a session
 
-You can get the session cookie from the `Cookie` header with [`SessionCookieController.parseCookies()`](ref:session). You should get the stored session, and if it exists, validate the state with [`SessionController.getSessionState()`](ref:session). This returns:
+You can get the session cookie from the `Cookie` header with [`SessionCookieController.parseCookies()`](/reference/session/SessionCookieController/parseCookies). You should get the stored session, and if it exists, validate the state with [`SessionController.getSessionState()`](/reference/session/SessionController/getSessionState). This returns:
 
 - `"expired"` if expired
 - `"active"` if valid
@@ -101,7 +101,7 @@ if (sessionState === "idle") {
 
 ### Invalidate a session
 
-To invalidate a session, for example on sign out, delete the session from the database and delete the session cookie by creating a new session with [`SessionCookieController.createBlankSessionCookie()`](ref:session).
+To invalidate a session, for example on sign out, delete the session from the database and delete the session cookie by creating a new session with [`SessionCookieController.createBlankSessionCookie()`](/reference/session/SessionCookieController/createBlankSessionCookie).
 
 ```ts
 await db.deleteSession(sessionId);

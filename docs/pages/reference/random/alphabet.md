@@ -12,7 +12,7 @@ Generates a string with all the characters defined in the provided pattern:
 - `-`: Character `-`
 - `_`: Character `_`
 
-Mostly used for [`generateRandomString()`](ref:random). Ignores duplicate patterns.
+Mostly used for [`generateRandomString()`](/reference/random/generateRandomString). Ignores duplicate patterns.
 
 ## Definition
 

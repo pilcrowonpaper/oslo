@@ -4,7 +4,7 @@ title: "encodeBase64url()"
 
 # `encodeBase64url()`
 
-Encodes data into base64 URL string. Use [`decodeBase64url()`](ref:encoding) to decode base64 URL strings.
+Encodes data into base64 URL string. Use [`decodeBase64url()`](/reference/encoding/decodeBase64url) to decode base64 URL strings.
 
 ## Definition
 

@@ -9,7 +9,7 @@ Helper for HMAC.
 ## Constructor
 
 ```ts
-//$ SHAHash=ref:crypto
+//$ SHAHash=/reference/crypto/SHAHash
 function constructor(hash: $$SHAHash): this;
 ```
 
@@ -19,9 +19,9 @@ function constructor(hash: $$SHAHash): this;
 
 ## Methods
 
-- [`generateKeyPair()`](ref:crypto/HMAC)
-- [`sign()`](ref:crypto/HMAC)
-- [`verify()`](ref:crypto/HMAC)
+- [`generateKeyPair()`](/reference/crypto/HMAC/generateKeyPair)
+- [`sign()`](/reference/crypto/HMAC/sign)
+- [`verify()`](/reference/crypto/HMAC/verify)
 
 ## Example
 

@@ -13,14 +13,14 @@ Provides utilities for working with JWTs. Supports the following algorithms:
 
 ## Functions
 
-- [`createJWT()`](ref:jwt)
-- [`parseJWT()`](ref:jwt)
-- [`validateJWT()`](ref:jwt)
+- [`createJWT()`](/reference/jwt/createJWT)
+- [`parseJWT()`](/reference/jwt/parseJWT)
+- [`validateJWT()`](/reference/jwt/validateJWT)
 
 ## Interfaces
 
-- [`JWT`](ref:jwt)
+- [`JWT`](/reference/jwt/JWT)
 
 ## Types
 
-- [`JWTAlgorithm`](ref:jwt)
+- [`JWTAlgorithm`](/reference/jwt/JWTAlgorithm)

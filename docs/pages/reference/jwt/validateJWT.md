@@ -9,9 +9,9 @@ Parses a JWT string and validates it, including the signature, expiration, and n
 ## Definition
 
 ```ts
-//$ JWTAlgorithm=ref:jwt
-//$ TimeSpan=ref:main
-//$ JWT=ref:jwt
+//$ JWTAlgorithm=/reference/jwt/JWTAlgorithm
+//$ TimeSpan=/reference/main/TimeSpan
+//$ JWT=/reference/jwt/JWT
 function validateJWT(algorithm: JWTAlgorithm, key: ArrayBuffer, jwt: string): Promise<$$JWT>;
 ```
 

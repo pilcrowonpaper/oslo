@@ -8,23 +8,23 @@ Provides light-wrappers around the Web Crypto API for generating hashes and sign
 
 ## Functions
 
-- [`constantTimeEqual()`](ref:crypto)
-- [`sha1()`](ref:crypto)
-- [`sha256()`](ref:crypto)
-- [`sha384()`](ref:crypto)
-- [`sha512()`](ref:crypto)
+- [`constantTimeEqual()`](/reference/crypto/constantTimeEqual)
+- [`sha1()`](/reference/crypto/sha1)
+- [`sha256()`](/reference/crypto/sha256)
+- [`sha384()`](/reference/crypto/sha384)
+- [`sha512()`](/reference/crypto/sha512)
 
 ## Classes
 
-- [`ECDSA`](ref:crypto)
-- [`HMAC`](ref:crypto)
-- [`RSASSAPKCS1v1_5`](ref:crypto)
-- [`RSASSAPSS`](ref:crypto)
+- [`ECDSA`](/reference/crypto/ECDSA)
+- [`HMAC`](/reference/crypto/HMAC)
+- [`RSASSAPKCS1v1_5`](/reference/crypto/RSASSAPKCS1v1_5)
+- [`RSASSAPSS`](/reference/crypto/RSASSAPSS)
 
 ## Interfaces
 
-- [`KeyPair`](ref:crypto)
+- [`KeyPair`](/reference/crypto/KeyPair)
 
 ## Types
 
-- [`SHAHash`](ref:crypto)
+- [`SHAHash`](/reference/crypto/SHAHash)

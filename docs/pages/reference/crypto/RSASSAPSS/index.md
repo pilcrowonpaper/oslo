@@ -9,7 +9,7 @@ Helper for RSASSA-PSS.
 ## Constructor
 
 ```ts
-//$ SHAHash=ref:crypto
+//$ SHAHash=/reference/crypto/SHAHash
 function constructor(hash: $$SHAHash): this;
 ```
 
@@ -19,9 +19,9 @@ function constructor(hash: $$SHAHash): this;
 
 ## Method
 
-- [`generateKeyPair()`](ref:crypto/RSASSAPSS)
-- [`sign()`](ref:crypto/RSASSAPSS)
-- [`verify()`](ref:crypto/RSASSAPSS)
+- [`generateKeyPair()`](/reference/crypto/RSASSAPSS/generateKeyPair)
+- [`sign()`](/reference/crypto/RSASSAPSS/sign)
+- [`verify()`](/reference/crypto/RSASSAPSS/verify)
 
 ## Example
 

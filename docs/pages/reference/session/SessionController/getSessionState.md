@@ -4,12 +4,12 @@ title: "SessionController.getSessionState()"
 
 # `SessionController.getSessionState()`
 
-Validates the state of a stored session and returns a [`SessionState`](ref:session) See [`oslo/session`](/reference/session) for a full example.
+Validates the state of a stored session and returns a [`SessionState`](/reference/session/SessionState) See [`oslo/session`](/reference/session) for a full example.
 
 ## Definition
 
 ```ts
-//$ SessionState=ref:session
+//$ SessionState=/reference/session/SessionState
 function getSessionState(expiresAt: Date): $$SessionState;
 ```
 

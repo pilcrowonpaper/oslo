@@ -9,6 +9,6 @@ Generates a new public/private key pair. The public key is in SPKI format and th
 ## Definition
 
 ```ts
-//$ KeyPair=ref:crypto
+//$ KeyPair=/reference/crypto/KeyPair
 function generateKeyPair(): Promise<$$KeyPair>;
 ```

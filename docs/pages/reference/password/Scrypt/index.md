@@ -6,7 +6,7 @@ title: "Scrypt"
 
 Provides methods for hashing passwords and verifying hashes with [scrypt](https://datatracker.ietf.org/doc/html/rfc7914). By default, the configuration is set to [the recommended values](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html).
 
-We recommend using [`Argon2id`](ref:password) if possible.
+We recommend using [`Argon2id`](/reference/password/Argon2id) if possible.
 
 Implements [`PasswordHashingAlgorithm`](/reference/password/PasswordHashingAlgorithm).
 
@@ -26,8 +26,8 @@ function constructor(options?: { N?: number; r?: number; p?: number; dkLen?: num
 
 ## Methods
 
-- [`hash()`](ref:password/Argon2id)
-- [`verify()`](ref:password/Argon2id)
+- [`hash()`](/reference/password/Argon2id/hash)
+- [`verify()`](/reference/password/Argon2id/verify)
 
 ## Example
 

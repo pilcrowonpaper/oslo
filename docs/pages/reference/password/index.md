@@ -10,10 +10,10 @@ Provides utilities for hashing passwords and verifying hashes. Argon2id is recom
 
 ## Classes
 
-- [`Argon2id`](ref:password)
-- [`Bcrypt`](ref:password)
-- [`Scrypt`](ref:password)
+- [`Argon2id`](/reference/password/Argon2id)
+- [`Bcrypt`](/reference/password/Bcrypt)
+- [`Scrypt`](/reference/password/Scrypt)
 
 ## Interfaces
 
-- [`PasswordHashingAlgorithm`](ref:password)
+- [`PasswordHashingAlgorithm`](/reference/password/PasswordHashingAlgorithm)

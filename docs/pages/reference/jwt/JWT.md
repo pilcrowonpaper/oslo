@@ -9,7 +9,7 @@ Represents a JWT.
 ## Definition
 
 ```ts
-//$ JWTAlgorithm=ref:jwt
+//$ JWTAlgorithm=/reference/jwt/JWTAlgorithm
 interface JWT {
 	value: string;
 	headers: object;

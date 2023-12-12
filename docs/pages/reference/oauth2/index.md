@@ -8,21 +8,21 @@ Provides utilities for working OAuth 2.0.
 
 ## Functions
 
-- [`generateCodeVerifier()`](ref:oauth2)
-- [`generateState()`](ref:oauth2)
+- [`generateCodeVerifier()`](/reference/oauth2/generateCodeVerifier)
+- [`generateState()`](/reference/oauth2/generateState)
 
 ## Classes
 
-- [`OAuth2Client`](ref:oauth2)
-- [`OAuth2RequestError`](ref:oauth2)
+- [`OAuth2Client`](/reference/oauth2/OAuth2Client)
+- [`OAuth2RequestError`](/reference/oauth2/OAuth2RequestError)
 
 ## Interfaces
 
-- [`TokenResponseBody`](ref:oauth2)
+- [`TokenResponseBody`](/reference/oauth2/TokenResponseBody)
 
 ## Types
 
-- [`ResponseMode`](ref:oauth2)
+- [`ResponseMode`](/reference/oauth2/ResponseMode)
 
 ## Example
 
@@ -67,7 +67,7 @@ url.searchParams.set("state", state);
 
 ### Validate an authorization code
 
-By default [`OAuth2Client.validateAuthorizationCode()`](ref:oauth2) sends credentials with the HTTP basic auth scheme.
+By default [`OAuth2Client.validateAuthorizationCode()`](/reference/oauth2/OAuth2Client/validateAuthorizationCode) sends credentials with the HTTP basic auth scheme.
 
 ```ts
 import { OAuth2RequestError } from "oslo/oauth2";

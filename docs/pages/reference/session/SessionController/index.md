@@ -22,13 +22,13 @@ function constructor(expiresIn: TimeSpan): this;
 
 ## Methods
 
-- [`createExpirationDate()`](ref:sessio/SessionController)
-- [`getSessionState()`](ref:session/SessionController)
+- [`createExpirationDate()`](/reference/sessio/SessionController/createExpirationDate)
+- [`getSessionState()`](/reference/session/SessionController/getSessionState)
 
 ## Properties
 
 ```ts
-//$ TimeSpan=ref:main
+//$ TimeSpan=/reference/main/TimeSpan
 interface Properties {
 	expiresIn: $$TimeSpan;
 }

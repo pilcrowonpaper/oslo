@@ -9,8 +9,8 @@ Creates a new JWT. Claims are not included by default and must by defined with `
 ## Definition
 
 ```ts
-//$ JWTAlgorithm=ref:jwt
-//$ TimeSpan=ref:main
+//$ JWTAlgorithm=/reference/jwt/JWTAlgorithm
+//$ TimeSpan=/reference/main/TimeSpan
 function createJWT(
 	algorithm: $$JWTAlgorithm,
 	key: ArrayBuffer,

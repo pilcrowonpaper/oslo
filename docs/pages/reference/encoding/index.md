@@ -8,11 +8,11 @@ Provides utilities for encoding and decoding with various formats.
 
 ## Functions
 
-- [`encodeBase32()`](ref:encoding)
-- [`encodeBase64()`](ref:encoding)
-- [`encodeBase64url()`](ref:encoding)
-- [`encodeHex()`](ref:encoding)
-- [`decodeBase32()`](ref:encoding)
-- [`decodeBase64()`](ref:encoding)
-- [`decodeBase64url()`](ref:encoding)
-- [`decodeHex()`](ref:encoding)
+- [`encodeBase32()`](/reference/encoding/encodeBase32)
+- [`encodeBase64()`](/reference/encoding/encodeBase64)
+- [`encodeBase64url()`](/reference/encoding/encodeBase64url)
+- [`encodeHex()`](/reference/encoding/encodeHex)
+- [`decodeBase32()`](/reference/encoding/decodeBase32)
+- [`decodeBase64()`](/reference/encoding/decodeBase64)
+- [`decodeBase64url()`](/reference/encoding/decodeBase64url)
+- [`decodeHex()`](/reference/encoding/decodeHex)

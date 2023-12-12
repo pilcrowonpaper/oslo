@@ -4,7 +4,7 @@ title: "generateRandomString()"
 
 # `generateRandomString()`
 
-Generates a random string of given length using the provided characters (`alphabet`). See [`alphabet()`](ref:random) for creating the alphabet string. Uses cryptographically strong random values.
+Generates a random string of given length using the provided characters (`alphabet`). See [`alphabet()`](/reference/random/alphabet) for creating the alphabet string. Uses cryptographically strong random values.
 
 ## Definition
 

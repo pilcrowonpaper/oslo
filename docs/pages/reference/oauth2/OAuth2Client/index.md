@@ -29,9 +29,9 @@ function constructor(
 
 ## Methods
 
-- [`createAuthorizationURL()`](ref:oauth2/OAuth2Client)
-- [`refreshAccessToken()`](ref:oauth2/OAuth2Client)
-- [`validateAuthorizationCode()`](ref:oauth2/OAuth2Client)
+- [`createAuthorizationURL()`](/reference/oauth2/OAuth2Client/createAuthorizationURL)
+- [`refreshAccessToken()`](/reference/oauth2/OAuth2Client/refreshAccessToken)
+- [`validateAuthorizationCode()`](/reference/oauth2/OAuth2Client/validateAuthorizationCode)
 
 ## Properties
 

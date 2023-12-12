@@ -18,5 +18,5 @@ function constructor(origin: string): this;
 
 ## Methods
 
-- [`validateAssertionResponse()`](ref:webauthn/WebAuthnController)
-- [`validateAttestationResponse()`](ref:webauthn/WebAuthnController)
+- [`validateAssertionResponse()`](/reference/webauthn/WebAuthnController/validateAssertionResponse)
+- [`validateAttestationResponse()`](/reference/webauthn/WebAuthnController/validateAttestationResponse)

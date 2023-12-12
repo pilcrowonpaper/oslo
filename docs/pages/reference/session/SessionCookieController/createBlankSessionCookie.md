@@ -9,6 +9,6 @@ Creates a blank session cookie, that when set, removes the existing the session 
 ## Definition
 
 ```ts
-//$ SessionCookie=ref:session
+//$ SessionCookie=/reference/session/SessionCookie
 function createBlankSessionCookie(): $$SessionCookie;
 ```

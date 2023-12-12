@@ -9,7 +9,7 @@ Validates a WebAuthn attestation response, including the signature, but not the 
 ## Definition
 
 ```ts
-//$ AttestationResponse=ref:webauthn
+//$ AttestationResponse=/reference/webauthn/AttestationResponse
 function validateAttestationResponse(
 	response: $$AttestationResponse,
 	challenge: ArrayBuffer
@@ -24,7 +24,7 @@ function validateAttestationResponse(
 ## Example
 
 ```ts
-//$ AttestationResponse=ref:webauthn
+//$ AttestationResponse=/reference/webauthn/AttestationResponse
 //$ webAuthnController=/reference/webauthn/WebAuthnController
 try {
 	const response: $$AttestationResponse = {

@@ -33,8 +33,8 @@ function constructor(options?: {
 
 ## Methods
 
-- [`hash()`](ref:password/Argon2id)
-- [`verify()`](ref:password/Argon2id)
+- [`hash()`](/reference/password/Argon2id/hash)
+- [`verify()`](/reference/password/Argon2id/verify)
 
 ## Example
 

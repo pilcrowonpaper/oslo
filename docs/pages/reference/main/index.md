@@ -8,9 +8,9 @@ Provides basic utilities used by other modules.
 
 ## Functions
 
-- [`createDate()`](ref:main)
-- [`isWithinExpiration()`](ref:main)
+- [`createDate()`](/reference/main/createDate)
+- [`isWithinExpiration()`](/reference/main/isWithinExpiration)
 
 ## Classes
 
-- [`TimeSpan`](ref:main)
+- [`TimeSpan`](/reference/main/TimeSpan)

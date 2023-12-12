@@ -33,9 +33,9 @@ function constructor(
 
 ## Methods
 
-- [`createBlankSessionCookie()`](ref:session/SessionCookieController)
-- [`createSessionCookie()`](ref:session/SessionCookieController)
-- [`parseCookies()`](ref:session/SessionCookieController)
+- [`createBlankSessionCookie()`](/reference/session/SessionCookieController)
+- [`createSessionCookie()`](/reference/session/SessionCookieController)
+- [`parseCookies()`](/reference/session/SessionCookieController)
 
 ## Example
 

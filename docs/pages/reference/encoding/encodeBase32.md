@@ -4,7 +4,7 @@ title: "encodeBase32()"
 
 # `encodeBase32()`
 
-Encodes data into base32 string. Use [`decodeBase32()`](ref:encoding) to decode base32 strings.
+Encodes data into base32 string. Use [`decodeBase32()`](/reference/encoding/decodeBase32) to decode base32 strings.
 
 ## Definition
 

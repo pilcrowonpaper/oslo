@@ -9,7 +9,7 @@ Parses a `Cookie` header and returns the session cookie value.
 ## Definition
 
 ```ts
-//$ SessionCookie=ref:session
+//$ SessionCookie=/reference/session/SessionCookie
 function parseCookies(header: string): string | null;
 ```
 
@@ -20,7 +20,7 @@ function parseCookies(header: string): string | null;
 ## Example
 
 ```ts
-//$ TimeSpan=ref:main
+//$ TimeSpan=/reference/main/TimeSpan
 import { SessionCookieController } from "oslo/session";
 import { $$TimeSpan } from "oslo";
 

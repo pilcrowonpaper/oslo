@@ -4,12 +4,12 @@ title: "SessionCookieController.createSessionCookie()"
 
 # `SessionCookieController.createSessionCookie()`
 
-Creates a new session cookie. Use [`SessionCookieController.createBlankSessionCookie()`](ref:session) to remove the cookie. See [`oslo/session`](/reference/session) for a full example.
+Creates a new session cookie. Use [`SessionCookieController.createBlankSessionCookie()`](/reference/session) to remove the cookie. See [`oslo/session`](/reference/session) for a full example.
 
 ## Definition
 
 ```ts
-//$ SessionCookie=ref:session
+//$ SessionCookie=/reference/session/SessionCookie
 function createSessionCookie(sessionId: string): $$SessionCookie;
 ```
 
