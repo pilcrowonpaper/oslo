@@ -7,17 +7,17 @@
 		{
 			"title": "API reference",
 			"pages": [
-				["oslo", "/api-reference/main"],
-				["oslo/cookie", "/api-reference/cookie"],
-				["oslo/crypto", "/api-reference/crypto"],
-				["oslo/encoding", "/api-reference/encoding"],
-				["oslo/oauth2", "/api-reference/oauth2"],
-				["oslo/otp", "/api-reference/otp"],
-				["oslo/password", "/api-reference/password"],
-				["oslo/random", "/api-reference/random"],
-				["oslo/request", "/api-reference/request"],
-				["oslo/session", "/api-reference/session"],
-				["oslo/webauthn", "/api-reference/webauthn"]
+				["oslo", "/reference/main"],
+				["oslo/cookie", "/reference/cookie"],
+				["oslo/crypto", "/reference/crypto"],
+				["oslo/encoding", "/reference/encoding"],
+				["oslo/oauth2", "/reference/oauth2"],
+				["oslo/otp", "/reference/otp"],
+				["oslo/password", "/reference/password"],
+				["oslo/random", "/reference/random"],
+				["oslo/request", "/reference/request"],
+				["oslo/session", "/reference/session"],
+				["oslo/webauthn", "/reference/webauthn"]
 			]
 		},
 		{
