@@ -13,7 +13,8 @@ See [`oslo/session`](/reference/session) for a full example.
 ## Constructor
 
 ```ts
-function constructor(expiresIn: TimeSpan): this;
+//$ TimeSpan=/reference/main/TimeSpan
+function constructor(expiresIn: $$TimeSpan): this;
 ```
 
 ### Parameters

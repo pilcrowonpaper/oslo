@@ -9,13 +9,14 @@ Creates a new [key URI](https://github.com/google/google-authenticator/wiki/Key-
 ## Definition
 
 ```ts
+//$ TimeSpan=/reference/main/TimeSpan
 function createTOTPKeyURI(
 	issuer: string,
 	accountName: string,
 	secret: ArrayBuffer,
 	options?: {
 		digits?: number;
-		period?: TimeSpan;
+		period?: $$TimeSpan;
 	}
 ): string;
 ```

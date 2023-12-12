@@ -9,9 +9,10 @@ Provides methods for handling session cookies. By default, session cookies have 
 ## Constructor
 
 ```ts
+//$ TimeSpan=/reference/main/TimeSpan
 function constructor(
 	cookieName: string,
-	expiresIn: TimeSpan,
+	expiresIn: $$TimeSpan,
 	options?: {
 		secure?: boolean;
 		path?: string;

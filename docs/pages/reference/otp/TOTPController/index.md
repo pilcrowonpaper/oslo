@@ -9,7 +9,8 @@ Helper for Time-based OTP, as defined in [RFC 6238](https://datatracker.ietf.org
 ## Constructor
 
 ```ts
-function constructor(options?: { digits?: number; period?: TimeSpan }): this;
+//$ TimeSpan=/reference/main/TimeSpan
+function constructor(options?: { digits?: number; period?: $$TimeSpan }): this;
 ```
 
 ### Parameters
