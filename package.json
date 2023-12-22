@@ -1,7 +1,7 @@
 {
 	"name": "oslo",
 	"type": "module",
-	"version": "0.25.0",
+	"version": "0.25.1",
 	"description": "A collection of auth-related utilities",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
@@ -27,7 +27,6 @@
 		"./password": "./dist/password/index.js",
 		"./random": "./dist/random/index.js",
 		"./request": "./dist/request/index.js",
-		"./session": "./dist/session/index.js",
 		"./webauthn": "./dist/webauthn/index.js"
 	},
 	"typesVersions": {
@@ -65,9 +64,6 @@
 			"request": [
 				"dist/request/index.d.ts"
 			],
-			"session": [
-				"dist/session/index.d.ts"
-			],
 			"webauthn": [
 				"dist/webauthn/index.d.ts"
 			]
@@ -76,8 +72,9 @@
 	"keywords": [
 		"auth",
 		"oauth2",
-		"session",
-		"crypto"
+		"jwt",
+		"crypto",
+		"webauthn"
 	],
 	"author": "pilcrowOnPaper",
 	"license": "MIT",
