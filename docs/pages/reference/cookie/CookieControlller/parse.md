@@ -1,16 +1,15 @@
 ---
-title: "SessionCookieController.parseCookies()"
+title: "CookieController.parse()"
 ---
 
-# `SessionCookieController.parseCookies()`
+# `CookieController.parse()`
 
 Parses a `Cookie` header and returns the session cookie value.
 
 ## Definition
 
 ```ts
-//$ SessionCookie=/reference/session/SessionCookie
-function parseCookies(header: string): string | null;
+function parse(header: string): string | null;
 ```
 
 ### Parameters
@@ -21,11 +20,10 @@ function parseCookies(header: string): string | null;
 
 ```ts
 //$ TimeSpan=/reference/main/TimeSpan
-import { SessionCookieController } from "oslo/session";
 import { $$TimeSpan } from "oslo";
 
 const cookieName = "session";
-const controller = new SessionCookieController(cookieName, new TimeSpan(30, "d"));
+const controller = new CookieController("session", {});
 
 // "abc"
 const sessionId = controller.parseCookies("session=abc");

@@ -10,14 +10,14 @@ Serializes cookie for `Set-Cookie` header. The cookie name and value are URI-com
 
 ```ts
 //$ CookieAttributes=/reference/cookie/CookieAttributes
-function serializeCookie(name: string, value: string, attributes?: $$CookieAttributes): string;
+function serializeCookie(name: string, value: string, attributes: $$CookieAttributes): string;
 ```
 
 ### Parameters
 
-- `name`: Cookie name
-- `value`: Cookie value
-- `attributes`: Cookie attributes
+- `name`
+- `value`
+- `attributes`
 
 ## Example
 

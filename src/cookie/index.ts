@@ -1,3 +1,5 @@
+import type { TimeSpan } from "../index.js";
+
 export interface CookieAttributes {
 	secure?: boolean;
 	path?: string;
@@ -8,12 +10,8 @@ export interface CookieAttributes {
 	expires?: Date;
 }
 
-export function serializeCookie(
-	name: string,
-	value: string,
-	attributes: CookieAttributes = {}
-): string {
-	const keyValueEntries: Array<[string, string | number] | [string]> = [];
+export function serializeCookie(name: string, value: string, attributes: CookieAttributes): string {
+	const keyValueEntries: Array<[string, string] | [string]> = [];
 	keyValueEntries.push([encodeURIComponent(name), encodeURIComponent(value)]);
 	if (attributes?.domain !== undefined) {
 		keyValueEntries.push(["Domain", attributes.domain]);
@@ -25,7 +23,7 @@ export function serializeCookie(
 		keyValueEntries.push(["HttpOnly"]);
 	}
 	if (attributes?.maxAge !== undefined) {
-		keyValueEntries.push(["Max-Age", attributes.maxAge]);
+		keyValueEntries.push(["Max-Age", attributes.maxAge.toString()]);
 	}
 	if (attributes?.path !== undefined) {
 		keyValueEntries.push(["Path", attributes.path]);
@@ -56,4 +54,58 @@ export function parseCookies(header: string): Map<string, string> {
 		cookies.set(decodeURIComponent(rawKey), decodeURIComponent(rawValue));
 	}
 	return cookies;
+}
+
+export class CookieController {
+	constructor(
+		cookieName: string,
+		baseCookieAttributes: CookieAttributes,
+		cookieOptions?: {
+			expiresIn?: TimeSpan;
+		}
+	) {
+		this.cookieName = cookieName;
+		this.cookieExpiresIn = cookieOptions?.expiresIn ?? null;
+		this.baseCookieAttributes = baseCookieAttributes;
+	}
+
+	public cookieName: string;
+
+	private cookieExpiresIn: TimeSpan | null;
+	private baseCookieAttributes: CookieAttributes;
+
+	public createCookie(value: string): Cookie {
+		return new Cookie(this.cookieName, value, {
+			...this.baseCookieAttributes,
+			maxAge: this.cookieExpiresIn?.seconds()
+		});
+	}
+
+	public createBlankCookie(): Cookie {
+		return new Cookie(this.cookieName, "", {
+			...this.baseCookieAttributes,
+			maxAge: 0
+		});
+	}
+
+	public parse(header: string): string | null {
+		const cookies = parseCookies(header);
+		return cookies.get(this.cookieName) ?? null;
+	}
+}
+
+export class Cookie {
+	constructor(name: string, value: string, attributes: CookieAttributes) {
+		this.name = name;
+		this.value = value;
+		this.attributes = attributes;
+	}
+
+	public name: string;
+	public value: string;
+	public attributes: CookieAttributes;
+
+	public serialize(): string {
+		return serializeCookie(this.name, this.value, this.attributes);
+	}
 }

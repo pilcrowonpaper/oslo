@@ -6,15 +6,14 @@ title: "Oslo documentation"
 
 Oslo provides a bunch of auth utilities, including APIs for:
 
-- Managing sessions
 - Creating JWTs
-- Handling OAuth 2.0
+- OAuth 2.0 clients
 - Hashing passwords
 - Generating cryptographically strong random values
-- Signing data
+- Signing and encoding data
 - Verifying WebAuthn responses
-- Encoding data
-- Lightweight, runtime agnostic, fully typed.
+
+It's lightweight, runtime agnostic, and fully typed.
 
 ## Installation
 

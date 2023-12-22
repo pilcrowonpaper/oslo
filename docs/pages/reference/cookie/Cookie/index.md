@@ -1,10 +1,10 @@
 ---
-title: "SessionCookie"
+title: "Cookie"
 ---
 
-# `SessionCookie`
+# `Cookie`
 
-Represents a session cookie.
+Represents a cookie.
 
 ## Constructor
 
@@ -15,13 +15,13 @@ function constructor(name: string, value: string, attributes?: $$CookieAttribute
 
 ### Parameters
 
-- `name`: Cookie name
-- `value`: Session id
-- `attributes`: Cookie attributes
+- `name`
+- `value`
+- `attributes`
 
 ## Methods
 
-- [`serialize()`](/reference/session/SessionCookie)
+- [`serialize()`](/reference/cookie/Cookie/serialize)
 
 ## Properties
 
@@ -34,18 +34,20 @@ interface Properties {
 }
 ```
 
-- `name`: Cookie name
-- `value`: Session id
-- `attributes`: Cookie attributes
+- `name`
+- `value`
+- `attributes`
 
 ## Example
 
 ```ts
-import { SessionCookie } from "oslo/session";
+import { Cookie } from "oslo/cookie";
 
-const cookieName = "session";
-const sessionCookie = new SessionCookie(cookieName, sessionId, {
-	maxAge: 60 * 60 * 24 // 1 day
+const sessionCookie = new Cookie("session", sessionId, {
+	maxAge: 60 * 60 * 24,
+	httpOnly: true,
+	secure: true,
+	path: "/"
 });
 response.headers.set("Set-Cookie", sessionCookie.serialize());
 ```
@@ -53,9 +55,13 @@ response.headers.set("Set-Cookie", sessionCookie.serialize());
 If your framework provides an API for setting cookies:
 
 ```ts
-import { SessionCookie } from "oslo/session";
+import { Cookie } from "oslo/cookie";
 
-const sessionCookie = new SessionCookie(cookieName, sessionId);
-
+const sessionCookie = new Cookie("session", sessionId, {
+	maxAge: 60 * 60 * 24,
+	httpOnly: true,
+	secure: true,
+	path: "/"
+});
 setCookie(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
 ```

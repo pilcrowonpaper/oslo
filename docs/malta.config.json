@@ -16,7 +16,6 @@
 				["oslo/password", "/reference/password"],
 				["oslo/random", "/reference/random"],
 				["oslo/request", "/reference/request"],
-				["oslo/session", "/reference/session"],
 				["oslo/webauthn", "/reference/webauthn"]
 			]
 		},
