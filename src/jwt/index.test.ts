@@ -105,14 +105,14 @@ describe("createJWT()", () => {
 				count: 100
 			},
 			{
-				audience: "_audience",
+				audiences: ["_audience"],
 				issuer: "_issuer",
 				subject: "_subject",
 				jwtId: "_jwtId"
 			}
 		);
 		const expected =
-			"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZXNzYWdlIjoiaGVsbG8iLCJjb3VudCI6MTAwLCJhdWQiOiJfYXVkaWVuY2UiLCJzdWIiOiJfc3ViamVjdCIsImlzcyI6Il9pc3N1ZXIiLCJqdGkiOiJfand0SWQifQ.xquflAkOGwGp5OxVmnNRZn97sACTBcey1KEcVQfnQks";
+			"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZXNzYWdlIjoiaGVsbG8iLCJjb3VudCI6MTAwLCJhdWQiOlsiX2F1ZGllbmNlIl0sInN1YiI6Il9zdWJqZWN0IiwiaXNzIjoiX2lzc3VlciIsImp0aSI6Il9qd3RJZCJ9.cKi5L4ZV79IHtpC-rXRwjnQIeWdswAvv1KavDSM_vds";
 		expect(result).toBe(expected);
 	});
 });
@@ -127,7 +127,7 @@ test("parseJWT()", async () => {
 			message: "hello"
 		},
 		{
-			audience: "_audience",
+			audiences: ["_audience"],
 			issuer: "_issuer",
 			subject: "_subject",
 			jwtId: "_jwtId",
@@ -144,7 +144,7 @@ test("parseJWT()", async () => {
 		expiresAt: new Date((currDateSeconds + new TimeSpan(1, "h").seconds()) * 1000),
 		notBefore: new Date(currDateSeconds * 1000),
 		issuedAt: new Date(currDateSeconds * 1000),
-		audience: "_audience",
+		audiences: ["_audience"],
 		issuer: "_issuer",
 		subject: "_subject",
 		jwtId: "_jwtId",
@@ -157,7 +157,7 @@ test("parseJWT()", async () => {
 		},
 		payload: {
 			message: "hello",
-			aud: "_audience",
+			aud: ["_audience"],
 			iss: "_issuer",
 			sub: "_subject",
 			jti: "_jwtId",

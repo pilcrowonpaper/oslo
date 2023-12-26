@@ -27,7 +27,7 @@ export async function createJWT(
 		expiresIn?: TimeSpan;
 		issuer?: string;
 		subject?: string;
-		audience?: string;
+		audiences?: string[];
 		notBefore?: Date;
 		includeIssuedTimestamp?: boolean;
 		jwtId?: string;
@@ -41,8 +41,8 @@ export async function createJWT(
 	const payload: JWTPayload = {
 		...payloadClaims
 	};
-	if (options?.audience !== undefined) {
-		payload.aud = options.audience;
+	if (options?.audiences !== undefined) {
+		payload.aud = options.audiences;
 	}
 	if (options?.subject !== undefined) {
 		payload.sub = options.subject;
@@ -136,7 +136,7 @@ export function parseJWT(jwt: string): JWT | null {
 		issuedAt: null,
 		issuer: null,
 		jwtId: null,
-		audience: null,
+		audiences: null,
 		notBefore: null
 	};
 	if ("exp" in payload) {
@@ -158,10 +158,15 @@ export function parseJWT(jwt: string): JWT | null {
 		properties.subject = payload.sub;
 	}
 	if ("aud" in payload) {
-		if (typeof payload.aud !== "string") {
+		if (!Array.isArray(payload.aud)) {
 			return null;
 		}
-		properties.audience = payload.aud;
+		for (const item of payload.aud) {
+			if (typeof item !== "string") {
+				return null;
+			}
+		}
+		properties.audiences = payload.aud;
 	}
 	if ("nbf" in payload) {
 		if (typeof payload.nbf !== "number") {
@@ -201,7 +206,7 @@ interface JWTProperties {
 	expiresAt: Date | null;
 	issuer: string | null;
 	subject: string | null;
-	audience: string | null;
+	audiences: string[] | null;
 	notBefore: Date | null;
 	issuedAt: Date | null;
 	jwtId: string | null;
@@ -257,7 +262,7 @@ interface JWTHeader {
 interface JWTPayload {
 	exp?: number;
 	iss?: string;
-	aud?: string;
+	aud?: string[] | string;
 	jti?: string;
 	nbf?: number;
 	sub?: string;

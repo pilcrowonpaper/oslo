@@ -18,7 +18,7 @@ interface JWT {
 	expiresAt: Date | null;
 	issuer: string | null;
 	subject: string | null;
-	audience: string | null;
+	audience: string[] | null;
 	notBefore: Date | null;
 	issuedAt: Date | null;
 	jwtId: string | null;
