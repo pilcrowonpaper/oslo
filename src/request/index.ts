@@ -7,7 +7,6 @@ export function verifyRequestOrigin(origin: string, allowedDomains: string[]): b
 		if (domain.startsWith("http://") || domain.startsWith("https://")) {
 			host = safeURL(domain)?.host ?? null;
 		} else {
-			// handle IDNs
 			host = safeURL("https://" + domain)?.host ?? null;
 		}
 		if (originHost === host) return true;
