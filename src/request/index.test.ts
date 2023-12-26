@@ -20,7 +20,7 @@ describe("verifyRequestOrigin()", () => {
 	});
 
 	test("IDN", () => {
-		expect(verifyRequestOrigin("http://xn--zckzah", ["xn--zckzah"])).toBe(true);
-		expect(verifyRequestOrigin("http://xn--zckzah", ["テスト"])).toBe(true);
+		expect(verifyRequestOrigin("http://xn--zckzah.com", ["xn--zckzah.com"])).toBe(true);
+		expect(verifyRequestOrigin("http://xn--zckzah.com", ["テスト.com"])).toBe(true);
 	});
 });
