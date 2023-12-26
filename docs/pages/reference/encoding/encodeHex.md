@@ -9,7 +9,7 @@ Encodes data into hex string. Use [`decodeHex()`](/reference/encoding/decodeHex)
 ## Definition
 
 ```ts
-function encodeHex(data: ArrayBuffer): string;
+function encodeHex(data: ArrayBuffer | TypedArray): string;
 ```
 
 ### Parameters

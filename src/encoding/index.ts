@@ -1,7 +1,8 @@
 import { bitsToInt, bytesToBits } from "../bytes.js";
+import type { TypedArray } from "../index.js";
 
 export function encodeBase64(
-	data: ArrayBuffer,
+	data: ArrayBuffer | TypedArray,
 	options?: {
 		padding?: boolean;
 	}
@@ -21,7 +22,7 @@ export function decodeBase64(data: string): Uint8Array {
 	);
 }
 
-export function encodeBase64url(data: ArrayBuffer): string {
+export function encodeBase64url(data: ArrayBuffer | TypedArray): string {
 	return encodeBase64(data, {
 		padding: false
 	})
@@ -33,7 +34,7 @@ export function decodeBase64url(data: string): Uint8Array {
 	return decodeBase64(data.replaceAll("-", "+").replaceAll("_", "/"));
 }
 
-export function encodeHex(data: ArrayBuffer): string {
+export function encodeHex(data: ArrayBuffer | TypedArray): string {
 	const buffer = new Uint8Array(data);
 	let result = "";
 	for (let i = 0; i < buffer.length; i++) {
@@ -51,7 +52,7 @@ export function decodeHex(data: string): Uint8Array {
 }
 
 export function encodeBase32(
-	data: ArrayBuffer,
+	data: ArrayBuffer | TypedArray,
 	options?: {
 		padding?: boolean;
 	}

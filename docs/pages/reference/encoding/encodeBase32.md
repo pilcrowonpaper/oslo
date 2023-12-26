@@ -10,7 +10,7 @@ Encodes data into base32 string. Use [`decodeBase32()`](/reference/encoding/deco
 
 ```ts
 function encodeBase32(
-	data: ArrayBuffer,
+	data: ArrayBuffer | TypedArray,
 	options?: {
 		padding?: boolean;
 	}

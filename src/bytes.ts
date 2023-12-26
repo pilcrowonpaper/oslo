@@ -1,3 +1,5 @@
+import type { TypedArray } from "./index.js";
+
 export function byteToBits(byte: number): string {
 	return byte.toString(2).padStart(8, "0");
 }
@@ -11,8 +13,8 @@ export function bitsToInt(bits: string): number {
 }
 
 export function compareBytes(
-	buffer1: ArrayBuffer | Uint8Array,
-	buffer2: ArrayBuffer | Uint8Array
+	buffer1: ArrayBuffer | TypedArray,
+	buffer2: ArrayBuffer | TypedArray
 ): boolean {
 	const bytes1 = new Uint8Array(buffer1);
 	const bytes2 = new Uint8Array(buffer2);

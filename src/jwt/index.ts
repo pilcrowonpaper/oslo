@@ -2,7 +2,7 @@ import { ECDSA, HMAC, RSASSAPKCS1v1_5, RSASSAPSS } from "../crypto/index.js";
 import { decodeBase64url, encodeBase64url } from "../encoding/index.js";
 import { isWithinExpirationDate } from "../index.js";
 
-import type { TimeSpan } from "../index.js";
+import type { TimeSpan, TypedArray } from "../index.js";
 
 export type JWTAlgorithm =
 	| "HS256"
@@ -20,7 +20,7 @@ export type JWTAlgorithm =
 
 export async function createJWT(
 	algorithm: JWTAlgorithm,
-	key: ArrayBuffer,
+	key: ArrayBuffer | TypedArray,
 	payloadClaims: Record<any, any>,
 	options?: {
 		headers?: Record<any, any>;
@@ -74,7 +74,7 @@ export async function createJWT(
 
 export async function validateJWT(
 	algorithm: JWTAlgorithm,
-	key: ArrayBuffer,
+	key: ArrayBuffer | TypedArray,
 	jwt: string
 ): Promise<JWT> {
 	const parsedJWT = parseJWT(jwt);

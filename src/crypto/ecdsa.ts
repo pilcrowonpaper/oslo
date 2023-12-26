@@ -1,3 +1,4 @@
+import type { TypedArray } from "../index.js";
 import type { KeyPair } from "./index.js";
 import type { SHAHash } from "./sha.js";
 
@@ -12,7 +13,10 @@ export class ECDSA {
 		this.curve = curve;
 	}
 
-	public async sign(privateKey: ArrayBuffer, data: ArrayBuffer): Promise<ArrayBuffer> {
+	public async sign(
+		privateKey: ArrayBuffer | TypedArray,
+		data: ArrayBuffer | TypedArray
+	): Promise<ArrayBuffer> {
 		const cryptoKey = await crypto.subtle.importKey(
 			"pkcs8",
 			privateKey,
@@ -35,9 +39,9 @@ export class ECDSA {
 	}
 
 	public async verify(
-		publicKey: ArrayBuffer,
-		signature: ArrayBuffer,
-		data: ArrayBuffer
+		publicKey: ArrayBuffer | TypedArray,
+		signature: ArrayBuffer | TypedArray,
+		data: ArrayBuffer | TypedArray
 	): Promise<boolean> {
 		const cryptoKey = await crypto.subtle.importKey(
 			"spki",

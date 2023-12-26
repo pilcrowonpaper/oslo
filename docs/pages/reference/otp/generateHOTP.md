@@ -9,7 +9,11 @@ Generates a new HOTP, as defined in [RFC 4226](https://www.ietf.org/rfc/rfc4226.
 ## Definition
 
 ```ts
-function generateHOTP(secretKey: ArrayBuffer, counter: number, digits?: number): Promise<string>;
+function generateHOTP(
+	secretKey: ArrayBuffer | TypedArray,
+	counter: number,
+	digits?: number
+): Promise<string>;
 ```
 
 ### Parameters

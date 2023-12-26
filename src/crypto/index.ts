@@ -5,13 +5,17 @@ export { sha1, sha256, sha384, sha512 } from "./sha.js";
 
 export type { ECDSACurve } from "./ecdsa.js";
 export type { SHAHash } from "./sha.js";
+import type { TypedArray } from "../index.js";
 
 export interface KeyPair {
-	publicKey: ArrayBuffer;
-	privateKey: ArrayBuffer;
+	publicKey: ArrayBuffer | TypedArray;
+	privateKey: ArrayBuffer | TypedArray;
 }
 
-export function constantTimeEqual(a: ArrayBuffer, b: ArrayBuffer): boolean {
+export function constantTimeEqual(
+	a: ArrayBuffer | TypedArray,
+	b: ArrayBuffer | TypedArray
+): boolean {
 	const aBuffer = new Uint8Array(a);
 	const bBuffer = new Uint8Array(b);
 	if (aBuffer.length !== bBuffer.length) {

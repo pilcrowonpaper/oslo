@@ -12,7 +12,11 @@ Parses a JWT string and validates it, including the signature, expiration, and n
 //$ JWTAlgorithm=/reference/jwt/JWTAlgorithm
 //$ TimeSpan=/reference/main/TimeSpan
 //$ JWT=/reference/jwt/JWT
-function validateJWT(algorithm: JWTAlgorithm, key: ArrayBuffer, jwt: string): Promise<$$JWT>;
+function validateJWT(
+	algorithm: JWTAlgorithm,
+	key: ArrayBuffer | TypedArray,
+	jwt: string
+): Promise<$$JWT>;
 ```
 
 ### Parameters

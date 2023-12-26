@@ -9,7 +9,7 @@ Encodes data into base64 URL string. Use [`decodeBase64url()`](/reference/encodi
 ## Definition
 
 ```ts
-function encodeBase64url(data: ArrayBuffer): string;
+function encodeBase64url(data: ArrayBuffer | TypedArray): string;
 ```
 
 ### Parameters

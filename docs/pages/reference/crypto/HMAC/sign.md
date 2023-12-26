@@ -9,7 +9,10 @@ Signs data with a private key and returns the signature. See [`HMAC`](/reference
 ## Definition
 
 ```ts
-function sign(secretKey: ArrayBuffer, data: ArrayBuffer): Promise<ArrayBuffer>;
+function sign(
+	secretKey: ArrayBuffer | TypedArray,
+	data: ArrayBuffer | TypedArray
+): Promise<ArrayBuffer>;
 ```
 
 ### Parameters

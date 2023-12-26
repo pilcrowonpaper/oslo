@@ -12,7 +12,7 @@ Validates a WebAuthn assertion response, including the signature. Supports ES256
 //$ AssertionResponse=/reference/webauthn/AssertionResponse
 function validateAssertionResponse(
 	algorithm: "ES256" | "RS256",
-	publicKey: ArrayBuffer,
+	publicKey: ArrayBuffer | TypedArray,
 	response: $$AssertionResponse,
 	challenge: ArrayBuffer
 ): Promise<void>;

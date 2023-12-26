@@ -1,3 +1,4 @@
+import type { TypedArray } from "../index.js";
 import type { KeyPair } from "./index.js";
 import type { SHAHash } from "./sha.js";
 
@@ -8,9 +9,9 @@ export class RSASSAPKCS1v1_5 {
 	}
 
 	public async verify(
-		publicKey: ArrayBuffer,
-		signature: ArrayBuffer,
-		data: ArrayBuffer
+		publicKey: ArrayBuffer | TypedArray,
+		signature: ArrayBuffer | TypedArray,
+		data: ArrayBuffer | TypedArray
 	): Promise<boolean> {
 		const cryptoKey = await crypto.subtle.importKey(
 			"spki",
@@ -25,7 +26,10 @@ export class RSASSAPKCS1v1_5 {
 		return await crypto.subtle.verify("RSASSA-PKCS1-v1_5", cryptoKey, signature, data);
 	}
 
-	public async sign(privateKey: ArrayBuffer, data: ArrayBuffer): Promise<ArrayBuffer> {
+	public async sign(
+		privateKey: ArrayBuffer | TypedArray,
+		data: ArrayBuffer | TypedArray
+	): Promise<ArrayBuffer> {
 		const cryptoKey = await crypto.subtle.importKey(
 			"pkcs8",
 			privateKey,
@@ -77,9 +81,9 @@ export class RSASSAPSS {
 	}
 
 	public async verify(
-		publicKey: ArrayBuffer,
-		signature: ArrayBuffer,
-		data: ArrayBuffer
+		publicKey: ArrayBuffer | TypedArray,
+		signature: ArrayBuffer | TypedArray,
+		data: ArrayBuffer | TypedArray
 	): Promise<boolean> {
 		const cryptoKey = await crypto.subtle.importKey(
 			"spki",
@@ -102,7 +106,10 @@ export class RSASSAPSS {
 		);
 	}
 
-	public async sign(privateKey: ArrayBuffer, data: ArrayBuffer): Promise<ArrayBuffer> {
+	public async sign(
+		privateKey: ArrayBuffer | TypedArray,
+		data: ArrayBuffer | TypedArray
+	): Promise<ArrayBuffer> {
 		const cryptoKey = await crypto.subtle.importKey(
 			"pkcs8",
 			privateKey,

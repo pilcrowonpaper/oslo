@@ -9,7 +9,10 @@ Signs data with a private key and returns the signature. See [`RSASSAPKCS1v1_5`]
 ## Definition
 
 ```ts
-function sign(privateKey: ArrayBuffer, data: ArrayBuffer): Promise<ArrayBuffer>;
+function sign(
+	privateKey: ArrayBuffer | TypedArray,
+	data: ArrayBuffer | TypedArray
+): Promise<ArrayBuffer>;
 ```
 
 ### Parameters

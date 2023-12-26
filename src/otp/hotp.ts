@@ -1,8 +1,9 @@
 import { bitsToInt, byteToBits, bytesToBits } from "../bytes.js";
 import { HMAC } from "../crypto/hmac.js";
+import type { TypedArray } from "../index.js";
 
 export async function generateHOTP(
-	key: ArrayBuffer,
+	key: ArrayBuffer | TypedArray,
 	counter: number,
 	digits: number = 6
 ): Promise<string> {

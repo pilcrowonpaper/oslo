@@ -2,12 +2,12 @@ import { encodeBase32 } from "../encoding/index.js";
 export { generateHOTP } from "./hotp.js";
 export { TOTPController } from "./totp.js";
 
-import type { TimeSpan } from "../index.js";
+import type { TimeSpan, TypedArray } from "../index.js";
 
 export function createTOTPKeyURI(
 	issuer: string,
 	accountName: string,
-	secret: ArrayBuffer,
+	secret: ArrayBuffer | TypedArray,
 	options?: {
 		digits?: number;
 		period?: TimeSpan;
@@ -23,7 +23,7 @@ export function createTOTPKeyURI(
 export function createHOTPKeyURI(
 	issuer: string,
 	accountName: string,
-	secret: ArrayBuffer,
+	secret: ArrayBuffer | TypedArray,
 	options?: {
 		counter?: number;
 		digits?: number;
@@ -39,7 +39,7 @@ function createKeyURIBase(
 	type: "totp" | "hotp",
 	issuer: string,
 	accountName: string,
-	secret: ArrayBuffer,
+	secret: ArrayBuffer | TypedArray,
 	options?: {
 		digits?: number;
 	}

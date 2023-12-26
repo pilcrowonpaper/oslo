@@ -1,3 +1,4 @@
+import type { TypedArray } from "../index.js";
 import type { SHAHash } from "./sha.js";
 
 export class HMAC {
@@ -7,9 +8,9 @@ export class HMAC {
 	}
 
 	public async verify(
-		key: ArrayBuffer,
-		signature: ArrayBuffer,
-		data: ArrayBuffer
+		key: ArrayBuffer | TypedArray,
+		signature: ArrayBuffer | TypedArray,
+		data: ArrayBuffer | TypedArray
 	): Promise<boolean> {
 		const cryptoKey = await crypto.subtle.importKey(
 			"raw",
@@ -24,7 +25,10 @@ export class HMAC {
 		return await crypto.subtle.verify("HMAC", cryptoKey, signature, data);
 	}
 
-	public async sign(key: ArrayBuffer, data: ArrayBuffer): Promise<ArrayBuffer> {
+	public async sign(
+		key: ArrayBuffer | TypedArray,
+		data: ArrayBuffer | TypedArray
+	): Promise<ArrayBuffer> {
 		const cryptoKey = await crypto.subtle.importKey(
 			"raw",
 			key,

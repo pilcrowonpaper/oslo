@@ -9,7 +9,11 @@ Verifies a signature with a public key and returns `true` if the signature is va
 ## Definition
 
 ```ts
-function sign(publicKey: ArrayBuffer, signature: ArrayBuffer, data: ArrayBuffer): Promise<boolean>;
+function sign(
+	publicKey: ArrayBuffer | TypedArray,
+	signature: ArrayBuffer | TypedArray,
+	data: ArrayBuffer | TypedArray
+): Promise<boolean>;
 ```
 
 ### Parameters

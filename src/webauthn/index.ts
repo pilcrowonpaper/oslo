@@ -2,15 +2,17 @@ import { encodeBase64url } from "../encoding/index.js";
 import { compareBytes } from "../bytes.js";
 import { ECDSA, RSASSAPKCS1v1_5 } from "../crypto/index.js";
 
+import type { TypedArray } from "../index.js";
+
 export interface AttestationResponse {
-	clientDataJSON: ArrayBuffer;
-	authenticatorData: ArrayBuffer;
+	clientDataJSON: ArrayBuffer | TypedArray;
+	authenticatorData: ArrayBuffer | TypedArray;
 }
 
 export interface AssertionResponse {
-	clientDataJSON: ArrayBuffer;
-	authenticatorData: ArrayBuffer;
-	signature: ArrayBuffer;
+	clientDataJSON: ArrayBuffer | TypedArray;
+	authenticatorData: ArrayBuffer | TypedArray;
+	signature: ArrayBuffer | TypedArray;
 }
 
 export class WebAuthnController {
@@ -21,7 +23,7 @@ export class WebAuthnController {
 
 	public async validateAttestationResponse(
 		response: AttestationResponse,
-		challenge: ArrayBuffer
+		challenge: ArrayBuffer | TypedArray
 	): Promise<void> {
 		const validClientDataJSON = this.verifyClientDataJSON(
 			"webauthn.create",
@@ -40,9 +42,9 @@ export class WebAuthnController {
 
 	public async validateAssertionResponse(
 		algorithm: "ES256" | "RS256",
-		publicKey: ArrayBuffer,
+		publicKey: ArrayBuffer | TypedArray,
 		response: AssertionResponse,
-		challenge: ArrayBuffer
+		challenge: ArrayBuffer | TypedArray
 	): Promise<void> {
 		const validClientDataJSON = this.verifyClientDataJSON(
 			"webauthn.get",
@@ -61,7 +63,7 @@ export class WebAuthnController {
 		if (algorithm === "ES256") {
 			const signature = convertDERSignatureToECDSASignature(response.signature);
 			const hash = await crypto.subtle.digest("SHA-256", response.clientDataJSON);
-			const data = concatenateArrayBuffer(response.authenticatorData, hash);
+			const data = concatenateBuffer(response.authenticatorData, hash);
 			const es256 = new ECDSA("SHA-256", "P-256");
 			const validSignature = await es256.verify(publicKey, signature, data);
 			if (!validSignature) {
@@ -70,7 +72,7 @@ export class WebAuthnController {
 		} else if (algorithm === "RS256") {
 			const signature = convertDERSignatureToECDSASignature(response.signature);
 			const hash = await crypto.subtle.digest("SHA-256", response.clientDataJSON);
-			const data = concatenateArrayBuffer(response.authenticatorData, hash);
+			const data = concatenateBuffer(response.authenticatorData, hash);
 			const rs256 = new RSASSAPKCS1v1_5("SHA-256");
 			const validSignature = await rs256.verify(publicKey, signature, data);
 			if (!validSignature) {
@@ -83,8 +85,8 @@ export class WebAuthnController {
 
 	private verifyClientDataJSON(
 		type: "webauthn.create" | "webauthn.get",
-		clientDataJSON: ArrayBuffer,
-		challenge: ArrayBuffer
+		clientDataJSON: ArrayBuffer | TypedArray,
+		challenge: ArrayBuffer | TypedArray
 	): boolean {
 		const clientData: unknown = JSON.parse(new TextDecoder().decode(clientDataJSON));
 		if (!clientData || typeof clientData !== "object") {
@@ -155,7 +157,10 @@ function decodeDERInteger(integerBytes: Uint8Array, expectedLength: number): Uin
 	return integerBytes.slice(-32);
 }
 
-function concatenateArrayBuffer(buffer1: ArrayBuffer, buffer2: ArrayBuffer): ArrayBuffer {
+function concatenateBuffer(
+	buffer1: ArrayBuffer | TypedArray,
+	buffer2: ArrayBuffer | TypedArray
+): ArrayBuffer {
 	return concatenateUint8Array(new Uint8Array(buffer1), new Uint8Array(buffer2)).buffer;
 }
 

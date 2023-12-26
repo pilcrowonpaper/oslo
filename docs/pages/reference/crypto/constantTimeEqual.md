@@ -9,7 +9,7 @@ Constant time comparison.s
 ## Definition
 
 ```ts
-function constantTimeEqual(a: ArrayBuffer, b: ArrayBuffer): boolean;
+function constantTimeEqual(a: ArrayBuffer | TypedArray, b: ArrayBuffer | TypedArray): boolean;
 ```
 
 ### Parameters
