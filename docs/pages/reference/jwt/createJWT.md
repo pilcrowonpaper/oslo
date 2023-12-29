@@ -20,7 +20,7 @@ function createJWT(
 		expiresIn?: $$TimeSpan;
 		issuer?: string;
 		subject?: string;
-		audience?: string[];
+		audiences?: string[];
 		notBefore?: Date;
 		includeIssuedTimestamp?: boolean;
 		jwtId?: string;
@@ -38,7 +38,7 @@ function createJWT(
   - `expiresIn`: How long the JWT is valid for (for `exp` claim)
   - `issuer`: `iss` claim
   - `subject`: `sub` claim
-  - `audience`: `aud` claims
+  - `audiences`: `aud` claims
   - `notBefore`: `nbf` claim
   - `includeIssuedTimestamp` (default: `false`): Set to `true` to include `iat` claim
   - `jwtId`: `jti` claim

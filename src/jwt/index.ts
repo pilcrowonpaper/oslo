@@ -159,14 +159,18 @@ export function parseJWT(jwt: string): JWT | null {
 	}
 	if ("aud" in payload) {
 		if (!Array.isArray(payload.aud)) {
-			return null;
-		}
-		for (const item of payload.aud) {
-			if (typeof item !== "string") {
+			if (typeof payload.aud !== "string") {
 				return null;
 			}
+			properties.audiences = [payload.aud];
+		} else {
+			for (const item of payload.aud) {
+				if (typeof item !== "string") {
+					return null;
+				}
+			}
+			properties.audiences = payload.aud;
 		}
-		properties.audiences = payload.aud;
 	}
 	if ("nbf" in payload) {
 		if (typeof payload.nbf !== "number") {

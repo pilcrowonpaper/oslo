@@ -18,7 +18,7 @@ interface JWT {
 	expiresAt: Date | null;
 	issuer: string | null;
 	subject: string | null;
-	audience: string[] | null;
+	audiences: string[] | null;
 	notBefore: Date | null;
 	issuedAt: Date | null;
 	jwtId: string | null;
@@ -35,7 +35,7 @@ interface JWT {
 - `expiresAt`: `exp` claim
 - `issuer`: `iss` claim
 - `subject`: `sub` claim
-- `audience`: `aud` claim
+- `audiences`: `aud` claims
 - `notBefore`: `nbf` claim
 - `issuedAt`: `iat` claim
 - `jwtId`: `jti` claim
