@@ -63,7 +63,7 @@ const jwt = await createJWT("HS256", secret, payload, {
 	expiresIn: new TimeSpan(30, "d"),
 	issuer,
 	subject,
-	audience,
+	audiences,
 	includeIssuedTimestamp: true
 });
 ```
