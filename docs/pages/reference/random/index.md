@@ -9,6 +9,6 @@ Provides utilities for generating random values. Uses cryptographically strong r
 ## Functions
 
 - [`alphabet()`](/reference/random/alphabet)
-- [`generateRandomNumber()`](/reference/random/generateRandomNumber)
+- [`generateRandomInteger()`](/reference/random/generateRandomInteger)
 - [`generateRandomString()`](/reference/random/generateRandomString)
 - [`random()`](/reference/random/random)

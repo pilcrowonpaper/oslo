@@ -1,16 +1,27 @@
 import { test, expect } from "vitest";
-import { bitsToInt, byteToBits, bytesToBits, compareBytes } from "./bytes.js";
+import {
+	binaryToInteger,
+	byteToBinary,
+	bytesToBinary,
+	bytesToInteger,
+	compareBytes
+} from "./bytes.js";
 
 test("bitsToInt()", () => {
-	expect(bitsToInt("110100101000010101")).toBe(215573);
+	expect(binaryToInteger("110100101000010101")).toBe(215573);
 });
 
 test("byteToBits()", () => {
-	expect(byteToBits(101)).toBe("01100101");
+	expect(byteToBinary(101)).toBe("01100101");
 });
 
 test("bytesToBits()", () => {
-	expect(bytesToBits(new Uint8Array([203, 3, 41, 76]))).toBe("11001011000000110010100101001100");
+	expect(bytesToBinary(new Uint8Array([203, 3, 41, 76]))).toBe("11001011000000110010100101001100");
+});
+
+test("bytesToInteger()", () => {
+	const bytes = Uint8Array.from([54, 204, 4, 128]);
+	expect(bytesToInteger(bytes)).toBe(new DataView(bytes.buffer).getUint32(0));
 });
 
 test("compareBytes()", () => {

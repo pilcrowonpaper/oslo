@@ -1,77 +1,54 @@
-/** A cryptographically secure alternative to `Math.random()`.
- * See `oslo/random:generateRandomNumber` for generating numbers in a range.
- *
- * @returns a random floating-point number between 0 (inclusive) and 1 (exclusive))
- *
- * ```ts
- * import { random } from "oslo/random";
- *
- * const num = random();
- * ```
- */
+import { bytesToInteger } from "../bytes.js";
+
 export function random(): number {
-	const randomUint32Values = new Uint32Array(1);
-	crypto.getRandomValues(randomUint32Values);
-	const u32Max = 0xffffffff; // max uint32 value
-	// convert uint32 to floating point between 0 (inclusive) and 1 (exclusive)
-	// divide by max + 1 to exclude 1
-	return randomUint32Values[0]! / (u32Max + 1);
+	const buffer = new ArrayBuffer(8);
+	const bytes = crypto.getRandomValues(new Uint8Array(buffer));
+
+	// sets the exponent value (11 bits) to 01111111111 (1023)
+	// since the bias is 1023 (2 * (11 - 1) - 1), 1023 - 1023 = 0
+	// 2^0 * (1 + [52 bit number between 0-1]) = number between 1-2
+	bytes[0] = 63;
+	bytes[1] = bytes[1]! | 240;
+
+	return new DataView(buffer).getFloat64(0) - 1;
 }
 
-/** Generates a random integer between 2 integers (cryptographically secure).
- *
- * @param min minimum (inclusive)
- * @param max maximum (exclusive)
- *
- * ```ts
- * import { generateRandomNumber } from "oslo/random";
- *
- * // 0, 1, 2...9
- * const num = await generateRandomNumber(0, 10);
- * ```
- * */
-export function generateRandomNumber(min: number, max: number): number {
-	return Math.floor((max - min) * random()) + min;
+export function generateRandomInteger(max: number): number {
+	if (max < 0 || !Number.isInteger(max)) {
+		throw new Error("Argument 'max' must be an integer greater than or equal to 0");
+	}
+	const bitLength = (max - 1).toString(2).length;
+	const shift = bitLength % 8;
+	const bytes = new Uint8Array(Math.ceil(bitLength / 8));
+
+	crypto.getRandomValues(bytes);
+
+	// This zeroes bits that can be ignored to increase the chance `result` < `max`.
+	// For example, if `max` can be represented with 10 bits, the leading 6 bits of the random 16 bits (2 bytes) can be ignored.
+	if (shift !== 0) {
+		bytes[0] &= (1 << shift) - 1;
+	}
+	let result = bytesToInteger(bytes);
+	while (result >= max) {
+		crypto.getRandomValues(bytes);
+		if (shift !== 0) {
+			bytes[0] &= (1 << shift) - 1;
+		}
+		result = bytesToInteger(bytes);
+	}
+	return result;
 }
 
-/** Generates a random string (cryptographically secure).
- * @param length length of the generated string
- * @param string a string of characters (see `oslo/random:alphabet`)
- *
- * ```ts
- * import { generateRandomString, alphabet } from "oslo/random";
- *
- * // a random 10-characters string consisting of characters a-z and 0-9
- * const id = generateRandomString(10, alphabet("a-z", "0-9"));
- * ```
- */
 export function generateRandomString(length: number, alphabet: string): string {
-	// see `random()` for explanation
-	const randomUint32Values = new Uint32Array(length);
-	crypto.getRandomValues(randomUint32Values);
-	const u32Max = 0xffffffff;
 	let result = "";
-	for (let i = 0; i < randomUint32Values.length; i++) {
-		const rand = randomUint32Values[i]! / (u32Max + 1);
-		result += alphabet[Math.floor(alphabet.length * rand)];
+	for (let i = 0; i < length; i++) {
+		result += alphabet[generateRandomInteger(alphabet.length)];
 	}
 	return result;
 }
 
 type AlphabetPattern = "a-z" | "A-Z" | "0-9" | "-" | "_";
 
-/** Creates an alphabet string using the provided patterns.
- *
- * @param patterns
- * @returns a string with all the characters from the provided pattern
- *
- * ```ts
- * import { alphabet } from "oslo/random";
- *
- * // "abcdefghijklmnopqrstuvwxyz0123456789"
- * const lowercaseAlphanumericCharacters = alphabet("a-z", "0-9");
- * ```
- */
 export function alphabet(...patterns: AlphabetPattern[]): string {
 	const patternSet = new Set<AlphabetPattern>(patterns);
 	let result = "";

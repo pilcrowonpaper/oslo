@@ -1,4 +1,4 @@
-import { bitsToInt, bytesToBits } from "../bytes.js";
+import { binaryToInteger, bytesToBinary } from "../bytes.js";
 import type { TypedArray } from "../index.js";
 
 export function encodeBase64(
@@ -57,11 +57,11 @@ export function encodeBase32(
 		padding?: boolean;
 	}
 ): string {
-	const bits = bytesToBits(new Uint8Array(data));
+	const bits = bytesToBinary(new Uint8Array(data));
 	const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
 	let result = "";
 	for (let i = 0; i < Math.ceil(bits.length / 5); i++) {
-		const key = bitsToInt(bits.slice(i * 5, (i + 1) * 5).padEnd(5, "0"));
+		const key = binaryToInteger(bits.slice(i * 5, (i + 1) * 5).padEnd(5, "0"));
 		const val = alphabet[key];
 		result += val;
 	}
@@ -83,7 +83,7 @@ export function decodeBase32(data: string): Uint8Array {
 	}
 	const result = new Uint8Array(bits.length / 8);
 	for (let i = 0; i < bits.length / 8; i++) {
-		result[i] = bitsToInt(bits.slice(i * 8, (i + 1) * 8).padStart(8, "0"));
+		result[i] = binaryToInteger(bits.slice(i * 8, (i + 1) * 8).padStart(8, "0"));
 	}
 	return result;
 }

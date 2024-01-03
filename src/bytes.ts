@@ -1,15 +1,19 @@
 import type { TypedArray } from "./index.js";
 
-export function byteToBits(byte: number): string {
+export function byteToBinary(byte: number): string {
 	return byte.toString(2).padStart(8, "0");
 }
 
-export function bytesToBits(bytes: Uint8Array): string {
-	return [...bytes].map((val) => byteToBits(val)).join("");
+export function bytesToBinary(bytes: Uint8Array): string {
+	return [...bytes].map((val) => byteToBinary(val)).join("");
 }
 
-export function bitsToInt(bits: string): number {
+export function binaryToInteger(bits: string): number {
 	return parseInt(bits, 2);
+}
+
+export function bytesToInteger(bytes: Uint8Array): number {
+	return parseInt(bytesToBinary(bytes), 2);
 }
 
 export function compareBytes(
