@@ -9,7 +9,7 @@ Provides basic utilities used by other modules.
 ## Functions
 
 - [`createDate()`](/reference/main/createDate)
-- [`isWithinExpiration()`](/reference/main/isWithinExpiration)
+- [`isWithinExpirationDate()`](/reference/main/isWithinExpirationDate)
 
 ## Classes
 
