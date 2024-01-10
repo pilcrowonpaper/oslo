@@ -79,7 +79,7 @@ export class OAuth2Client {
 		body.set("refresh_token", refreshToken);
 		body.set("client_id", this.clientId);
 		body.set("grant_type", "refresh_token");
-		
+
 		const scopes = Array.from(new Set(options?.scopes ?? [])); // remove duplicates
 		if (scopes.length > 0) {
 			body.set("scope", scopes.join(" "));
@@ -119,7 +119,7 @@ export class OAuth2Client {
 		});
 		const response = await fetch(request);
 		const result: _TokenResponseBody | TokenErrorResponseBody = await response.json();
-        
+
 		// providers are allowed to return non-400 status code for errors
 		if (!("access_token" in result) && "error" in result) {
 			throw new OAuth2RequestError(request, result);
