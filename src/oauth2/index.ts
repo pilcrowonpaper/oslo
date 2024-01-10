@@ -72,12 +72,18 @@ export class OAuth2Client {
 		options?: {
 			credentials?: string;
 			authenticateWith?: "http_basic_auth" | "request_body";
+			scopes?: string[];
 		}
 	): Promise<_TokenResponseBody> {
 		const body = new URLSearchParams();
 		body.set("refresh_token", refreshToken);
 		body.set("client_id", this.clientId);
 		body.set("grant_type", "refresh_token");
+		
+		const scopes = Array.from(new Set(options?.scopes ?? [])); // remove duplicates
+		if (scopes.length > 0) {
+			body.set("scope", scopes.join(" "));
+		}
 
 		return await this.sendTokenRequest<_TokenResponseBody>(body, options);
 	}
