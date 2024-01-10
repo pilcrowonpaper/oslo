@@ -116,7 +116,6 @@ try {
 	}>(code, {
 		credentials: clientSecret,
 		authenticateWith: "request_body",
-		scopes: []
 	});
 } catch (e) {
 	if (e instanceof OAuth2RequestError) {
