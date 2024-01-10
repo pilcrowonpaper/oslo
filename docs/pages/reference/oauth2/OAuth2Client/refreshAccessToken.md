@@ -52,7 +52,7 @@ interface ResponseBody extends TokenResponseBody {
 try {
 	const tokens = await $$oauth2Client.refreshAccessToken<ResponseBody>(code, {
 		credentials: clientSecret,
-		authenticateWith: "request_body", // send client secret inside body
+		authenticateWith: "request_body" // send client secret inside body
 	});
 } catch (e) {
 	if (e instanceof OAuth2RequestError) {
