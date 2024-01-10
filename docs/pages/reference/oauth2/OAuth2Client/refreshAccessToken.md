@@ -20,6 +20,7 @@ function refreshAccessToken<_TokenResponseBody extends TokenResponseBody>(
 	options?: {
 		credentials?: string;
 		authenticateWith?: "http_basic_auth" | "request_body";
+		scopes?: string[];
 	}
 ): Promise<_TokenResponseBody>;
 ```
@@ -30,6 +31,7 @@ function refreshAccessToken<_TokenResponseBody extends TokenResponseBody>(
 - `options`
   - `credentials`: Client password or secret for authenticated requests
   - `authenticateWith` (default: `"http_basic_auth"`): How the credentials should be sent
+  - `scopes`
 
 ### Type parameters
 
