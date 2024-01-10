@@ -31,7 +31,7 @@ function refreshAccessToken<_TokenResponseBody extends TokenResponseBody>(
 - `options`
   - `credentials`: Client password or secret for authenticated requests
   - `authenticateWith` (default: `"http_basic_auth"`): How the credentials should be sent
-  - `scopes`: Optional scopes to pass to the token endpoint when refreshing. Certain providers require this.
+  - `scopes`
 
 ### Type parameters
 
