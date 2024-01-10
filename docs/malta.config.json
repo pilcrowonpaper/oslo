@@ -11,6 +11,7 @@
 				["oslo/cookie", "/reference/cookie"],
 				["oslo/crypto", "/reference/crypto"],
 				["oslo/encoding", "/reference/encoding"],
+				["oslo/jwt", "/reference/jwt"],
 				["oslo/oauth2", "/reference/oauth2"],
 				["oslo/otp", "/reference/otp"],
 				["oslo/password", "/reference/password"],
