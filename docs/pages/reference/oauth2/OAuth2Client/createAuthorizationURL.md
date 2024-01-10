@@ -28,8 +28,8 @@ function createAuthorizationURL(options?: {
 ## Example
 
 ```ts
-// $generateState=/reference/oauth2/generateState
-// $generateCodeVerifier=/reference/oauth2/generateCodeVerifier
+//$ generateState=/reference/oauth2/generateState
+//$ generateCodeVerifier=/reference/oauth2/generateCodeVerifier
 import { $$generateState, $$generateCodeVerifier } from "oslo/oauth2";
 
 const state = generateState();
