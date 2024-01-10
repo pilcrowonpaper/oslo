@@ -115,7 +115,7 @@ try {
 		refreshToken: string;
 	}>(code, {
 		credentials: clientSecret,
-		authenticateWith: "request_body",
+		authenticateWith: "request_body"
 	});
 } catch (e) {
 	if (e instanceof OAuth2RequestError) {
