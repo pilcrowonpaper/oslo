@@ -20,6 +20,7 @@ function refreshAccessToken<_TokenResponseBody extends TokenResponseBody>(
 	options?: {
 		credentials?: string;
 		authenticateWith?: "http_basic_auth" | "request_body";
+		scopes?: string[];
 	}
 ): Promise<_TokenResponseBody>;
 ```
@@ -30,6 +31,7 @@ function refreshAccessToken<_TokenResponseBody extends TokenResponseBody>(
 - `options`
   - `credentials`: Client password or secret for authenticated requests
   - `authenticateWith` (default: `"http_basic_auth"`): How the credentials should be sent
+  - `scopes`: Optional scopes to pass to the token endpoint when refreshing. Certain providers require this.
 
 ### Type parameters
 
@@ -50,7 +52,8 @@ interface ResponseBody extends TokenResponseBody {
 try {
 	const tokens = await $$oauth2Client.refreshAccessToken<ResponseBody>(code, {
 		credentials: clientSecret,
-		authenticateWith: "request_body" // send client secret inside body
+		authenticateWith: "request_body", // send client secret inside body
+		scopes: [] // optional scopes, required by some providers
 	});
 } catch (e) {
 	if (e instanceof OAuth2RequestError) {
