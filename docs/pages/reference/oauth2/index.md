@@ -4,7 +4,7 @@ title: "oslo/oauth2"
 
 # `oslo/oauth2`
 
-Provides utilities for working OAuth 2.0.
+Provides utilities for working OAuth 2.0 based on [RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749) and [RFC 7636](https://datatracker.ietf.org/doc/html/rfc7636). Can be used for OpenID Connect.
 
 ## Functions
 
@@ -32,7 +32,7 @@ import { OAuth2Client } from "oslo/oauth2";
 const authorizeEndpoint = "https://github.com/login/oauth/authorize";
 const tokenEndpoint = "https://github.com/login/oauth/access_token";
 
-const oauth2Client = new OAuth2Client(clientId, authorizeEndpoint, tokenEndpoint, {
+const client = new OAuth2Client(clientId, authorizeEndpoint, tokenEndpoint, {
 	redirectURI: "http://localhost:3000/login/github/callback"
 });
 ```
@@ -44,10 +44,10 @@ import { generateState } from "oslo/oauth2";
 
 const state = generateState();
 
-const url = await createAuthorizationURL({
+const url = await client.createAuthorizationURL({
+	state,
 	scope: ["user:email"]
 });
-url.searchParams.set("state", state);
 ```
 
 It also supports the PKCE flow:
@@ -55,14 +55,14 @@ It also supports the PKCE flow:
 ```ts
 import { generateState, generateCodeVerifier } from "oslo/oauth2";
 
-const codeVerifier = generateCodeVerifier(); // for PKCE flow
 const state = generateState();
+const codeVerifier = generateCodeVerifier();
 
-const url = await createAuthorizationURL({
+const url = await client.createAuthorizationURL({
+	state,
 	scope: ["user:email"],
 	codeVerifier
 });
-url.searchParams.set("state", state);
 ```
 
 ### Validate an authorization code
@@ -79,7 +79,7 @@ if (!storedState || !state || storedState !== state) {
 // ...
 
 try {
-	const { accessToken, refreshToken } = await oauth2Client.validateAuthorizationCode<{
+	const { accessToken, refreshToken } = await client.validateAuthorizationCode<{
 		refreshToken: string;
 	}>(code, {
 		credentials: clientSecret,
@@ -97,7 +97,7 @@ try {
 This also supports the PKCE flow:
 
 ```ts
-await oauth2Client.validateAuthorizationCode<{
+await client.validateAuthorizationCode<{
 	refreshToken: string;
 }>(code, {
 	credentials: clientSecret,
@@ -111,7 +111,7 @@ await oauth2Client.validateAuthorizationCode<{
 import { OAuth2RequestError } from "oslo/oauth2";
 
 try {
-	const { accessToken, refreshToken } = await oauth2Client.refreshAccessToken<{
+	const { accessToken, refreshToken } = await client.refreshAccessToken<{
 		refreshToken: string;
 	}>(code, {
 		credentials: clientSecret,

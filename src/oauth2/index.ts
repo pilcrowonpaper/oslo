@@ -23,6 +23,7 @@ export class OAuth2Client {
 	}
 
 	public async createAuthorizationURL(options?: {
+		state?: string;
 		codeVerifier?: string;
 		scopes?: string[];
 	}): Promise<URL> {
@@ -30,10 +31,13 @@ export class OAuth2Client {
 		const authorizationUrl = new URL(this.authorizeEndpoint);
 		authorizationUrl.searchParams.set("response_type", "code");
 		authorizationUrl.searchParams.set("client_id", this.clientId);
+		if (options?.state !== undefined) {
+			authorizationUrl.searchParams.set("state", options.state);
+		}
 		if (scopes.length > 0) {
 			authorizationUrl.searchParams.set("scope", scopes.join(" "));
 		}
-		if (this.redirectURI) {
+		if (this.redirectURI !== null) {
 			authorizationUrl.searchParams.set("redirect_uri", this.redirectURI);
 		}
 		if (options?.codeVerifier !== undefined) {
@@ -113,7 +117,7 @@ export class OAuth2Client {
 		});
 		const response = await fetch(request);
 		const result: _TokenResponseBody | TokenErrorResponseBody = await response.json();
-        
+
 		// providers are allowed to return non-400 status code for errors
 		if (!("access_token" in result) && "error" in result) {
 			throw new OAuth2RequestError(request, result);

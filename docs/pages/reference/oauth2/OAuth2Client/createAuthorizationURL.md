@@ -12,6 +12,7 @@ See [`oslo/oauth2`](/reference/oauth2) for a full example. For generating the st
 
 ```ts
 function createAuthorizationURL(options?: {
+	state?: string;
 	codeVerifier?: string;
 	scopes?: string[];
 }): Promise<URL>;
@@ -20,14 +21,22 @@ function createAuthorizationURL(options?: {
 ### Parameters
 
 - `options`
+  - `state`
   - `codeVerifier`: `S256` code verifier for PKCE flow
   - `scopes`: An array of scopes
 
 ## Example
 
 ```ts
-//$ oauth2Client=/reference/oauth2/OAuth2Client
-const url = await $$oauth2Client.createAuthorizationURL({
+// $generateState=/reference/oauth2/generateState
+// $generateCodeVerifier=/reference/oauth2/generateCodeVerifier
+import { $$generateState, $$generateCodeVerifier } from "oslo/oauth2";
+
+const state = generateState();
+const codeVerifier = generateCodeVerifier();
+
+const url = await oauth2Client.createAuthorizationURL({
+	state,
 	codeVerifier,
 	scopes: ["profile", "openid"]
 });
