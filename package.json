@@ -49,9 +49,6 @@
 			"oauth2": [
 				"dist/oauth2/index.d.ts"
 			],
-			"oauth2/providers": [
-				"dist/oauth2/providers/index.d.ts"
-			],
 			"otp": [
 				"dist/otp/index.d.ts"
 			],

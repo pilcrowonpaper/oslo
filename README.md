@@ -2,7 +2,7 @@
 
 > This package is _highly_ experimental - use at your own risk
 
-A collection of utilities for auth, including:
+A collection of auth-related utilities, including:
 
 - `oslo/cookie`: Cookie parsing and serialization
 - `oslo/crypto`: Generate hashes and signatures
@@ -13,7 +13,6 @@ A collection of utilities for auth, including:
 - `oslo/password`: Password hashing
 - `oslo/random`: Generate cryptographically strong random values
 - `oslo/request`: CSRF protection
-- `oslo/session`: Session management
 - `oslo/webauthn`: Verify Web Authentication API attestations and assertions
 
 Aside from `oslo/password`, every module works in any environment, including Node.js, Cloudflare Workers, Deno, and Bun.
