@@ -22,7 +22,6 @@
 		"./encoding": "./dist/encoding/index.js",
 		"./jwt": "./dist/jwt/index.js",
 		"./oauth2": "./dist/oauth2/index.js",
-		"./oauth2/providers": "./dist/oauth2/providers/index.js",
 		"./otp": "./dist/otp/index.js",
 		"./password": "./dist/password/index.js",
 		"./random": "./dist/random/index.js",
@@ -71,7 +70,9 @@
 		"oauth2",
 		"jwt",
 		"crypto",
-		"webauthn"
+		"webauthn",
+		"otp",
+		"encoding"
 	],
 	"author": "pilcrowOnPaper",
 	"license": "MIT",
