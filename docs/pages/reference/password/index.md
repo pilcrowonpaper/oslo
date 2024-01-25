@@ -20,13 +20,13 @@ Provides utilities for hashing passwords and verifying hashes. Argon2id is recom
 
 ## Next.js
 
-In Next.js specifically, you must update your config to prevent the package from the getting bundeld.
+In Next.js specifically, you must update your config to prevent dependencies from the getting bundled.
 
 ```ts
 // next.config.ts
 const config = {
 	experimental: {
-		serverComponentsExternalPackages: ["oslo"]
+		serverComponentsExternalPackages: ["@node-rs/argon2", "@node-rs/bcrypt"]
 	}
 };
 ```

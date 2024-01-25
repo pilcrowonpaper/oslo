@@ -12,6 +12,7 @@ Oslo provides a bunch of auth utilities, including APIs for:
 - Generating cryptographically strong random values
 - Signing and encoding data
 - Verifying WebAuthn responses
+- Zero dependencies (except for `oslo/password`)
 
 It's lightweight, runtime agnostic, and fully typed.
 
