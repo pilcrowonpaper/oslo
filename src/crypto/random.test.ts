@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { alphabet } from "./index.js";
+import { alphabet } from "./random.js";
 
 test("alphabet()", async () => {
 	expect(alphabet("0-9", "a-z", "A-Z", "-", "_")).toBe(

@@ -12,7 +12,7 @@ Generates a string with all the characters defined in the provided pattern:
 - `-`: Character `-`
 - `_`: Character `_`
 
-Mostly used for [`generateRandomString()`](/reference/random/generateRandomString). Ignores duplicate patterns.
+Mostly used for [`generateRandomString()`](/reference/crypto/generateRandomString). Ignores duplicate patterns.
 
 ## Definition
 
@@ -27,7 +27,7 @@ function alphabet(...patterns: "a-z" | "A-Z" | "0-9" | "-" | "_"): string;
 ## Example
 
 ```ts
-import { alphabet } from "oslo/random";
+import { alphabet } from "oslo/crypto";
 
 // "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPqRSTUVWXYZ0123456789"
 alphabet("a-z", "A-Z", "0-9");

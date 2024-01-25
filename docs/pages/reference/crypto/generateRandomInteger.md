@@ -19,7 +19,7 @@ function generateRandomInteger(max: number): number;
 ## Example
 
 ```ts
-import { generateRandomInteger } from "oslo/random";
+import { generateRandomInteger } from "oslo/crypto";
 
 // random number from 0 to 9
 generateRandomInteger(10);

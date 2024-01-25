@@ -5,13 +5,12 @@
 A collection of auth-related utilities, including:
 
 - `oslo/cookie`: Cookie parsing and serialization
-- `oslo/crypto`: Generate hashes and signatures
+- `oslo/crypto`: Generate hashes, signatures, and random values
 - `oslo/encoding`: Encode base64, base64url, base32, hex
 - `oslo/jwt`: Create and verify JWTs
 - `oslo/oauth2`: OAuth2 helpers
 - `oslo/otp`: HOTP, TOTP
 - `oslo/password`: Password hashing
-- `oslo/random`: Generate cryptographically strong random values
 - `oslo/request`: CSRF protection
 - `oslo/webauthn`: Verify Web Authentication API attestations and assertions
 

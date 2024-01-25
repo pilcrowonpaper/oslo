@@ -15,7 +15,6 @@
 				["oslo/oauth2", "/reference/oauth2"],
 				["oslo/otp", "/reference/otp"],
 				["oslo/password", "/reference/password"],
-				["oslo/random", "/reference/random"],
 				["oslo/request", "/reference/request"],
 				["oslo/webauthn", "/reference/webauthn"]
 			]

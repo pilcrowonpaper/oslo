@@ -24,7 +24,6 @@
 		"./oauth2": "./dist/oauth2/index.js",
 		"./otp": "./dist/otp/index.js",
 		"./password": "./dist/password/index.js",
-		"./random": "./dist/random/index.js",
 		"./request": "./dist/request/index.js",
 		"./webauthn": "./dist/webauthn/index.js"
 	},
@@ -53,9 +52,6 @@
 			],
 			"password": [
 				"dist/password/index.d.ts"
-			],
-			"random": [
-				"dist/random/index.d.ts"
 			],
 			"request": [
 				"dist/request/index.d.ts"

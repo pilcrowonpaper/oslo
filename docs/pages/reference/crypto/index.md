@@ -4,11 +4,15 @@ title: "oslo/crypto"
 
 # `oslo/crypto`
 
-Provides light-wrappers around the Web Crypto API for generating hashes and signatures. To generate crypto-graphically secure random values, see [`oslo/random`](/reference/random).
+Provides light-wrappers around the Web Crypto API for hashing, encryption, creating signatures, and generating cryptographically strong random values
 
 ## Functions
 
+- [`alphabet()`](/reference/crypto/alphabet)
 - [`constantTimeEqual()`](/reference/crypto/constantTimeEqual)
+- [`generateRandomInteger()`](/reference/crypto/generateRandomInteger)
+- [`generateRandomString()`](/reference/crypto/generateRandomString)
+- [`random()`](/reference/crypto/random)
 - [`sha1()`](/reference/crypto/sha1)
 - [`sha256()`](/reference/crypto/sha256)
 - [`sha384()`](/reference/crypto/sha384)
