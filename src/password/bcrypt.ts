@@ -2,20 +2,15 @@ import { hash, verify } from "@node-rs/bcrypt";
 
 import type { PasswordHashingAlgorithm } from "./index.js";
 
-interface BcryptOptions {
-	cost?: number;
-}
-
 export class Bcrypt implements PasswordHashingAlgorithm {
-	constructor(options?: BcryptOptions) {
-		this.options = options ?? {};
+	constructor(options?: { cost?: number }) {
+		this.cost = options?.cost ?? 10;
 	}
 
-	private options: BcryptOptions;
+	private cost: number;
 
 	public async hash(password: string): Promise<string> {
-		const cost = this.options.cost ?? 10;
-		return await hash(password.normalize("NFKC"), cost);
+		return await hash(password.normalize("NFKC"), this.cost);
 	}
 
 	public async verify(hash: string, password: string): Promise<boolean> {

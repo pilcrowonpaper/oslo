@@ -12,12 +12,11 @@ Implements [`PasswordHashingAlgorithm`](/reference/password/PasswordHashingAlgor
 
 ```ts
 function constructor(options?: {
-	memorySize?: number;
-	iterations?: number;
-	tagLength?: number;
-	parallelism?: number;
-	version?: number;
-	secret?: Buffer;
+		memorySize?: number;
+		iterations?: number;
+		tagLength?: number;
+		parallelism?: number;
+		secret?: ArrayBuffer | TypedArray;
 }): this;
 ```
 
@@ -28,7 +27,6 @@ function constructor(options?: {
   - `iterations` (default: `2`)
   - `tagLength` (default: `32`)
   - `parallelism` (default: `1`)
-  - `version`
   - `secret`
 
 ## Methods

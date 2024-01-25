@@ -89,7 +89,7 @@
 		"vitest": "^0.34.6"
 	},
 	"dependencies": {
-		"@node-rs/argon2": "^1.5.2",
-		"@node-rs/bcrypt": "^1.7.3"
+		"@node-rs/argon2": "1.7.2",
+		"@node-rs/bcrypt": "1.9.2"
 	}
 }
