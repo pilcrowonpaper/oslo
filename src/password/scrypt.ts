@@ -4,19 +4,18 @@ import { decodeHex, encodeHex } from "../encoding/index.js";
 import type { PasswordHashingAlgorithm } from "./index.js";
 import type { TypedArray } from "../index.js";
 
-interface ScryptOptions {
-	N?: number;
-	r?: number;
-	p?: number;
-	dkLen?: number;
-}
-
 export class Scrypt implements PasswordHashingAlgorithm {
-	constructor(options?: ScryptOptions) {
-		this.options = options ?? {};
+	constructor(options?: { N?: number; r?: number; p?: number; dkLen?: number }) {
+		this.N = options?.N ?? 16384;
+		this.r = options?.r ?? 16;
+		this.p = options?.p ?? 1;
+		this.dkLen = options?.dkLen ?? 64;
 	}
 
-	private options: ScryptOptions;
+	private N: number;
+	private r: number;
+	private p: number;
+	private dkLen: number;
 
 	public async hash(password: string): Promise<string> {
 		const salt = encodeHex(crypto.getRandomValues(new Uint8Array(16)));
@@ -31,21 +30,17 @@ export class Scrypt implements PasswordHashingAlgorithm {
 	}
 
 	private async generateKey(password: string, salt: string): Promise<ArrayBuffer> {
-		const dkLen = this.options.dkLen ?? 64;
 		return await new Promise<ArrayBuffer>((resolve, reject) => {
-			const N = this.options.N ?? 16384;
-			const p = this.options.p ?? 1;
-			const r = this.options.r ?? 16;
 			scrypt(
 				password.normalize("NFKC"),
 				salt!,
-				dkLen,
+				this.dkLen,
 				{
-					N,
-					p,
-					r,
+					N: this.N,
+					p: this.p,
+					r: this.r,
 					// errors when 128 * N * r > `maxmem` (approximately)
-					maxmem: 128 * N * r * 2
+					maxmem: 128 * this.N * this.r * 2
 				},
 				(err, buff) => {
 					if (err) return reject(err);
@@ -56,10 +51,7 @@ export class Scrypt implements PasswordHashingAlgorithm {
 	}
 }
 
-function constantTimeEqual(
-	a: ArrayBuffer | TypedArray,
-	b: ArrayBuffer | TypedArray
-): boolean {
+function constantTimeEqual(a: ArrayBuffer | TypedArray, b: ArrayBuffer | TypedArray): boolean {
 	const aBuffer = new Uint8Array(a);
 	const bBuffer = new Uint8Array(b);
 	if (aBuffer.length !== bBuffer.length) {
