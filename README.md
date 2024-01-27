@@ -1,7 +1,5 @@
 # `oslo`
 
-> This package is _highly_ experimental - use at your own risk
-
 A collection of auth-related utilities, including:
 
 - `oslo/cookie`: Cookie parsing and serialization
