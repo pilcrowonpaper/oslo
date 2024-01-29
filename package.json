@@ -1,7 +1,7 @@
 {
 	"name": "oslo",
 	"type": "module",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "A collection of auth-related utilities",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
@@ -89,7 +89,7 @@
 		"vitest": "^0.34.6"
 	},
 	"dependencies": {
-		"@node-rs/argon2": "1.7.2",
-		"@node-rs/bcrypt": "1.9.2"
+		"@node-rs/argon2": "1.7.0",
+		"@node-rs/bcrypt": "1.9.0"
 	}
 }
