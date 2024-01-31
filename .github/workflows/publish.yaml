@@ -25,15 +25,14 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 20
+          cache: "npm"
           registry-url: "https://registry.npmjs.org/"
-      - name: Install PNPM
-        run: npm i -g pnpm
       - name: Install Auri
-        run: pnpm i -g auri
+        run: npm i -g auri
       - name: Prepare release
-        run: pnpm auri prepare ${{ github.ref_name }}
+        run: npx auri prepare ${{ github.ref_name }}
       - name: Publish package
-        run: pnpm auri publish ${{ github.ref_name }}
+        run: npx auri publish ${{ github.ref_name }}
 
   check-changesets:
     name: Check changesets
