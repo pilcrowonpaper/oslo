@@ -29,9 +29,9 @@ jobs:
       - name: Install Auri
         run: npm i -g auri
       - name: Prepare release
-        run: npm run auri prepare ${{ github.ref_name }}
+        run: npx auri prepare ${{ github.ref_name }}
       - name: Publish package
-        run: npm run auri publish ${{ github.ref_name }}
+        run: npx auri publish ${{ github.ref_name }}
 
   check-changesets:
     name: Check changesets
