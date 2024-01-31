@@ -91,6 +91,6 @@
 	"dependencies": {
 		"@node-rs/argon2": "1.7.0",
 		"@node-rs/bcrypt": "1.9.0",
-		"auri": "1.0.1"
+		"auri": "1.0.2"
 	}
 }
