@@ -26,12 +26,14 @@ jobs:
         with:
           node-version: 20
           registry-url: "https://registry.npmjs.org/"
-      - name: Install dependencies
-        run: npm ci
+      - name: Install PNPM
+        run: npm i -g pnpm
+      - name: Install Auri
+        run: pnpm i -g auri
       - name: Prepare release
-        run: npx auri prepare ${{ github.ref_name }}
+        run: pnpm auri prepare ${{ github.ref_name }}
       - name: Publish package
-        run: npx auri publish ${{ github.ref_name }}
+        run: pnpm auri publish ${{ github.ref_name }}
 
   check-changesets:
     name: Check changesets
