@@ -26,7 +26,6 @@ jobs:
         with:
           node-version: 20
           registry-url: "https://registry.npmjs.org/"
-          cache: "npm"
       - name: Install Auri
         run: npm i -g auri
       - name: Prepare release
