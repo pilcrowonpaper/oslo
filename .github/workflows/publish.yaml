@@ -27,7 +27,7 @@ jobs:
           node-version: 20
           registry-url: "https://registry.npmjs.org/"
       - name: Run Auri?
-        run: auri
+        run: npx auri
       - name: Install dependencies
         run: npm i
       - name: Prepare release
