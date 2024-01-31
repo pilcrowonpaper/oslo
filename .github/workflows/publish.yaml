@@ -27,7 +27,7 @@ jobs:
           node-version: 20
           registry-url: "https://registry.npmjs.org/"
       - name: Install dependencies
-        run: npm i -g auri
+        run: npm ci
       - name: Prepare release
         run: npx auri prepare ${{ github.ref_name }}
       - name: Publish package
