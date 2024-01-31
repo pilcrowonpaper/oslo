@@ -54,7 +54,7 @@ jobs:
     name: Publish docs
     needs: check-changesets
     if: needs.check-changesets.check-changesets.outputs.changesets == 0 && github.ref_name == 'main'
-    run: ubuntu-latest
+    runs: ubuntu-latest
     steps:
       - name: setup actions
         uses: actions/checkout@v3
