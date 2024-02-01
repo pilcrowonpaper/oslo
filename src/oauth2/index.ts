@@ -25,6 +25,7 @@ export class OAuth2Client {
 	public async createAuthorizationURL(options?: {
 		state?: string;
 		codeVerifier?: string;
+		codeChallengeMethod?: "S256" | "plain";
 		scopes?: string[];
 	}): Promise<URL> {
 		const scopes = Array.from(new Set(options?.scopes ?? [])); // remove duplicates
@@ -41,10 +42,17 @@ export class OAuth2Client {
 			authorizationUrl.searchParams.set("redirect_uri", this.redirectURI);
 		}
 		if (options?.codeVerifier !== undefined) {
-			const codeChallengeBuffer = await sha256(new TextEncoder().encode(options.codeVerifier));
-			const codeChallenge = encodeBase64url(codeChallengeBuffer);
-			authorizationUrl.searchParams.set("code_challenge_method", "S256");
-			authorizationUrl.searchParams.set("code_challenge", codeChallenge);
+			if (options.codeChallengeMethod === "plain") {
+				authorizationUrl.searchParams.set("code_challenge", options.codeVerifier);
+			} else {
+				const codeChallengeBuffer = await sha256(new TextEncoder().encode(options.codeVerifier));
+				const codeChallenge = encodeBase64url(codeChallengeBuffer);
+				authorizationUrl.searchParams.set("code_challenge", codeChallenge);
+			}
+			authorizationUrl.searchParams.set(
+				"code_challenge_method",
+				options.codeChallengeMethod ?? "S256"
+			);
 		}
 		return authorizationUrl;
 	}
