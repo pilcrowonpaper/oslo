@@ -18,7 +18,7 @@ function constructor(hash: $$SHAHash, curve: "P-256" | "P-384" | "P-521"): this;
 - `hash`
 - `curve`
 
-## Method
+## Methods
 
 - [`generateKeyPair()`](/reference/crypto/ECDSA/generateKeyPair)
 - [`sign()`](/reference/crypto/ECDSA/sign)

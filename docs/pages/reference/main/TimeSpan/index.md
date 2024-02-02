@@ -9,13 +9,32 @@ Represents a time-span. Supports negative values.
 ## Constructor
 
 ```ts
-function constructor(value: number, unit: "ms" | "s" | "m" | "h" | "d" | "w"): this;
+//$ TimeSpanUnit=/reference/main/TimeSpanUnit
+function constructor(value: number, unit: $$TimeSpanUnit): this;
 ```
 
 ### Parameters
 
 - `value`
 - `unit`: `ms` for milliseconds, `s` for seconds, etc
+
+## Methods
+
+- [`milliseconds()`](/reference/main/TimeSpan/milliseconds)
+- [`seconds()`](/reference/main/TimeSpan/seconds)
+
+## Properties
+
+```ts
+//$ TimeSpanUnit=/reference/main/TimeSpanUnit
+interface Properties {
+	unit: $$TimeSpanUnit;
+	value: number;
+}
+```
+
+- `unit`
+- `value`
 
 ## Example
 
