@@ -1,4 +1,4 @@
-type TimeSpanUnit = "ms" | "s" | "m" | "h" | "d" | "w";
+export type TimeSpanUnit = "ms" | "s" | "m" | "h" | "d" | "w";
 
 export class TimeSpan {
 	constructor(value: number, unit: TimeSpanUnit) {
