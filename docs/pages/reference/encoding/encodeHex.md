@@ -4,7 +4,7 @@ title: "encodeHex()"
 
 # `encodeHex()`
 
-Encodes data into hex string. Use [`decodeHex()`](/reference/encoding/decodeHex) to decode hex strings.
+Encodes data into lowercase hex based on [RFC 4648 §8](https://datatracker.ietf.org/doc/html/rfc4648#section-8). Use [`decodeHex()`](/reference/encoding/decodeHex) to decode hex strings.
 
 ## Definition
 

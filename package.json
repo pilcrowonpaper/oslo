@@ -7,7 +7,7 @@
 	"types": "dist/index.d.ts",
 	"module": "dist/index.js",
 	"scripts": {
-		"build": "rm -rf dist/* && tsc",
+		"build": "rm -rf dist/* && tsc --project tsconfig.build.json",
 		"format": "prettier -w .",
 		"lint": "eslint src",
 		"test": "vitest run --sequence.concurrent"
