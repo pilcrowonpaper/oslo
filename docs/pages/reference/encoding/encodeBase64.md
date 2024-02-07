@@ -2,9 +2,9 @@
 title: "encodeBase64()"
 ---
 
-**Deprecated - Use [`base64`](/encoding/base64) instead.**
-
 # `encodeBase64()`
+
+**Deprecated - Use [`base64`](/reference/encoding/base64) instead.**
 
 Encodes data into base64 string. Use [`decodeBase64()`](/reference/encoding/decodeBase64) to decode base64 strings.
 

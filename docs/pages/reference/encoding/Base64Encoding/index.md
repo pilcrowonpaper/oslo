@@ -4,7 +4,7 @@ title: "Base64Encoding"
 
 # `Base64Encoding`
 
-Radix 64 encoding/decoding scheme. Characters are case sensitive. Use [`base64`](/encoding/base64) or [`base64url`](/encoding/base64url) for Base 64 encoding based on [RFC 4648](https://rfc-editor.org/rfc/rfc4648.html).
+Radix 64 encoding/decoding scheme. Characters are case sensitive. Use [`base64`](/reference/encoding/base64) or [`base64url`](/reference/encoding/base64url) for Base 64 encoding based on [RFC 4648](https://rfc-editor.org/rfc/rfc4648.html).
 
 ## Constructor
 

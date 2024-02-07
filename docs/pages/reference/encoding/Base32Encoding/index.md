@@ -4,7 +4,7 @@ title: "Base32Encoding"
 
 # `Base32Encoding`
 
-Radix 32 encoding/decoding scheme. Characters are case sensitive. Use [`base32`](/encoding/base32) or [`base32hex`](/encoding/base32hex) for Base 32 encoding based on [RFC 4648](https://rfc-editor.org/rfc/rfc4648.html).
+Radix 32 encoding/decoding scheme. Characters are case sensitive. Use [`base32`](/reference/encoding/base32) or [`base32hex`](/reference/encoding/base32hex) for Base 32 encoding based on [RFC 4648](https://rfc-editor.org/rfc/rfc4648.html).
 
 ## Constructor
 

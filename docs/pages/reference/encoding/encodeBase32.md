@@ -2,9 +2,9 @@
 title: "encodeBase32()"
 ---
 
-**Deprecated - Use [`base32`](/encoding/base32) instead.**
-
 # `encodeBase32()`
+
+**Deprecated - Use [`base32`](/reference/encoding/base32) instead.**
 
 Encodes data into base32 string. Use [`decodeBase32()`](/reference/encoding/decodeBase32) to decode base32 strings.
 
