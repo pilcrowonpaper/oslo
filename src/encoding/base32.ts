@@ -46,7 +46,8 @@ export class Base32Encoding implements Encoding {
 		if (shift > 0) {
 			result += this.alphabet[(block << (5 - shift)) & 0x1f];
 		}
-		if (options?.includePadding ?? true) {
+		const includePadding = options?.includePadding ?? true;
+		if (includePadding) {
 			const padCount = (8 - (result.length % 8)) % 8;
 			for (let i = 0; i < padCount; i++) {
 				result += "=";
