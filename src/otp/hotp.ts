@@ -1,5 +1,6 @@
 import { binaryToInteger, byteToBinary, bytesToBinary } from "../bytes.js";
 import { HMAC } from "../crypto/hmac.js";
+
 import type { TypedArray } from "../index.js";
 
 export async function generateHOTP(

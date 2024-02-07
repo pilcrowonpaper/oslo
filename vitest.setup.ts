@@ -5,7 +5,6 @@ const now = new Date();
 class StaticDate extends Date {
 	constructor(value?: any) {
 		if (value === undefined) {
-			console.log(1);
 			super(now);
 		} else {
 			super(value);

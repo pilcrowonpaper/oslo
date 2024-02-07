@@ -1,5 +1,5 @@
 import { ECDSA, HMAC, RSASSAPKCS1v1_5, RSASSAPSS } from "../crypto/index.js";
-import { decodeBase64url, encodeBase64url } from "../encoding/index.js";
+import { base64url } from "../encoding/index.js";
 import { isWithinExpirationDate } from "../index.js";
 
 import type { TimeSpan, TypedArray } from "../index.js";
@@ -63,11 +63,17 @@ export async function createJWT(
 		payload.iat = Math.floor(Date.now() / 1000);
 	}
 	const textEncoder = new TextEncoder();
-	const headerPart = encodeBase64url(textEncoder.encode(JSON.stringify(header)));
-	const payloadPart = encodeBase64url(textEncoder.encode(JSON.stringify(payload)));
+	const headerPart = base64url.encode(textEncoder.encode(JSON.stringify(header)), {
+		includePadding: false
+	});
+	const payloadPart = base64url.encode(textEncoder.encode(JSON.stringify(payload)), {
+		includePadding: false
+	});
 	const data = textEncoder.encode([headerPart, payloadPart].join("."));
 	const signature = await getAlgorithm(algorithm).sign(key, data);
-	const signaturePart = encodeBase64url(signature);
+	const signaturePart = base64url.encode(new Uint8Array(signature), {
+		includePadding: false
+	});
 	const value = [headerPart, payloadPart, signaturePart].join(".");
 	return value;
 }
@@ -90,7 +96,9 @@ export async function validateJWT(
 	if (parsedJWT.notBefore && Date.now() < parsedJWT.notBefore.getTime()) {
 		throw new Error("Inactive JWT");
 	}
-	const signature = decodeBase64url(parsedJWT.parts[2]);
+	const signature = base64url.decode(parsedJWT.parts[2], {
+		strict: false
+	});
 	const data = new TextEncoder().encode(parsedJWT.parts[0] + "." + parsedJWT.parts[1]);
 	const validSignature = await getAlgorithm(parsedJWT.algorithm).verify(key, signature, data);
 	if (!validSignature) {
@@ -113,8 +121,12 @@ export function parseJWT(jwt: string): JWT | null {
 		return null;
 	}
 	const textDecoder = new TextDecoder();
-	const rawHeader = decodeBase64url(jwtParts[0]);
-	const rawPayload = decodeBase64url(jwtParts[1]);
+	const rawHeader = base64url.decode(jwtParts[0], {
+		strict: false
+	});
+	const rawPayload = base64url.decode(jwtParts[1], {
+		strict: false
+	});
 	const header: unknown = JSON.parse(textDecoder.decode(rawHeader));
 	if (typeof header !== "object" || header === null) {
 		return null;

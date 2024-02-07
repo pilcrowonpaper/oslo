@@ -11,9 +11,6 @@
 		"strict": true,
 		"noUncheckedIndexedAccess": true,
 		"moduleResolution": "NodeNext",
-		"module": "NodeNext",
-		"outDir": "dist",
-		"declaration": true
-	},
-	"exclude": ["src/**/*.test.ts"]
+		"module": "NodeNext"
+	}
 }
