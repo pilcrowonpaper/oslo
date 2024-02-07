@@ -1,0 +1,1 @@
+Feat: Add `Base16`, `Base32`, `Base64`, `base16`, `base32`, `base32hex`, `base64`, `base64url`.
