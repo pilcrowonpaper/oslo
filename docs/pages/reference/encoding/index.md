@@ -13,7 +13,7 @@ Provides utilities for encoding and decoding with various formats.
 - [`base64url`](/encoding/base64url)
 - [`Base64Encoding`](/encoding/Base64Encoding)
 - [`decodeHex()`](/reference/encoding/decodeHex)
-- [`encodeHex()`](/reference/encoding/encodeHex)zsg
+- [`encodeHex()`](/reference/encoding/encodeHex)
 - [`encodeBase32()`](/reference/encoding/encodeBase32) (_deprecated_)
 - [`encodeBase64()`](/reference/encoding/encodeBase64) (_deprecated_)
 - [`encodeBase64url()`](/reference/encoding/encodeBase64url) (_deprecated_)
