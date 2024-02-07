@@ -1,5 +1,12 @@
 # oslo
 
+## 1.1.0
+
+### Minor changes
+
+- Deprecate `encodeBase32()`, `decodeBase32()`, `encodeBase64`, `decodeBase64()`, `encodeBase64url()`, `decodeBase64url()`. ([#35](https://github.com/pilcrowOnPaper/oslo/pull/35))
+- Feat: Add `Base64Encoding`, `Base32Encoding`, `base16`, `base32`, `base32hex`, `base64`, `base64url`. ([#35](https://github.com/pilcrowOnPaper/oslo/pull/35))
+
 ## 1.0.4
 
 ### Patch changes
