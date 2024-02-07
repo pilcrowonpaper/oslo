@@ -1,7 +1,5 @@
-import { expect } from "vitest";
-import { test } from "vitest";
+import { describe, expect, test } from "vitest";
 import { base64 } from "./base64.js";
-import { describe } from "node:test";
 
 describe("Base64.encode()", () => {
 	test("Generates valid string", () => {

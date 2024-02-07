@@ -1,8 +1,6 @@
-import { expect } from "vitest";
-import { test } from "vitest";
+import { describe, expect, test } from "vitest";
 import { base32 as base32Reference } from "@scure/base";
 import { base32 } from "./base32.js";
-import { describe } from "node:test";
 
 describe("Base32.encode()", () => {
 	test("Generates valid string", () => {

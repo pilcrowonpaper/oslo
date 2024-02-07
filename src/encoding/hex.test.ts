@@ -1,7 +1,5 @@
-import { expect } from "vitest";
-import { test } from "vitest";
+import { describe, expect, test } from "vitest";
 import { encodeHex, decodeHex } from "./hex.js";
-import { describe } from "node:test";
 
 describe("encodeHex()", () => {
 	test("Generates valid hex string", () => {
