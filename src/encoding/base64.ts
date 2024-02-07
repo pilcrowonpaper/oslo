@@ -1,6 +1,7 @@
 import type { TypedArray } from "../index.js";
+import type { Encoding } from "./index.js";
 
-export class Base64 {
+export class Base64Encoding implements Encoding {
 	public alphabet: string;
 	public padding: string;
 
@@ -102,11 +103,11 @@ export class Base64 {
 	}
 }
 
-export const base64 = new Base64(
+export const base64 = new Base64Encoding(
 	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 );
 
-export const base64url = new Base64(
+export const base64url = new Base64Encoding(
 	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"
 );
 

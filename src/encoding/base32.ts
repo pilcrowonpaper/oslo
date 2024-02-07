@@ -1,6 +1,7 @@
 import type { TypedArray } from "../index.js";
+import type { Encoding } from "./index.js";
 
-export class Base32 {
+export class Base32Encoding implements Encoding {
 	public alphabet: string;
 	public padding: string;
 
@@ -122,8 +123,8 @@ export class Base32 {
 	}
 }
 
-export const base32 = new Base32("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567");
-export const base32hex = new Base32("0123456789ABCDEFGHIJKLMNOPQRSTUV");
+export const base32 = new Base32Encoding("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567");
+export const base32hex = new Base32Encoding("0123456789ABCDEFGHIJKLMNOPQRSTUV");
 
 /** @deprecated Use `base32.encode()` instead */
 export function encodeBase32(

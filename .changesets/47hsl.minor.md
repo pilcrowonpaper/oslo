@@ -1,1 +1,1 @@
-Deprecate `encodeHex()`, `decodeHex()`, `encodeBase32()`, `decodeBase32()`, `encodeBase64`, `decodeBase64()`, `encodeBase64url()`, `decodeBase64url()`.
+Deprecate `encodeBase32()`, `decodeBase32()`, `encodeBase64`, `decodeBase64()`, `encodeBase64url()`, `decodeBase64url()`.

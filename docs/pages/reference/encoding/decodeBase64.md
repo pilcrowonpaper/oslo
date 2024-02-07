@@ -2,6 +2,8 @@
 title: "decodeBase64()"
 ---
 
+**Deprecated - Use [`base64`](/encoding/base64) instead.**
+
 # `decodeBase64()`
 
 Decodes base64 strings. This does not check the length and ignores padding. Use [`encodeBase64()`](/reference/encoding/encodeBase64) to encode into base64 strings.
