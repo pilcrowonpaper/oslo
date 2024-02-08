@@ -33,23 +33,22 @@ export class Base64Encoding implements Encoding {
 		}
 	): string {
 		let result = "";
-		const chunkCount = Math.ceil(data.length / 3);
-		for (let i = 0; i < chunkCount; i++) {
-			let buffer = data[i * 3]! << 16;
-			buffer += (data[i * 3 + 1] ?? 0) << 8;
-			buffer += data[i * 3 + 2] ?? 0;
-			for (let j = 0; j < 4; j++) {
-				const key = (buffer >> ((3 - j) * 6)) & 0x3f;
-				result += this.alphabet[key];
+		let buffer = 0;
+		let shift = 0;
+		for (let i = 0; i < data.length; i++) {
+			buffer = (buffer << 8) | data[i]!;
+			shift += 8;
+			while (shift >= 6) {
+				shift += -6;
+				result += this.alphabet[(buffer >> shift) & 0x3f];
 			}
 		}
-		let padCount = 0;
-		if (data.length % 3 !== 0) {
-			padCount = 4 - Math.ceil(((data.length % 3) * 4) / 3);
+		if (shift > 0) {
+			result += this.alphabet[(buffer << (6 - shift)) & 0x3f];
 		}
-		result = result.slice(0, result.length - padCount);
 		const includePadding = options?.includePadding ?? true;
 		if (includePadding) {
+			const padCount = (4 - (result.length % 4)) % 4;
 			for (let i = 0; i < padCount; i++) {
 				result += "=";
 			}

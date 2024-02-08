@@ -33,18 +33,18 @@ export class Base32Encoding implements Encoding {
 		}
 	): string {
 		let result = "";
-		let block = 0;
+		let buffer = 0;
 		let shift = 0;
 		for (let i = 0; i < data.length; i++) {
-			block = (block << 8) | data[i]!;
+			buffer = (buffer << 8) | data[i]!;
 			shift += 8;
 			while (shift >= 5) {
 				shift -= 5;
-				result += this.alphabet[(block >> shift) & 0x1f];
+				result += this.alphabet[(buffer >> shift) & 0x1f];
 			}
 		}
 		if (shift > 0) {
-			result += this.alphabet[(block << (5 - shift)) & 0x1f];
+			result += this.alphabet[(buffer << (5 - shift)) & 0x1f];
 		}
 		const includePadding = options?.includePadding ?? true;
 		if (includePadding) {
