@@ -33,29 +33,22 @@ export class Base32Encoding implements Encoding {
 		}
 	): string {
 		let result = "";
-		const chunkCount = Math.ceil(data.length / 5);
-		for (let i = 0; i < chunkCount; i++) {
-			let buffer1 = data[i * 5]! << 24;
-			buffer1 += (data[i * 5 + 1] ?? 0) << 16;
-			buffer1 += (data[i * 5 + 2] ?? 0) << 8;
-			buffer1 += data[i * 5 + 3] ?? 0;
-			for (let j = 0; j < 6; j++) {
-				const key = (buffer1 >> (27 - 5 * j)) & 0x1f;
-				result += this.alphabet[key];
+		let block = 0;
+		let shift = 0;
+		for (let i = 0; i < data.length; i++) {
+			block = (block << 8) | data[i]!;
+			shift += 8;
+			while (shift >= 5) {
+				shift -= 5;
+				result += this.alphabet[(block >> shift) & 0x1f];
 			}
-			const buffer2 = data[i * 5 + 4] ?? 0;
-			let key = ((buffer1 & 0x03) << 3) + (buffer2 >> 5);
-			result += this.alphabet[key];
-			key = buffer2 & 0x1f;
-			result += this.alphabet[key];
 		}
-		let padCount = 0;
-		if (data.length % 5 !== 0) {
-			padCount = 8 - Math.ceil(((data.length % 5) * 8) / 5);
+		if (shift > 0) {
+			result += this.alphabet[(block << (5 - shift)) & 0x1f];
 		}
-		result = result.slice(0, result.length - padCount);
 		const includePadding = options?.includePadding ?? true;
 		if (includePadding) {
+			const padCount = (8 - (result.length % 8)) % 8;
 			for (let i = 0; i < padCount; i++) {
 				result += "=";
 			}
