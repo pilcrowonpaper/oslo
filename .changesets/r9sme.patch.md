@@ -1,1 +1,0 @@
-Improve `base32.encode()` performance.
