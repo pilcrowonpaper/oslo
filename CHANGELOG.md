@@ -1,5 +1,12 @@
 # oslo
 
+## 1.1.1
+
+### Patch changes
+
+- Improve `base64.encode()` performance
+- Improve `base32.encode()` performance. ([#40](https://github.com/pilcrowOnPaper/oslo/pull/40))
+
 ## 1.1.0
 
 ### Minor changes
