@@ -1,1 +1,1 @@
-Export OAuth2 token response interfaces
+Export OAuth2 token response interface
