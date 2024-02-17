@@ -167,7 +167,7 @@ interface TokenErrorResponseBody {
 	error_description?: string;
 }
 
-interface TokenResponseBody {
+export interface TokenResponseBody {
 	access_token: string;
 	token_type?: string;
 	expires_in?: number;
