@@ -162,12 +162,12 @@ export class OAuth2RequestError extends Error {
 	}
 }
 
-interface TokenErrorResponseBody {
+export interface TokenErrorResponseBody {
 	error: string;
 	error_description?: string;
 }
 
-interface TokenResponseBody {
+export interface TokenResponseBody {
 	access_token: string;
 	token_type?: string;
 	expires_in?: number;
