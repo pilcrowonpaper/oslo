@@ -1,1 +1,0 @@
-Improve `base64.encode()` performance
