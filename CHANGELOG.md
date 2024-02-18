@@ -1,5 +1,12 @@
 # oslo
 
+## 1.1.2
+
+### Patch changes
+
+- Export OAuth2 token response interface ([#45](https://github.com/pilcrowOnPaper/oslo/pull/45))
+- Fix client data JSON validation
+
 ## 1.1.1
 
 ### Patch changes
