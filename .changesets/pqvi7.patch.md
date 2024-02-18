@@ -1,0 +1,1 @@
+Fix client data JSON validation
