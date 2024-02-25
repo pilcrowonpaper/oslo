@@ -1,5 +1,11 @@
 # oslo
 
+## 1.1.3
+
+### Patch changes
+
+- Update dependencies. ([#51](https://github.com/pilcrowOnPaper/oslo/pull/51))
+
 ## 1.1.2
 
 ### Patch changes
