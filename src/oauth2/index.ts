@@ -123,7 +123,10 @@ export class OAuth2Client {
 			headers,
 			body
 		});
-		const response = await fetch(request);
+		const response = await fetch(request, {
+			// workaround for a bun bug
+			method: "POST"
+		});
 		const result: _TokenResponseBody | TokenErrorResponseBody = await response.json();
 
 		// providers are allowed to return non-400 status code for errors
