@@ -28,7 +28,7 @@ function validateJWT(
 ## Example
 
 ```ts
-import { parseJWT } from "oslo/jwt";
+import { validateJWT } from "oslo/jwt";
 
 try {
 	const jwt = validateJWT(
