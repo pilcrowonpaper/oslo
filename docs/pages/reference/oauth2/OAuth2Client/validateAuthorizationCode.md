@@ -19,7 +19,6 @@ function validateAuthorizationCode<_TokenResponseBody extends TokenResponseBody>
 	authorizationCode: string,
 	options?: {
 		codeVerifier?: string;
-		codeChallengeMethod?: "S256" | "plain";
 		credentials?: string;
 		authenticateWith?: "http_basic_auth" | "request_body";
 	}
@@ -31,7 +30,6 @@ function validateAuthorizationCode<_TokenResponseBody extends TokenResponseBody>
 - `authorizationCode`: `code` param in callback request
 - `options`
   - `codeVerifier`: Stored code verifier for PKCE flow
-  - `codeChallengeMethod` (default: `"S256"`): Code challenge method for PKCE flow
   - `credentials`: Client password or secret for authenticated requests
   - `authenticateWith` (default: `"http_basic_auth"`): How the credentials should be sent
 
