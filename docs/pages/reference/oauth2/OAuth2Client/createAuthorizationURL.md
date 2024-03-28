@@ -4,7 +4,7 @@ title: "OAuth2Client.createAuthorizationURL()"
 
 # `OAuth2Client.createAuthorizationURL()`
 
-Creates a new authorization URL. This method only supports `$256` PKCE code challenge method. By default, no scopes are included.
+Creates a new authorization URL. This method supports both `plain` and `S256` PKCE code challenge methods. By default, no scopes are included.
 
 See [`oslo/oauth2`](/reference/oauth2) for a full example. For generating the state and code verifier, see [`generateState()`](/reference/oauth2/generateState) and [`generateCodeVerifier()`](/reference/oauth2/generateCodeVerifier) respectively.
 
