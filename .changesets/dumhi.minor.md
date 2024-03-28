@@ -1,1 +1,1 @@
-Feat: Add optional `codeChallengeMethod` (`plain` or `S256`) option to oauth2 method `validateAuthorizationCode`
+Feat: Add `codeChallengeMethod` option to `OAuth2Client.createAuthorizationURL()`

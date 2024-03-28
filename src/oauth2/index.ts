@@ -42,17 +42,18 @@ export class OAuth2Client {
 			authorizationUrl.searchParams.set("redirect_uri", this.redirectURI);
 		}
 		if (options?.codeVerifier !== undefined) {
-			if (options.codeChallengeMethod === "plain") {
-				authorizationUrl.searchParams.set("code_challenge", options.codeVerifier);
-			} else {
+			const codeChallengeMethod = options?.codeChallengeMethod ?? "S256";
+			if (codeChallengeMethod === "S256") {
 				const codeChallengeBuffer = await sha256(new TextEncoder().encode(options.codeVerifier));
 				const codeChallenge = encodeBase64url(codeChallengeBuffer);
 				authorizationUrl.searchParams.set("code_challenge", codeChallenge);
+				authorizationUrl.searchParams.set("code_challenge_method", "S256");
+			} else if (codeChallengeMethod === "plain") {
+				authorizationUrl.searchParams.set("code_challenge", options.codeVerifier);
+				authorizationUrl.searchParams.set("code_challenge_method", "plain");
+			} else {
+				throw new TypeError(`Invalid value for 'codeChallengeMethod': ${codeChallengeMethod}`);
 			}
-			authorizationUrl.searchParams.set(
-				"code_challenge_method",
-				options.codeChallengeMethod ?? "S256"
-			);
 		}
 		return authorizationUrl;
 	}
@@ -119,8 +120,10 @@ export class OAuth2Client {
 					new TextEncoder().encode(`${this.clientId}:${options.credentials}`)
 				);
 				headers.set("Authorization", `Basic ${encodedCredentials}`);
-			} else {
+			} else if (authenticateWith === "request_body") {
 				body.set("client_secret", options.credentials);
+			} else {
+				throw new TypeError(`Invalid value for 'authenticateWith': ${authenticateWith}`);
 			}
 		}
 
