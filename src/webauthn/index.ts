@@ -99,7 +99,7 @@ export class WebAuthnController {
 			return false;
 		}
 		const clientDataChallengeBuffer = base64url.decode(clientData.challenge, {
-			strict: false,
+			strict: false
 		});
 		if (!compareBytes(clientDataChallengeBuffer, challenge)) {
 			return false;

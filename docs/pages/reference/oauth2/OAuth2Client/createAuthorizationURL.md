@@ -13,6 +13,7 @@ See [`oslo/oauth2`](/reference/oauth2) for a full example. For generating the st
 ```ts
 function createAuthorizationURL(options?: {
 	state?: string;
+	codeChallengeMethod?: "S256" | "plain";
 	codeVerifier?: string;
 	scopes?: string[];
 }): Promise<URL>;
@@ -22,7 +23,8 @@ function createAuthorizationURL(options?: {
 
 - `options`
   - `state`
-  - `codeVerifier`: `S256` code verifier for PKCE flow
+  - `codeVerifier`: Code verifier for PKCE flow
+  - `codeChallengeMethod` (default: `"S256"`): Ignored if `codeVerifier` is undefined
   - `scopes`: An array of scopes
 
 ## Example
