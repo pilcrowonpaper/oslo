@@ -1,5 +1,11 @@
 # oslo
 
+## 1.2.0
+
+### Minor changes
+
+- Feat: Add `codeChallengeMethod` option to `OAuth2Client.createAuthorizationURL()` ([#29](https://github.com/pilcrowOnPaper/oslo/pull/29))
+
 ## 1.1.3
 
 ### Patch changes
