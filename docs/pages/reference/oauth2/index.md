@@ -46,7 +46,7 @@ const state = generateState();
 
 const url = await client.createAuthorizationURL({
 	state,
-	scope: ["user:email"]
+	scopes: ["user:email"]
 });
 ```
 
@@ -60,7 +60,7 @@ const codeVerifier = generateCodeVerifier();
 
 const url = await client.createAuthorizationURL({
 	state,
-	scope: ["user:email"],
+	scopes: ["user:email"],
 	codeVerifier
 });
 ```

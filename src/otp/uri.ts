@@ -1,4 +1,4 @@
-import { encodeBase32 } from "../encoding/index.js";
+import { base32 } from "../encoding/index.js";
 
 import type { TimeSpan, TypedArray } from "../index.js";
 
@@ -46,8 +46,8 @@ function createKeyURIBase(
 	const encodedAccountName = encodeURIComponent(accountName);
 	const baseURI = `otpauth://${type}/${encodedIssuer}:${encodedAccountName}`;
 	const params = new URLSearchParams({
-		secret: encodeBase32(secret, {
-			padding: false
+		secret: base32.encode(new Uint8Array(secret), {
+			includePadding: false
 		}),
 		issuer: encodedIssuer
 	});

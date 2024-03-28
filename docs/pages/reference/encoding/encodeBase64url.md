@@ -4,6 +4,8 @@ title: "encodeBase64url()"
 
 # `encodeBase64url()`
 
+**Deprecated - Use [`base64url`](/reference/encoding/base64url) instead.**
+
 Encodes data into base64 URL string. Use [`decodeBase64url()`](/reference/encoding/decodeBase64url) to decode base64 URL strings.
 
 ## Definition

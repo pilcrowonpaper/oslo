@@ -1,5 +1,5 @@
 import { sha256 } from "../crypto/index.js";
-import { encodeBase64, encodeBase64url } from "../encoding/index.js";
+import { base64, base64url } from "../encoding/index.js";
 
 export class OAuth2Client {
 	public clientId: string;
@@ -45,7 +45,9 @@ export class OAuth2Client {
 			const codeChallengeMethod = options?.codeChallengeMethod ?? "S256";
 			if (codeChallengeMethod === "S256") {
 				const codeChallengeBuffer = await sha256(new TextEncoder().encode(options.codeVerifier));
-				const codeChallenge = encodeBase64url(codeChallengeBuffer);
+				const codeChallenge = base64url.encode(new Uint8Array(codeChallengeBuffer), {
+					includePadding: false
+				});
 				authorizationUrl.searchParams.set("code_challenge", codeChallenge);
 				authorizationUrl.searchParams.set("code_challenge_method", "S256");
 			} else if (codeChallengeMethod === "plain") {
@@ -116,7 +118,7 @@ export class OAuth2Client {
 		if (options?.credentials !== undefined) {
 			const authenticateWith = options?.authenticateWith ?? "http_basic_auth";
 			if (authenticateWith === "http_basic_auth") {
-				const encodedCredentials = encodeBase64(
+				const encodedCredentials = base64.encode(
 					new TextEncoder().encode(`${this.clientId}:${options.credentials}`)
 				);
 				headers.set("Authorization", `Basic ${encodedCredentials}`);
@@ -148,13 +150,17 @@ export class OAuth2Client {
 export function generateCodeVerifier(): string {
 	const randomValues = new Uint8Array(32);
 	crypto.getRandomValues(randomValues);
-	return encodeBase64url(randomValues);
+	return base64url.encode(randomValues, {
+		includePadding: false
+	});
 }
 
 export function generateState(): string {
 	const randomValues = new Uint8Array(32);
 	crypto.getRandomValues(randomValues);
-	return encodeBase64url(randomValues);
+	return base64url.encode(randomValues, {
+		includePadding: false
+	});
 }
 
 export class OAuth2RequestError extends Error {
@@ -172,7 +178,7 @@ interface TokenErrorResponseBody {
 	error_description?: string;
 }
 
-interface TokenResponseBody {
+export interface TokenResponseBody {
 	access_token: string;
 	token_type?: string;
 	expires_in?: number;

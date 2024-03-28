@@ -1,4 +1,4 @@
-import { encodeBase64url } from "../encoding/index.js";
+import { base64url } from "../encoding/index.js";
 import { compareBytes } from "../bytes.js";
 import { ECDSA, RSASSAPKCS1v1_5 } from "../crypto/index.js";
 
@@ -95,7 +95,13 @@ export class WebAuthnController {
 		if (!("type" in clientData) || clientData.type !== type) {
 			return false;
 		}
-		if (!("challenge" in clientData) || clientData.challenge !== encodeBase64url(challenge)) {
+		if (!("challenge" in clientData) || typeof clientData.challenge !== "string") {
+			return false;
+		}
+		const clientDataChallengeBuffer = base64url.decode(clientData.challenge, {
+			strict: false,
+		});
+		if (!compareBytes(clientDataChallengeBuffer, challenge)) {
 			return false;
 		}
 		if (!("origin" in clientData) || clientData.origin !== this.originURL.origin) {
