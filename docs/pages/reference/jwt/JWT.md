@@ -29,7 +29,7 @@ interface JWT {
 ### Properties
 
 - `value`: JWT string
-- `header`
+- `headers`
 - `payload`
 - `algorithm`
 - `expiresAt`: `exp` claim

@@ -21,4 +21,4 @@ function decode(
 
 - `data`
 - `options`
-  - `strict` (default: `true`): Strict mode
+  - `strict` (default: `true`): Requires the input to have padding
