@@ -10,15 +10,14 @@ export class OAuth2Client {
 
 	constructor(
 		clientId: string,
-		authorizeEndpoint: string,
-		tokenEndpoint: string,
+		endpoints: OAuth2Endpoints,
 		options?: {
 			redirectURI?: string;
 		}
 	) {
 		this.clientId = clientId;
-		this.authorizeEndpoint = authorizeEndpoint;
-		this.tokenEndpoint = tokenEndpoint;
+		this.authorizeEndpoint = endpoints.authorizeEndpoint;
+		this.tokenEndpoint = endpoints.tokenEndpoint;
 		this.redirectURI = options?.redirectURI ?? null;
 	}
 
@@ -65,7 +64,7 @@ export class OAuth2Client {
 		options?: {
 			codeVerifier?: string;
 			credentials?: string;
-			authenticateWith?: "http_basic_auth" | "request_body";
+			// authenticateWith?: "http_basic_auth" | "request_body";
 		}
 	): Promise<_TokenResponseBody> {
 		const body = new URLSearchParams();
@@ -86,7 +85,7 @@ export class OAuth2Client {
 		refreshToken: string,
 		options?: {
 			credentials?: string;
-			authenticateWith?: "http_basic_auth" | "request_body";
+			// authenticateWith?: "http_basic_auth" | "request_body";
 			scopes?: string[];
 		}
 	): Promise<_TokenResponseBody> {
@@ -107,7 +106,7 @@ export class OAuth2Client {
 		body: URLSearchParams,
 		options?: {
 			credentials?: string;
-			authenticateWith?: "http_basic_auth" | "request_body";
+			// authenticateWith?: "http_basic_auth" | "request_body";
 		}
 	): Promise<_TokenResponseBody> {
 		const headers = new Headers();
@@ -116,17 +115,21 @@ export class OAuth2Client {
 		headers.set("User-Agent", "oslo");
 
 		if (options?.credentials !== undefined) {
-			const authenticateWith = options?.authenticateWith ?? "http_basic_auth";
-			if (authenticateWith === "http_basic_auth") {
-				const encodedCredentials = base64.encode(
-					new TextEncoder().encode(`${this.clientId}:${options.credentials}`)
-				);
-				headers.set("Authorization", `Basic ${encodedCredentials}`);
-			} else if (authenticateWith === "request_body") {
-				body.set("client_secret", options.credentials);
-			} else {
-				throw new TypeError(`Invalid value for 'authenticateWith': ${authenticateWith}`);
-			}
+			const encodedCredentials = base64.encode(
+				new TextEncoder().encode(`${this.clientId}:${options.credentials}`)
+			);
+			headers.set("Authorization", `Basic ${encodedCredentials}`);
+			// const authenticateWith = options?.authenticateWith ?? "http_basic_auth";
+			// if (authenticateWith === "http_basic_auth") {
+			// 	const encodedCredentials = base64.encode(
+			// 		new TextEncoder().encode(`${this.clientId}:${options.credentials}`)
+			// 	);
+			// 	headers.set("Authorization", `Basic ${encodedCredentials}`);
+			// } else if (authenticateWith === "request_body") {
+			// 	body.set("client_secret", options.credentials);
+			// } else {
+			// 	throw new TypeError(`Invalid value for 'authenticateWith': ${authenticateWith}`);
+			// }
 		}
 
 		const request = new Request(this.tokenEndpoint, {
@@ -184,4 +187,9 @@ export interface TokenResponseBody {
 	expires_in?: number;
 	refresh_token?: string;
 	scope?: string;
+}
+
+export interface OAuth2Endpoints {
+	authorizeEndpoint: string
+	tokenEndpoint: string
 }
