@@ -2,7 +2,6 @@ import { hash, verify } from "@node-rs/argon2";
 
 import type { PasswordHashingAlgorithm } from "./index.js";
 
-
 const v0x13 = 1;
 
 export class Argon2id implements PasswordHashingAlgorithm {

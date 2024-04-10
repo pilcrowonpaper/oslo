@@ -1,5 +1,3 @@
-
-
 const hexAlphabet = "0123456789abcdef";
 
 const hexDecodeMap = new Map<string, number>([

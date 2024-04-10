@@ -1,4 +1,3 @@
-
 import type { Encoding } from "./index.js";
 
 export class Base32Encoding implements Encoding {

@@ -4,7 +4,7 @@ title: "sha1()"
 
 # `sha1()`
 
-Generates a SHA-1 hash. Performance is better or comparable to the Web Crypto API for data < 1000 bytes. Use the Web Crypto API directly (async) or API provided by your runtime if you need better performance. 
+Generates a SHA-1 hash. Performance is better or comparable to the Web Crypto API for data < 1000 bytes. Use the Web Crypto API directly (async) or API provided by your runtime if you need better performance.
 
 ## Definition
 
