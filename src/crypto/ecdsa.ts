@@ -1,6 +1,5 @@
-import type { TypedArray } from "../index.js";
 import type { KeyPair } from "./index.js";
-import type { SHAHash } from "./sha.js";
+import type { SHAHash } from "./sha/index.js";
 
 export type ECDSACurve = "P-256" | "P-384" | "P-521";
 
@@ -13,10 +12,7 @@ export class ECDSA {
 		this.curve = curve;
 	}
 
-	public async sign(
-		privateKey: ArrayBuffer | TypedArray,
-		data: ArrayBuffer | TypedArray
-	): Promise<ArrayBuffer> {
+	public async sign(privateKey: Uint8Array, data: Uint8Array): Promise<Uint8Array> {
 		const cryptoKey = await crypto.subtle.importKey(
 			"pkcs8",
 			privateKey,
@@ -27,21 +23,23 @@ export class ECDSA {
 			false,
 			["sign"]
 		);
-		const signature = await crypto.subtle.sign(
-			{
-				name: "ECDSA",
-				hash: this.hash
-			},
-			cryptoKey,
-			data
+		const signature = new Uint8Array(
+			await crypto.subtle.sign(
+				{
+					name: "ECDSA",
+					hash: this.hash
+				},
+				cryptoKey,
+				data
+			)
 		);
 		return signature;
 	}
 
 	public async verify(
-		publicKey: ArrayBuffer | TypedArray,
-		signature: ArrayBuffer | TypedArray,
-		data: ArrayBuffer | TypedArray
+		publicKey: Uint8Array,
+		signature: Uint8Array,
+		data: Uint8Array
 	): Promise<boolean> {
 		const cryptoKey = await crypto.subtle.importKey(
 			"spki",
@@ -73,8 +71,12 @@ export class ECDSA {
 			true,
 			["sign"]
 		);
-		const privateKey = await crypto.subtle.exportKey("pkcs8", cryptoKeyPair.privateKey);
-		const publicKey = await crypto.subtle.exportKey("spki", cryptoKeyPair.publicKey);
+		const privateKey = new Uint8Array(
+			await crypto.subtle.exportKey("pkcs8", cryptoKeyPair.privateKey)
+		);
+		const publicKey = new Uint8Array(
+			await crypto.subtle.exportKey("spki", cryptoKeyPair.publicKey)
+		);
 		return {
 			privateKey,
 			publicKey

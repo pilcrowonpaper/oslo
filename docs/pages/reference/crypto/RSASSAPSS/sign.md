@@ -10,9 +10,9 @@ Signs data with a private key and returns the signature. See [`RSASSAPSS`](/refe
 
 ```ts
 function sign(
-	privateKey: ArrayBuffer | TypedArray,
-	data: ArrayBuffer | TypedArray
-): Promise<ArrayBuffer>;
+	privateKey: Uint8Array,
+	data: Uint8Array
+): Promise<Uint8Array>;
 ```
 
 ### Parameters

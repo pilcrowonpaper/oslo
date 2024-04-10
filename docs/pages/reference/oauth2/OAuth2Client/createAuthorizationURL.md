@@ -16,7 +16,7 @@ function createAuthorizationURL(options?: {
 	codeChallengeMethod?: "S256" | "plain";
 	codeVerifier?: string;
 	scopes?: string[];
-}): Promise<URL>;
+}): URL;
 ```
 
 ### Parameters
@@ -37,7 +37,7 @@ import { $$generateState, $$generateCodeVerifier } from "oslo/oauth2";
 const state = generateState();
 const codeVerifier = generateCodeVerifier();
 
-const url = await oauth2Client.createAuthorizationURL({
+const url = oauth2Client.createAuthorizationURL({
 	state,
 	codeVerifier,
 	scopes: ["profile", "openid"]

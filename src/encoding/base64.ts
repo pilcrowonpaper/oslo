@@ -1,4 +1,4 @@
-import type { TypedArray } from "../index.js";
+
 import type { Encoding } from "./index.js";
 
 export class Base64Encoding implements Encoding {
@@ -112,12 +112,12 @@ export const base64url = new Base64Encoding(
 
 /** @deprecated Use `base64.encode()` instead */
 export function encodeBase64(
-	data: ArrayBuffer | TypedArray,
+	data: Uint8Array,
 	options?: {
 		padding?: boolean;
 	}
 ): string {
-	return base64.encode(new Uint8Array(data), {
+	return base64.encode(data, {
 		includePadding: options?.padding ?? true
 	});
 }
@@ -130,8 +130,8 @@ export function decodeBase64(data: string): Uint8Array {
 }
 
 /** @deprecated Use `base64url.encode()` instead */
-export function encodeBase64url(data: ArrayBuffer | TypedArray): string {
-	return base64.encode(new Uint8Array(data), {
+export function encodeBase64url(data: Uint8Array): string {
+	return base64.encode(data, {
 		includePadding: false
 	});
 }

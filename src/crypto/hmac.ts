@@ -1,5 +1,4 @@
-import type { TypedArray } from "../index.js";
-import type { SHAHash } from "./sha.js";
+import type { SHAHash } from "./sha/index.js";
 
 export class HMAC {
 	private hash: SHAHash;
@@ -7,11 +6,7 @@ export class HMAC {
 		this.hash = hash;
 	}
 
-	public async verify(
-		key: ArrayBuffer | TypedArray,
-		signature: ArrayBuffer | TypedArray,
-		data: ArrayBuffer | TypedArray
-	): Promise<boolean> {
+	public async verify(key: Uint8Array, signature: Uint8Array, data: Uint8Array): Promise<boolean> {
 		const cryptoKey = await crypto.subtle.importKey(
 			"raw",
 			key,
@@ -25,10 +20,7 @@ export class HMAC {
 		return await crypto.subtle.verify("HMAC", cryptoKey, signature, data);
 	}
 
-	public async sign(
-		key: ArrayBuffer | TypedArray,
-		data: ArrayBuffer | TypedArray
-	): Promise<ArrayBuffer> {
+	public async sign(key: Uint8Array, data: Uint8Array): Promise<Uint8Array> {
 		const cryptoKey = await crypto.subtle.importKey(
 			"raw",
 			key,
@@ -39,11 +31,11 @@ export class HMAC {
 			false,
 			["sign"]
 		);
-		const signature = await crypto.subtle.sign("HMAC", cryptoKey, data);
+		const signature = new Uint8Array(await crypto.subtle.sign("HMAC", cryptoKey, data));
 		return signature;
 	}
 
-	public async generateKey(): Promise<ArrayBuffer> {
+	public async generateKey(): Promise<Uint8Array> {
 		const cryptoKey: CryptoKey = await crypto.subtle.generateKey(
 			{
 				name: "HMAC",
@@ -52,7 +44,7 @@ export class HMAC {
 			true,
 			["sign"]
 		);
-		const key = await crypto.subtle.exportKey("raw", cryptoKey);
+		const key = new Uint8Array(await crypto.subtle.exportKey("raw", cryptoKey));
 		return key;
 	}
 }

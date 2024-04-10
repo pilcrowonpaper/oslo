@@ -16,7 +16,7 @@ function constructor(options?: {
 	iterations?: number;
 	tagLength?: number;
 	parallelism?: number;
-	secret?: ArrayBuffer | TypedArray;
+	secret?: Uint8Array;
 }): this;
 ```
 

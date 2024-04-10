@@ -13,7 +13,7 @@ Creates a new JWT. Claims are not included by default and must by defined with `
 //$ TimeSpan=/reference/main/TimeSpan
 function createJWT(
 	algorithm: $$JWTAlgorithm,
-	key: ArrayBuffer | TypedArray,
+	key: Uint8Array,
 	payloadClaims: Record<any, any>,
 	options?: {
 		headers?: Record<any, any>;

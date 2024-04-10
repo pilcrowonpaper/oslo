@@ -12,7 +12,7 @@ Encodes data into base64 string. Use [`decodeBase64()`](/reference/encoding/deco
 
 ```ts
 function encodeBase64(
-	data: ArrayBuffer | TypedArray,
+	data: Uint8Array,
 	options?: {
 		padding?: boolean;
 	}

@@ -10,8 +10,8 @@ Represents a WebAuthn attestation response.
 
 ```ts
 interface AttestationResponse {
-	clientDataJSON: ArrayBuffer;
-	authenticatorData: ArrayBuffer;
+	clientDataJSON: Uint8Array;
+	authenticatorData: Uint8Array;
 }
 ```
 

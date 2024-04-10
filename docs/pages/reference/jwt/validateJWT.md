@@ -14,7 +14,7 @@ Parses a JWT string and validates it, including the signature, expiration, and n
 //$ JWT=/reference/jwt/JWT
 function validateJWT(
 	algorithm: JWTAlgorithm,
-	key: ArrayBuffer | TypedArray,
+	key: Uint8Array,
 	jwt: string
 ): Promise<$$JWT>;
 ```

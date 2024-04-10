@@ -1,10 +1,8 @@
 import { binaryToInteger, byteToBinary, bytesToBinary } from "../bytes.js";
 import { HMAC } from "../crypto/hmac.js";
 
-import type { TypedArray } from "../index.js";
-
 export async function generateHOTP(
-	key: ArrayBuffer | TypedArray,
+	key: Uint8Array,
 	counter: number,
 	digits: number = 6
 ): Promise<string> {
@@ -13,7 +11,7 @@ export async function generateHOTP(
 	}
 	const counterBytes = intTo8Bytes(counter);
 	const HS = await new HMAC("SHA-1").sign(key, counterBytes);
-	const SBites = truncate(new Uint8Array(HS));
+	const SBites = truncate(HS);
 	const SNum = binaryToInteger(SBites);
 	const D = SNum % 10 ** digits;
 	return D.toString().padStart(digits, "0");

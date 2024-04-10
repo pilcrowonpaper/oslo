@@ -21,12 +21,12 @@ export class OAuth2Client {
 		this.redirectURI = options?.redirectURI ?? null;
 	}
 
-	public async createAuthorizationURL(options?: {
+	public createAuthorizationURL(options?: {
 		state?: string;
 		codeVerifier?: string;
 		codeChallengeMethod?: "S256" | "plain";
 		scopes?: string[];
-	}): Promise<URL> {
+	}): URL {
 		const scopes = Array.from(new Set(options?.scopes ?? [])); // remove duplicates
 		const authorizationUrl = new URL(this.authorizeEndpoint);
 		authorizationUrl.searchParams.set("response_type", "code");
@@ -43,8 +43,8 @@ export class OAuth2Client {
 		if (options?.codeVerifier !== undefined) {
 			const codeChallengeMethod = options?.codeChallengeMethod ?? "S256";
 			if (codeChallengeMethod === "S256") {
-				const codeChallengeBuffer = await sha256(new TextEncoder().encode(options.codeVerifier));
-				const codeChallenge = base64url.encode(new Uint8Array(codeChallengeBuffer), {
+				const codeChallengeBuffer = sha256(new TextEncoder().encode(options.codeVerifier));
+				const codeChallenge = base64url.encode(codeChallengeBuffer, {
 					includePadding: false
 				});
 				authorizationUrl.searchParams.set("code_challenge", codeChallenge);
@@ -190,6 +190,6 @@ export interface TokenResponseBody {
 }
 
 export interface OAuth2Endpoints {
-	authorizeEndpoint: string
-	tokenEndpoint: string
+	authorizeEndpoint: string;
+	tokenEndpoint: string;
 }

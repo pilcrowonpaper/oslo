@@ -1,7 +1,7 @@
 import { describe, test, expect } from "vitest";
 import { RSASSAPKCS1v1_5, RSASSAPSS } from "./rsa.js";
 
-import type { SHAHash } from "./sha.js";
+import type { SHAHash } from "./sha/index.js";
 
 interface TestCase {
 	hash: SHAHash;

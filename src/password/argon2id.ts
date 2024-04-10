@@ -1,7 +1,7 @@
 import { hash, verify } from "@node-rs/argon2";
 
 import type { PasswordHashingAlgorithm } from "./index.js";
-import type { TypedArray } from "../index.js";
+
 
 const v0x13 = 1;
 
@@ -11,7 +11,7 @@ export class Argon2id implements PasswordHashingAlgorithm {
 		iterations?: number;
 		tagLength?: number;
 		parallelism?: number;
-		secret?: ArrayBuffer | TypedArray;
+		secret?: Uint8Array;
 	}) {
 		this.memorySize = options?.memorySize ?? 19456;
 		this.iterations = options?.iterations ?? 2;
@@ -24,7 +24,7 @@ export class Argon2id implements PasswordHashingAlgorithm {
 	private iterations?: number;
 	private tagLength?: number;
 	private parallelism?: number;
-	private secret: ArrayBuffer | TypedArray | null;
+	private secret: Uint8Array | null;
 
 	public async hash(password: string): Promise<string> {
 		return await hash(password.normalize("NFKC"), {

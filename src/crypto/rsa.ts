@@ -1,6 +1,5 @@
-import type { TypedArray } from "../index.js";
 import type { KeyPair } from "./index.js";
-import type { SHAHash } from "./sha.js";
+import type { SHAHash } from "./sha/index.js";
 
 export class RSASSAPKCS1v1_5 {
 	private hash: SHAHash;
@@ -9,9 +8,9 @@ export class RSASSAPKCS1v1_5 {
 	}
 
 	public async verify(
-		publicKey: ArrayBuffer | TypedArray,
-		signature: ArrayBuffer | TypedArray,
-		data: ArrayBuffer | TypedArray
+		publicKey: Uint8Array,
+		signature: Uint8Array,
+		data: Uint8Array
 	): Promise<boolean> {
 		const cryptoKey = await crypto.subtle.importKey(
 			"spki",
@@ -26,10 +25,7 @@ export class RSASSAPKCS1v1_5 {
 		return await crypto.subtle.verify("RSASSA-PKCS1-v1_5", cryptoKey, signature, data);
 	}
 
-	public async sign(
-		privateKey: ArrayBuffer | TypedArray,
-		data: ArrayBuffer | TypedArray
-	): Promise<ArrayBuffer> {
+	public async sign(privateKey: Uint8Array, data: Uint8Array): Promise<Uint8Array> {
 		const cryptoKey = await crypto.subtle.importKey(
 			"pkcs8",
 			privateKey,
@@ -40,7 +36,9 @@ export class RSASSAPKCS1v1_5 {
 			false,
 			["sign"]
 		);
-		const signature = await crypto.subtle.sign("RSASSA-PKCS1-v1_5", cryptoKey, data);
+		const signature = new Uint8Array(
+			await crypto.subtle.sign("RSASSA-PKCS1-v1_5", cryptoKey, data)
+		);
 		return signature;
 	}
 
@@ -55,8 +53,12 @@ export class RSASSAPKCS1v1_5 {
 			true,
 			["sign"]
 		);
-		const privateKey = await crypto.subtle.exportKey("pkcs8", cryptoKeyPair.privateKey);
-		const publicKey = await crypto.subtle.exportKey("spki", cryptoKeyPair.publicKey);
+		const privateKey = new Uint8Array(
+			await crypto.subtle.exportKey("pkcs8", cryptoKeyPair.privateKey)
+		);
+		const publicKey = new Uint8Array(
+			await crypto.subtle.exportKey("spki", cryptoKeyPair.publicKey)
+		);
 		return {
 			privateKey,
 			publicKey
@@ -81,9 +83,9 @@ export class RSASSAPSS {
 	}
 
 	public async verify(
-		publicKey: ArrayBuffer | TypedArray,
-		signature: ArrayBuffer | TypedArray,
-		data: ArrayBuffer | TypedArray
+		publicKey: Uint8Array,
+		signature: Uint8Array,
+		data: Uint8Array
 	): Promise<boolean> {
 		const cryptoKey = await crypto.subtle.importKey(
 			"spki",
@@ -106,10 +108,7 @@ export class RSASSAPSS {
 		);
 	}
 
-	public async sign(
-		privateKey: ArrayBuffer | TypedArray,
-		data: ArrayBuffer | TypedArray
-	): Promise<ArrayBuffer> {
+	public async sign(privateKey: Uint8Array, data: Uint8Array): Promise<Uint8Array> {
 		const cryptoKey = await crypto.subtle.importKey(
 			"pkcs8",
 			privateKey,
@@ -120,13 +119,15 @@ export class RSASSAPSS {
 			false,
 			["sign"]
 		);
-		const signature = await crypto.subtle.sign(
-			{
-				name: "RSA-PSS",
-				saltLength: this.saltLength
-			},
-			cryptoKey,
-			data
+		const signature = new Uint8Array(
+			await crypto.subtle.sign(
+				{
+					name: "RSA-PSS",
+					saltLength: this.saltLength
+				},
+				cryptoKey,
+				data
+			)
 		);
 		return signature;
 	}
@@ -142,8 +143,12 @@ export class RSASSAPSS {
 			true,
 			["sign"]
 		);
-		const privateKey = await crypto.subtle.exportKey("pkcs8", cryptoKeyPair.privateKey);
-		const publicKey = await crypto.subtle.exportKey("spki", cryptoKeyPair.publicKey);
+		const privateKey = new Uint8Array(
+			await crypto.subtle.exportKey("pkcs8", cryptoKeyPair.privateKey)
+		);
+		const publicKey = new Uint8Array(
+			await crypto.subtle.exportKey("spki", cryptoKeyPair.publicKey)
+		);
 		return {
 			privateKey,
 			publicKey

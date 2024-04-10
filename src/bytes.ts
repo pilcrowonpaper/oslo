@@ -1,5 +1,3 @@
-import type { TypedArray } from "./index.js";
-
 export function byteToBinary(byte: number): string {
 	return byte.toString(2).padStart(8, "0");
 }
@@ -16,15 +14,10 @@ export function bytesToInteger(bytes: Uint8Array): number {
 	return parseInt(bytesToBinary(bytes), 2);
 }
 
-export function compareBytes(
-	buffer1: ArrayBuffer | TypedArray,
-	buffer2: ArrayBuffer | TypedArray
-): boolean {
-	const bytes1 = new Uint8Array(buffer1);
-	const bytes2 = new Uint8Array(buffer2);
-	if (bytes1.byteLength !== bytes2.byteLength) return false;
-	for (let i = 0; i < bytes1.byteLength; i++) {
-		if (bytes1[i] !== bytes2[i]) return false;
+export function compareBytes(a: Uint8Array, b: Uint8Array): boolean {
+	if (a.byteLength !== b.byteLength) return false;
+	for (let i = 0; i < b.byteLength; i++) {
+		if (a[i] !== b[i]) return false;
 	}
 	return true;
 }

@@ -29,8 +29,8 @@ export class Scrypt implements PasswordHashingAlgorithm {
 		return constantTimeEqual(targetKey, decodeHex(key!));
 	}
 
-	private async generateKey(password: string, salt: string): Promise<ArrayBuffer> {
-		return await new Promise<ArrayBuffer>((resolve, reject) => {
+	private async generateKey(password: string, salt: string): Promise<Uint8Array> {
+		return await new Promise<Uint8Array>((resolve, reject) => {
 			scrypt(
 				password.normalize("NFKC"),
 				salt!,

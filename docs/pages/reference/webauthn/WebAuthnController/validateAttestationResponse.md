@@ -12,7 +12,7 @@ Validates a WebAuthn attestation response, including the signature, but not the 
 //$ AttestationResponse=/reference/webauthn/AttestationResponse
 function validateAttestationResponse(
 	response: $$AttestationResponse,
-	challenge: ArrayBuffer
+	challenge: Uint8Array
 ): Promise<void>;
 ```
 
@@ -28,7 +28,7 @@ function validateAttestationResponse(
 //$ webAuthnController=/reference/webauthn/WebAuthnController
 try {
 	const response: $$AttestationResponse = {
-		// all `ArrayBuffer` type (`Uint8Array`, `ArrayBuffer` etc)
+		// all `Uint8Array` type (`Uint8Array`, `Uint8Array` etc)
 		clientDataJSON,
 		authenticatorData
 	};

@@ -11,7 +11,7 @@ Encodes data into base64 URL string. Use [`decodeBase64url()`](/reference/encodi
 ## Definition
 
 ```ts
-function encodeBase64url(data: ArrayBuffer | TypedArray): string;
+function encodeBase64url(data: Uint8Array): string;
 ```
 
 ### Parameters

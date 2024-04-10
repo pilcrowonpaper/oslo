@@ -1,7 +1,7 @@
 import { describe, test, expect } from "vitest";
 import { HMAC } from "./index.js";
 
-import type { SHAHash } from "./sha.js";
+import type { SHAHash } from "./sha/index.js";
 
 interface TestCase {
 	hash: SHAHash;

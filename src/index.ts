@@ -44,15 +44,3 @@ export function isWithinExpirationDate(date: Date): boolean {
 export function createDate(timeSpan: TimeSpan): Date {
 	return new Date(Date.now() + timeSpan.milliseconds());
 }
-
-export type TypedArray =
-	| Uint8Array
-	| Int8Array
-	| Uint16Array
-	| Int16Array
-	| Uint32Array
-	| Int32Array
-	| Float32Array
-	| Float64Array
-	| BigInt64Array
-	| BigUint64Array;
