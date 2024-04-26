@@ -130,7 +130,7 @@ export class WebAuthnController {
 function convertDEREncodedECDSASignature(derEncoded: Uint8Array): Uint8Array {
 	const rStart = 4;
 	const rLength = derEncoded[3];
-	const rEnd = rStart + rLength!;
+	const rEnd = rStart + rLength;
 	const DEREncodedR = derEncoded.slice(rStart, rEnd);
 	// DER encoded 32 bytes integers can have leading 0x00s or be smaller than 32 bytes
 	const r = decodeDERInteger(DEREncodedR, 32);
@@ -146,13 +146,14 @@ function convertDEREncodedECDSASignature(derEncoded: Uint8Array): Uint8Array {
 }
 
 function decodeDERInteger(integerBytes: Uint8Array, expectedLength: number): Uint8Array {
-	if (integerBytes.byteLength === expectedLength) return integerBytes;
+	if (integerBytes.byteLength === expectedLength) {
+		return integerBytes;
+	}
 	if (integerBytes.byteLength < expectedLength) {
-		return concatenateBytes(
-			// add leading 0x00s if smaller than expected length
-			new Uint8Array(expectedLength - integerBytes.byteLength).fill(0),
-			integerBytes
-		);
+		// add leading 0x00s if smaller than expected length
+		const result = new Uint8Array(expectedLength);
+		result.set(integerBytes, expectedLength - integerBytes.byteLength);
+		return result;
 	}
 	// remove leading 0x00s if larger then expected length
 	return integerBytes.slice(-32);
