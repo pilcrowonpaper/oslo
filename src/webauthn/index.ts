@@ -1,5 +1,5 @@
 import { base64url } from "../encoding/index.js";
-import { compareBytes } from "../binary/index.js";
+import { compareBytes, concatenateBytes } from "../binary/index.js";
 import { ECDSA, RSASSAPKCS1v1_5, sha256 } from "../crypto/index.js";
 
 export interface AttestationResponse {
@@ -159,9 +159,3 @@ function decodeDERInteger(integerBytes: Uint8Array, expectedLength: number): Uin
 	return integerBytes.slice(-32);
 }
 
-function concatenateBytes(a: Uint8Array, b: Uint8Array): Uint8Array {
-	const result = new Uint8Array(a.byteLength + b.byteLength);
-	result.set(new Uint8Array(a), 0);
-	result.set(new Uint8Array(b), a.byteLength);
-	return result;
-}

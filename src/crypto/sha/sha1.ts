@@ -1,6 +1,7 @@
 // Shared buffer.
 
-import { rotl32, uint32BytesBigEndian } from "./utils.js";
+import { bigEndian } from "../../binary/uint.js";
+import { rotl32 } from "./utils.js";
 
 // To avoid unnecessary array instantiation.
 const w = new Uint32Array(80);
@@ -14,7 +15,8 @@ export function sha1(data: Uint8Array): Uint8Array {
 	const buffer = new Uint8Array(targetLength);
 	buffer.set(data);
 	buffer[data.length] = 0x80;
-	buffer.set(uint32BytesBigEndian(l), targetLength - 4);
+	bigEndian.putUint32(buffer, l, targetLength - 4);
+	
 	for (let i = 0; i < buffer.length; i += 64) {
 		for (let t = 0; t < 16; t++) {
 			w[t] =
@@ -66,7 +68,7 @@ export function sha1(data: Uint8Array): Uint8Array {
 
 	const result = new Uint8Array(20);
 	for (let i = 0; i < 5; i++) {
-		result.set(uint32BytesBigEndian(H[i]), i * 4);
+		bigEndian.putUint32(result, H[i], i * 4);
 	}
 	return result;
 }

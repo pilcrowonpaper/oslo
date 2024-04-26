@@ -1,4 +1,5 @@
-import { rotr64, uint32BytesBigEndian, uint64BytesBigEndian } from "./utils.js";
+import { bigEndian } from "../../binary/uint.js";
+import { rotr64 } from "./utils.js";
 
 const K = [
 	0x428a2f98d728ae22n,
@@ -103,7 +104,7 @@ export function sha384(data: Uint8Array): Uint8Array {
 	const buffer = new Uint8Array(targetLength);
 	buffer[data.length] = 0x80;
 	buffer.set(data);
-	buffer.set(uint32BytesBigEndian(l), targetLength - 4);
+	bigEndian.putUint32(buffer, l, targetLength - 4);
 	for (let i = 0; i < buffer.length; i += 128) {
 		for (let t = 0; t < 16; t++) {
 			w[t] =
@@ -162,7 +163,7 @@ export function sha384(data: Uint8Array): Uint8Array {
 
 	const result = new Uint8Array(48);
 	for (let i = 0; i < 6; i++) {
-		result.set(uint64BytesBigEndian(H[i]), i * 8);
+		bigEndian.putUint64(result, H[i], i * 8);
 	}
 	return result;
 }

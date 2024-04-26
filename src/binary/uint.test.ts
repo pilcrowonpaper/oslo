@@ -62,12 +62,12 @@ describe("bigEndian", () => {
 	describe("bigEndian.putUint8", () => {
 		test("sets correct value", () => {
 			const data = new Uint8Array(1);
-			bigEndian.putUint8(data, 1);
+			bigEndian.putUint8(data, 1, 0);
 			expect(data).toStrictEqual(new Uint8Array([1]));
 		});
 		test("excessive bytes", () => {
 			const data = new Uint8Array(2);
-			bigEndian.putUint8(data, 1);
+			bigEndian.putUint8(data, 1, 0);
 			expect(data).toStrictEqual(new Uint8Array([1, 0]));
 		});
 		test("offset", () => {
@@ -77,7 +77,7 @@ describe("bigEndian", () => {
 		});
 		test("insufficient space", () => {
 			const data = new Uint8Array(0);
-			expect(() => bigEndian.putUint8(data, 1)).toThrow();
+			expect(() => bigEndian.putUint8(data, 1, 0)).toThrow();
 		});
 		test("insufficient space with offset", () => {
 			const data = new Uint8Array(1);
@@ -87,12 +87,12 @@ describe("bigEndian", () => {
 	describe("bigEndian.putUint16", () => {
 		test("sets correct value", () => {
 			const data = new Uint8Array(2);
-			bigEndian.putUint16(data, 258);
+			bigEndian.putUint16(data, 258, 0);
 			expect(data).toStrictEqual(new Uint8Array([1, 2]));
 		});
 		test("excessive bytes", () => {
 			const data = new Uint8Array(3);
-			bigEndian.putUint16(data, 258);
+			bigEndian.putUint16(data, 258, 0);
 			expect(data).toStrictEqual(new Uint8Array([1, 2, 0]));
 		});
 		test("offset", () => {
@@ -102,7 +102,7 @@ describe("bigEndian", () => {
 		});
 		test("insufficient space", () => {
 			const data = new Uint8Array(0);
-			expect(() => bigEndian.putUint16(data, 1)).toThrow();
+			expect(() => bigEndian.putUint16(data, 1, 0)).toThrow();
 		});
 		test("insufficient space with offset", () => {
 			const data = new Uint8Array(2);
@@ -112,12 +112,12 @@ describe("bigEndian", () => {
 	describe("bigEndian.putUint32", () => {
 		test("sets correct value", () => {
 			const data = new Uint8Array(4);
-			bigEndian.putUint32(data, 16909060);
+			bigEndian.putUint32(data, 16909060, 0);
 			expect(data).toStrictEqual(new Uint8Array([1, 2, 3, 4]));
 		});
 		test("excessive bytes", () => {
 			const data = new Uint8Array(5);
-			bigEndian.putUint32(data, 16909060);
+			bigEndian.putUint32(data, 16909060, 0);
 			expect(data).toStrictEqual(new Uint8Array([1, 2, 3, 4, 0]));
 		});
 		test("offset", () => {
@@ -127,7 +127,7 @@ describe("bigEndian", () => {
 		});
 		test("insufficient space", () => {
 			const data = new Uint8Array(0);
-			expect(() => bigEndian.putUint32(data, 1)).toThrow();
+			expect(() => bigEndian.putUint32(data, 1, 0)).toThrow();
 		});
 		test("insufficient space with offset", () => {
 			const data = new Uint8Array(4);
@@ -137,12 +137,12 @@ describe("bigEndian", () => {
 	describe("bigEndian.putUint64", () => {
 		test("sets correct value", () => {
 			const data = new Uint8Array(8);
-			bigEndian.putUint64(data, 72623859790382856n);
+			bigEndian.putUint64(data, 72623859790382856n, 0);
 			expect(data).toStrictEqual(new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8]));
 		});
 		test("excessive bytes", () => {
 			const data = new Uint8Array(9);
-			bigEndian.putUint64(data, 72623859790382856n);
+			bigEndian.putUint64(data, 72623859790382856n, 0);
 			expect(data).toStrictEqual(new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 0]));
 		});
 		test("offset", () => {
@@ -152,7 +152,7 @@ describe("bigEndian", () => {
 		});
 		test("insufficient space", () => {
 			const data = new Uint8Array(0);
-			expect(() => bigEndian.putUint64(data, 72623859790382856n)).toThrow();
+			expect(() => bigEndian.putUint64(data, 72623859790382856n, 0)).toThrow();
 		});
 		test("insufficient space with offset", () => {
 			const data = new Uint8Array(8);
@@ -223,12 +223,12 @@ describe("littleEndian", () => {
 	describe("littleEndian.putUint8", () => {
 		test("sets correct value", () => {
 			const data = new Uint8Array(1);
-			littleEndian.putUint8(data, 1);
+			littleEndian.putUint8(data, 1, 0);
 			expect(data).toStrictEqual(new Uint8Array([1]));
 		});
 		test("excessive bytes", () => {
 			const data = new Uint8Array(2);
-			littleEndian.putUint8(data, 1);
+			littleEndian.putUint8(data, 1, 0);
 			expect(data).toStrictEqual(new Uint8Array([1, 0]));
 		});
 		test("offset", () => {
@@ -238,7 +238,7 @@ describe("littleEndian", () => {
 		});
 		test("insufficient space", () => {
 			const data = new Uint8Array(0);
-			expect(() => littleEndian.putUint8(data, 1)).toThrow();
+			expect(() => littleEndian.putUint8(data, 1, 0)).toThrow();
 		});
 		test("insufficient space with offset", () => {
 			const data = new Uint8Array(1);
@@ -248,12 +248,12 @@ describe("littleEndian", () => {
 	describe("littleEndian.putUint16", () => {
 		test("sets correct value", () => {
 			const data = new Uint8Array(2);
-			littleEndian.putUint16(data, 258);
+			littleEndian.putUint16(data, 258, 0);
 			expect(data).toStrictEqual(new Uint8Array([2, 1]));
 		});
 		test("excessive bytes", () => {
 			const data = new Uint8Array(3);
-			littleEndian.putUint16(data, 258);
+			littleEndian.putUint16(data, 258, 0);
 			expect(data).toStrictEqual(new Uint8Array([2, 1, 0]));
 		});
 		test("offset", () => {
@@ -263,7 +263,7 @@ describe("littleEndian", () => {
 		});
 		test("insufficient space", () => {
 			const data = new Uint8Array(0);
-			expect(() => littleEndian.putUint16(data, 1)).toThrow();
+			expect(() => littleEndian.putUint16(data, 1, 0)).toThrow();
 		});
 		test("insufficient space with offset", () => {
 			const data = new Uint8Array(2);
@@ -273,12 +273,12 @@ describe("littleEndian", () => {
 	describe("littleEndian.putUint32", () => {
 		test("sets correct value", () => {
 			const data = new Uint8Array(4);
-			littleEndian.putUint32(data, 16909060);
+			littleEndian.putUint32(data, 16909060, 0);
 			expect(data).toStrictEqual(new Uint8Array([4, 3, 2, 1]));
 		});
 		test("excessive bytes", () => {
 			const data = new Uint8Array(5);
-			littleEndian.putUint32(data, 16909060);
+			littleEndian.putUint32(data, 16909060, 0);
 			expect(data).toStrictEqual(new Uint8Array([4, 3, 2, 1, 0]));
 		});
 		test("offset", () => {
@@ -288,7 +288,7 @@ describe("littleEndian", () => {
 		});
 		test("insufficient space", () => {
 			const data = new Uint8Array(0);
-			expect(() => littleEndian.putUint32(data, 1)).toThrow();
+			expect(() => littleEndian.putUint32(data, 1, 0)).toThrow();
 		});
 		test("insufficient space with offset", () => {
 			const data = new Uint8Array(4);
@@ -298,12 +298,12 @@ describe("littleEndian", () => {
 	describe("littleEndian.putUint64", () => {
 		test("sets correct value", () => {
 			const data = new Uint8Array(8);
-			littleEndian.putUint64(data, 72623859790382856n);
+			littleEndian.putUint64(data, 72623859790382856n, 0);
 			expect(data).toStrictEqual(new Uint8Array([8, 7, 6, 5, 4, 3, 2, 1]));
 		});
 		test("excessive bytes", () => {
 			const data = new Uint8Array(9);
-			littleEndian.putUint64(data, 72623859790382856n);
+			littleEndian.putUint64(data, 72623859790382856n, 0);
 			expect(data).toStrictEqual(new Uint8Array([8, 7, 6, 5, 4, 3, 2, 1, 0]));
 		});
 		test("offset", () => {
@@ -313,7 +313,7 @@ describe("littleEndian", () => {
 		});
 		test("insufficient space", () => {
 			const data = new Uint8Array(0);
-			expect(() => littleEndian.putUint64(data, 72623859790382856n)).toThrow();
+			expect(() => littleEndian.putUint64(data, 72623859790382856n, 0)).toThrow();
 		});
 		test("insufficient space with offset", () => {
 			const data = new Uint8Array(8);

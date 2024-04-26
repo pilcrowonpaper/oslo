@@ -10,7 +10,7 @@ export async function generateHOTP(
 		throw new TypeError("Digits must be 8 or smaller");
 	}
 	const counterBytes = new Uint8Array(8);
-	bigEndian.putUint64(counterBytes, counter);
+	bigEndian.putUint64(counterBytes, counter, 0);
 	const HS = await new HMAC("SHA-1").sign(key, counterBytes);
 	const truncated = truncate(HS);
 	const SNum = bigEndian.uint32(truncated);
