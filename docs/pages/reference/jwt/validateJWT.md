@@ -28,6 +28,8 @@ import { validateJWT } from "oslo/jwt";
 
 try {
 	const jwt = validateJWT(
+		"HS256",
+		key,
 		"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZXNzYWdlIjoiaGVsbG8ifQ.yP03DaEblJkk9mR-Y5L7YCMzJgHL-RDPx90aXz-cuAI"
 	);
 	const message = jwt.payload.message;
