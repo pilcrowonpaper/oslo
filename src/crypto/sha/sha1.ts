@@ -16,7 +16,7 @@ export function sha1(data: Uint8Array): Uint8Array {
 	buffer.set(data);
 	buffer[data.length] = 0x80;
 	bigEndian.putUint32(buffer, l, targetLength - 4);
-	
+
 	for (let i = 0; i < buffer.length; i += 64) {
 		for (let t = 0; t < 16; t++) {
 			w[t] =

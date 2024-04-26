@@ -92,7 +92,7 @@ class LittleEndian implements ByteOrder {
 		if (data.byteLength === 0) {
 			throw new TypeError("Empty byte array");
 		}
-		return (data[0]) | ((data[1] ?? 0) << 8);
+		return data[0] | ((data[1] ?? 0) << 8);
 	}
 
 	public uint32(data: Uint8Array): number {

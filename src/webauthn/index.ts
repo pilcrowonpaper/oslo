@@ -158,4 +158,3 @@ function decodeDERInteger(integerBytes: Uint8Array, expectedLength: number): Uin
 	// remove leading 0x00s if larger then expected length
 	return integerBytes.slice(-32);
 }
-
