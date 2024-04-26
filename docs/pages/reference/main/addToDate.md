@@ -10,7 +10,7 @@ Creates a new `Date` by adding the provided time-span to the one provided. Suppo
 
 ```ts
 //$ TimeSpan=/reference/main/TimeSpan
-function createDate(date: Date, timeSpan: $$TimeSpan): Date;
+function addToDate(date: Date, timeSpan: $$TimeSpan): Date;
 ```
 
 ### Parameters

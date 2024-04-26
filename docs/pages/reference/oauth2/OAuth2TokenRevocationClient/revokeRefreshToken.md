@@ -30,7 +30,7 @@ function revokeRefreshToken(
 ```ts
 //$ OAuth2RequestError=/reference/oauth2/OAuth2RequestError
 //$ OAuth2TokenRevocationRetryError=/reference/oauth2/OAuth2TokenRevocationRetryError
-import { $OAuth2RequestError, $OAuth2TokenRevocationRetryError } from "oslo/oauth2";
+import { $$OAuth2RequestError, $$OAuth2TokenRevocationRetryError } from "oslo/oauth2";
 
 try {
 	const url = oauth2Client.revokeRefreshToken(refreshToken, {
