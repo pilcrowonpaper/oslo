@@ -1,15 +1,15 @@
 ---
-title: "AttestationResponse"
+title: "WebAuthnAttestationResponse"
 ---
 
-# `AttestationResponse`
+# `WebAuthnAttestationResponse`
 
 Represents a WebAuthn attestation response.
 
 ## Definition
 
 ```ts
-interface AttestationResponse {
+interface WebAuthnAttestationResponse {
 	clientDataJSON: Uint8Array;
 	authenticatorData: Uint8Array;
 }

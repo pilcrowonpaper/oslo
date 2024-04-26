@@ -1,19 +1,19 @@
 ---
-title: "WebAuthnController.validateAssertionResponse()"
+title: "PasskeyController.validateAssertionResponse()"
 ---
 
-# `WebAuthnController.validateAssertionResponse()`
+# `PasskeyController.validateAssertionResponse()`
 
 Validates a WebAuthn assertion response, including the signature. Supports ES256 (algorithm id `-7`) and RS256 (algorithm id `-257`). Throws an error on invalid response.
 
 ## Definition
 
 ```ts
-//$ AssertionResponse=/reference/webauthn/AssertionResponse
+//$ WebAuthnAssertionResponse=/reference/passkey/WebAuthnAssertionResponse
 function validateAssertionResponse(
 	algorithm: "ES256" | "RS256",
 	publicKey: Uint8Array,
-	response: $$AssertionResponse,
+	response: $$WebAuthnAssertionResponse,
 	challenge: Uint8Array
 ): Promise<void>;
 ```
@@ -28,15 +28,15 @@ function validateAssertionResponse(
 ## Example
 
 ```ts
-//$ AssertionResponse=/reference/webauthn/AssertionResponse
-//$ webAuthnController=/reference/webauthn/WebAuthnController
+//$ WebAuthnAssertionResponse=/reference/passkey/WebAuthnAssertionResponse
+//$ passkeyController=/reference/passkey/PasskeyController
 try {
-	const response: $$AssertionResponse = {
+	const response: $$WebAuthnAssertionResponse = {
 		clientDataJSON,
 		authenticatorData,
 		signature
 	};
-	await $$webAuthnController.validateAssertionResponse("ES256", publicKey, response, challenge);
+	await $$passkeyController.validateAssertionResponse("ES256", publicKey, response, challenge);
 } catch {
 	// failed to validate
 }

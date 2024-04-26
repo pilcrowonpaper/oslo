@@ -15,7 +15,7 @@
 				["oslo/jwt", "/reference/jwt"],
 				["oslo/oauth2", "/reference/oauth2"],
 				["oslo/otp", "/reference/otp"],
-				["oslo/webauthn", "/reference/webauthn"]
+				["oslo/passkey", "/reference/passkey"]
 			]
 		},
 		{

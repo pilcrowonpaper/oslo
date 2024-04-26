@@ -9,7 +9,7 @@ A collection of auth-related utilities, including:
 - `oslo/jwt`: Create and verify JWTs
 - `oslo/oauth2`: OAuth2 helpers
 - `oslo/otp`: HOTP, TOTP
-- `oslo/webauthn`: Verify Web Authentication API attestations and assertions
+- `oslo/passkey`: Verify Web Authentication API attestations and assertions for passkeys
 
 It's lightweight, runtime-agnostic, and fully typed.
 

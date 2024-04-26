@@ -2,25 +2,25 @@ import { base64url } from "../encoding/index.js";
 import { compareBytes, concatenateBytes } from "../binary/index.js";
 import { ECDSA, RSASSAPKCS1v1_5, sha256 } from "../crypto/index.js";
 
-export interface AttestationResponse {
+export interface WebAuthnAttestationResponse {
 	clientDataJSON: Uint8Array;
 	authenticatorData: Uint8Array;
 }
 
-export interface AssertionResponse {
+export interface WebAuthnAssertionResponse {
 	clientDataJSON: Uint8Array;
 	authenticatorData: Uint8Array;
 	signature: Uint8Array;
 }
 
-export class WebAuthnController {
+export class PasskeyController {
 	private originURL: URL;
 	constructor(origin: string) {
 		this.originURL = new URL(origin);
 	}
 
 	public async validateAttestationResponse(
-		response: AttestationResponse,
+		response: WebAuthnAttestationResponse,
 		challenge: Uint8Array
 	): Promise<void> {
 		const validClientDataJSON = this.verifyClientDataJSON(
@@ -41,7 +41,7 @@ export class WebAuthnController {
 	public async validateAssertionResponse(
 		algorithm: "ES256" | "RS256",
 		publicKey: Uint8Array,
-		response: AssertionResponse,
+		response: WebAuthnAssertionResponse,
 		challenge: Uint8Array
 	): Promise<void> {
 		const validClientDataJSON = this.verifyClientDataJSON(

@@ -24,7 +24,7 @@
 		"./jwt": "./dist/jwt/index.js",
 		"./oauth2": "./dist/oauth2/index.js",
 		"./otp": "./dist/otp/index.js",
-		"./webauthn": "./dist/webauthn/index.js"
+		"./passkey": "./dist/passkey/index.js"
 	},
 	"typesVersions": {
 		"*": {
@@ -52,8 +52,8 @@
 			"otp": [
 				"dist/otp/index.d.ts"
 			],
-			"webauthn": [
-				"dist/webauthn/index.d.ts"
+			"passkey": [
+				"dist/passkey/index.d.ts"
 			]
 		}
 	},
@@ -63,6 +63,7 @@
 		"jwt",
 		"crypto",
 		"webauthn",
+		"passkey",
 		"otp",
 		"encoding",
 		"auth",
@@ -84,9 +85,5 @@
 		"prettier": "^3.0.3",
 		"typescript": "^5.2.2",
 		"vitest": "^0.34.6"
-	},
-	"dependencies": {
-		"@node-rs/argon2": "1.7.0",
-		"@node-rs/bcrypt": "1.9.0"
 	}
 }
