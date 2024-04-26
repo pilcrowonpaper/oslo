@@ -120,8 +120,7 @@ export class WebAuthnController {
 		if (!compareBytes(rpIdHash, expectedRpIdHash)) {
 			return false;
 		}
-		const flagsBits = authData[32].toString(2);
-		if (flagsBits.charAt(flagsBits.length - 1) !== "1") {
+		if ((authData[32] & 0x01) !== 1) {
 			return false;
 		}
 		return true;
