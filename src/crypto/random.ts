@@ -65,3 +65,9 @@ export function alphabet(...patterns: AlphabetPattern[]): string {
 	}
 	return result;
 }
+
+export function generateRandomBoolean(): boolean {
+	const bytes = new Uint8Array(1);
+	crypto.getRandomValues(bytes);
+	return (bytes[0] & 0x01) === 1;
+}

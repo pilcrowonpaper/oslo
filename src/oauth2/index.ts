@@ -1,24 +1,32 @@
 import { sha256 } from "../crypto/index.js";
 import { base64, base64url } from "../encoding/index.js";
+import { createDate, TimeSpan } from "../index.js";
 
 export class OAuth2Client {
 	public clientId: string;
 
-	private authorizeEndpoint: string;
-	private tokenEndpoint: string;
+	public authorizeEndpoint: string;
+	public tokenEndpoint: string;
+
 	private redirectURI: string | null;
+	private authenticateWith: "http_basic_auth" | "request_body" = "http_basic_auth";
 
 	constructor(
 		clientId: string,
-		endpoints: OAuth2Endpoints,
+		authorizeEndpoint: string,
+		tokenEndpoint: string,
 		options?: {
 			redirectURI?: string;
+			authenticateWith?: "http_basic_auth" | "request_body";
 		}
 	) {
 		this.clientId = clientId;
-		this.authorizeEndpoint = endpoints.authorizeEndpoint;
-		this.tokenEndpoint = endpoints.tokenEndpoint;
+		this.authorizeEndpoint = authorizeEndpoint;
+		this.tokenEndpoint = tokenEndpoint;
 		this.redirectURI = options?.redirectURI ?? null;
+		if (options?.authenticateWith !== undefined) {
+			this.authenticateWith = options?.authenticateWith;
+		}
 	}
 
 	public createAuthorizationURL(options?: {
@@ -64,7 +72,6 @@ export class OAuth2Client {
 		options?: {
 			codeVerifier?: string;
 			credentials?: string;
-			// authenticateWith?: "http_basic_auth" | "request_body";
 		}
 	): Promise<_TokenResponseBody> {
 		const body = new URLSearchParams();
@@ -85,7 +92,6 @@ export class OAuth2Client {
 		refreshToken: string,
 		options?: {
 			credentials?: string;
-			// authenticateWith?: "http_basic_auth" | "request_body";
 			scopes?: string[];
 		}
 	): Promise<_TokenResponseBody> {
@@ -94,7 +100,7 @@ export class OAuth2Client {
 		body.set("client_id", this.clientId);
 		body.set("grant_type", "refresh_token");
 
-		const scopes = Array.from(new Set(options?.scopes ?? [])); // remove duplicates
+		const scopes = options?.scopes ?? [];
 		if (scopes.length > 0) {
 			body.set("scope", scopes.join(" "));
 		}
@@ -106,7 +112,6 @@ export class OAuth2Client {
 		body: URLSearchParams,
 		options?: {
 			credentials?: string;
-			// authenticateWith?: "http_basic_auth" | "request_body";
 		}
 	): Promise<_TokenResponseBody> {
 		const headers = new Headers();
@@ -119,17 +124,14 @@ export class OAuth2Client {
 				new TextEncoder().encode(`${this.clientId}:${options.credentials}`)
 			);
 			headers.set("Authorization", `Basic ${encodedCredentials}`);
-			// const authenticateWith = options?.authenticateWith ?? "http_basic_auth";
-			// if (authenticateWith === "http_basic_auth") {
-			// 	const encodedCredentials = base64.encode(
-			// 		new TextEncoder().encode(`${this.clientId}:${options.credentials}`)
-			// 	);
-			// 	headers.set("Authorization", `Basic ${encodedCredentials}`);
-			// } else if (authenticateWith === "request_body") {
-			// 	body.set("client_secret", options.credentials);
-			// } else {
-			// 	throw new TypeError(`Invalid value for 'authenticateWith': ${authenticateWith}`);
-			// }
+			if (this.authenticateWith === "http_basic_auth") {
+				const encodedCredentials = base64.encode(
+					new TextEncoder().encode(`${this.clientId}:${options.credentials}`)
+				);
+				headers.set("Authorization", `Basic ${encodedCredentials}`);
+			} else if (this.authenticateWith === "request_body") {
+				body.set("client_secret", options.credentials);
+			}
 		}
 
 		const request = new Request(this.tokenEndpoint, {
@@ -147,6 +149,110 @@ export class OAuth2Client {
 			throw new OAuth2RequestError(request, {});
 		}
 		return result;
+	}
+}
+
+export class OAuth2TokenRevocationClient {
+	public clientId: string;
+	public tokenRevocationEndpoint: string;
+
+	private authenticateWith: "http_basic_auth" | "request_body" = "http_basic_auth";
+
+	constructor(
+		clientId: string,
+		tokenRevocationEndpoint: string,
+		options?: {
+			authenticateWith?: "http_basic_auth" | "request_body";
+		}
+	) {
+		this.clientId = clientId;
+		this.tokenRevocationEndpoint = tokenRevocationEndpoint;
+		if (options?.authenticateWith !== undefined) {
+			this.authenticateWith = options.authenticateWith;
+		}
+	}
+
+	public async revokeAccessToken(
+		accessToken: string,
+		options?: {
+			credentials?: string;
+		}
+	): Promise<void> {
+		const body = new URLSearchParams();
+		body.set("token", accessToken);
+		body.set("token_type_hint", "access_token");
+		await this.sendRevocationRequest(body, options);
+	}
+
+	public async revokeRefreshToken(
+		refreshToken: string,
+		options?: {
+			credentials?: string;
+		}
+	): Promise<void> {
+		const body = new URLSearchParams();
+		body.set("token", refreshToken);
+		body.set("token_type_hint", "refresh_token");
+		await this.sendRevocationRequest(body, options);
+	}
+
+	private async sendRevocationRequest(
+		body: URLSearchParams,
+		options?: {
+			credentials?: string;
+		}
+	): Promise<void> {
+		const headers = new Headers();
+		headers.set("Content-Type", "application/x-www-form-urlencoded");
+		headers.set("Accept", "application/json");
+		headers.set("User-Agent", "oslo");
+
+		if (options?.credentials !== undefined) {
+			const encodedCredentials = base64.encode(
+				new TextEncoder().encode(`${this.clientId}:${options.credentials}`)
+			);
+			headers.set("Authorization", `Basic ${encodedCredentials}`);
+			if (this.authenticateWith === "http_basic_auth") {
+				const encodedCredentials = base64.encode(
+					new TextEncoder().encode(`${this.clientId}:${options.credentials}`)
+				);
+				headers.set("Authorization", `Basic ${encodedCredentials}`);
+			} else if (this.authenticateWith === "request_body") {
+				body.set("client_secret", options.credentials);
+			}
+		}
+
+		const request = new Request(this.tokenRevocationEndpoint, {
+			method: "POST",
+			headers,
+			body
+		});
+		const response = await fetch(request);
+
+		if (response.status === 503) {
+			const retryAfterHeader = response.headers.get("Retry-After");
+			if (retryAfterHeader === null) {
+				throw new OAuth2TokenRevocationRetryError();
+			}
+			const retryAfterNumber = parseInt(retryAfterHeader);
+			if (!Number.isNaN(retryAfterNumber)) {
+				throw new OAuth2TokenRevocationRetryError({
+					retryAfter: createDate(new TimeSpan(retryAfterNumber, "s"))
+				});
+			}
+			const retryAfterDate = parseDateString(retryAfterHeader);
+			if (retryAfterDate !== null) {
+				throw new OAuth2TokenRevocationRetryError({
+					retryAfter: retryAfterDate
+				});
+			}
+			throw new OAuth2TokenRevocationRetryError();
+		}
+
+		if (response.status !== 200) {
+			const result: TokenErrorResponseBody = await response.json();
+			throw new OAuth2RequestError(request, result);
+		}
 	}
 }
 
@@ -176,6 +282,14 @@ export class OAuth2RequestError extends Error {
 	}
 }
 
+export class OAuth2TokenRevocationRetryError extends Error {
+	public retryAfter: Date | null;
+	constructor(options?: { retryAfter?: Date }) {
+		super("retry revocation");
+		this.retryAfter = options?.retryAfter ?? null;
+	}
+}
+
 interface TokenErrorResponseBody {
 	error: string;
 	error_description?: string;
@@ -192,4 +306,16 @@ export interface TokenResponseBody {
 export interface OAuth2Endpoints {
 	authorizeEndpoint: string;
 	tokenEndpoint: string;
+}
+
+export interface OAuth2EndpointsWithTokenRevocation extends OAuth2Endpoints {
+	tokenRevocationEndpoint: string;
+}
+
+function parseDateString(dateString: string): Date | null {
+	try {
+		return new Date(dateString);
+	} catch {
+		return null;
+	}
 }

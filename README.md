@@ -2,6 +2,7 @@
 
 A collection of auth-related utilities, including:
 
+- `oslo/binary`: Utilities for byte arrays
 - `oslo/cookie`: Cookie parsing and serialization
 - `oslo/crypto`: Generate hashes, signatures, and random values
 - `oslo/encoding`: Encode base64, base64url, base32, hex
@@ -9,7 +10,6 @@ A collection of auth-related utilities, including:
 - `oslo/oauth2`: OAuth2 helpers
 - `oslo/otp`: HOTP, TOTP
 - `oslo/password`: Password hashing
-- `oslo/request`: CSRF protection
 - `oslo/webauthn`: Verify Web Authentication API attestations and assertions
 
 Aside from `oslo/password`, every module works in any environment, including Node.js, Cloudflare Workers, Deno, and Bun.

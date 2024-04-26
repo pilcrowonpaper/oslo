@@ -15,6 +15,8 @@ Provides utilities for working OAuth 2.0 based on [RFC 6749](https://datatracker
 
 - [`OAuth2Client`](/reference/oauth2/OAuth2Client)
 - [`OAuth2RequestError`](/reference/oauth2/OAuth2RequestError)
+- [`OAuth2TokenRevocationClient`](/reference/oauth2/OAuth2TokenRevocationClient)
+- [`OAuth2TokenRevocationRetryError`](/reference/oauth2/OAuth2TokenRevocationRetryError)
 
 ## Interfaces
 
@@ -71,7 +73,8 @@ const url = await client.createAuthorizationURL({
 By default [`OAuth2Client.validateAuthorizationCode()`](/reference/oauth2/OAuth2Client/validateAuthorizationCode) sends credentials with the HTTP basic auth scheme.
 
 ```ts
-import { OAuth2RequestError } from "oslo/oauth2";
+//$ OAuth2RequestError=/reference/oauth2/OAuth2RequestError
+import { $OAuth2RequestError } from "oslo/oauth2";
 
 if (!storedState || !state || storedState !== state) {
 	// error
@@ -88,8 +91,7 @@ try {
 	});
 } catch (e) {
 	if (e instanceof OAuth2RequestError) {
-		// see https://www.rfc-editor.org/rfc/rfc6749#section-5.2
-		const { request, message, description } = e;
+		// invalid credentials etc;
 	}
 	// unknown error
 }
@@ -109,7 +111,8 @@ await client.validateAuthorizationCode<{
 ### Refresh an access token
 
 ```ts
-import { OAuth2RequestError } from "oslo/oauth2";
+//$ OAuth2RequestError=/reference/oauth2/OAuth2RequestError
+import { $OAuth2RequestError } from "oslo/oauth2";
 
 try {
 	const { accessToken, refreshToken } = await client.refreshAccessToken<{
@@ -120,8 +123,7 @@ try {
 	});
 } catch (e) {
 	if (e instanceof OAuth2RequestError) {
-		// see https://www.rfc-editor.org/rfc/rfc6749#section-5.2
-		const { request, message, description } = e;
+		// invalid credentials etc
 	}
 	// unknown error
 }

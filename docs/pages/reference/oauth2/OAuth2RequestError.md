@@ -5,12 +5,12 @@ extends: "Error"
 
 # `OAuth2RequestError`
 
-Error thrown by [`OAuth2Client.validateAuthorizationCode()`](/reference/oauth/OAuth2Client2/validateAuthorizationCode) when the token endpoint returns an error response. See [RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749#section-5.2) for a full reference on error messages.
+Thrown when the endpoint returns the error response as defined in [RFC 6749 section 5.2](https://datatracker.ietf.org/doc/html/rfc6749#section-5.2).
 
 ## Definition
 
 ```ts
-interface Properties extends Error {
+interface OAuth2RequestError extends Error {
 	request: Request;
 	description: string | null;
 }

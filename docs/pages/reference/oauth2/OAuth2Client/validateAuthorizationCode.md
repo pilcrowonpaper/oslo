@@ -8,7 +8,7 @@ Validates the authorization code included in the callback. This sends a POST req
 
 By default, credentials (client secret) is sent via the HTTP basic auth scheme. To send it inside the request body (ie. search params), set `options.authenticateWith` to `"request_body"`.
 
-This throws a [`OAuth2RequestError`](/reference/oauth2/OAuth2RequestError) on error responses, and `fetch()` error when it fails to connect to the endpoint.
+This throws a [`OAuth2RequestError`](/reference/oauth2/OAuth2RequestError) on OAuth 2.0 error responses, and `fetch()` error when it fails to connect to the endpoint.
 
 See [`oslo/oauth2`](/reference/oauth2) for a full example.
 
@@ -20,7 +20,6 @@ function validateAuthorizationCode<_TokenResponseBody extends TokenResponseBody>
 	options?: {
 		codeVerifier?: string;
 		credentials?: string;
-		authenticateWith?: "http_basic_auth" | "request_body";
 	}
 ): Promise<_TokenResponseBody>;
 ```
@@ -31,7 +30,6 @@ function validateAuthorizationCode<_TokenResponseBody extends TokenResponseBody>
 - `options`
   - `codeVerifier`: Stored code verifier for PKCE flow
   - `credentials`: Client password or secret for authenticated requests
-  - `authenticateWith` (default: `"http_basic_auth"`): How the credentials should be sent
 
 ### Type parameters
 

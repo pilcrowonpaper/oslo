@@ -4,7 +4,9 @@ title: "OAuth2Client"
 
 # `OAuth2Client`
 
-Helper for OAuth 2.0, as defined in [RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749). See [`oslo/oauth2`](/reference/oauth2) for a full example.
+Client for OAuth 2.0, as defined in [RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749). See [`oslo/oauth2`](/reference/oauth2) for a full example.
+
+Use with [`OAuth2TokenRevocationClient`](/reference/oauth2/OAuth2TokenRevocationClient) to revoke tokens.
 
 ## Constructor
 
@@ -15,6 +17,7 @@ function constructor(
 	tokenEndpoint: string,
 	options?: {
 		redirectURI?: string;
+		authenticateWith?: "http_basic_auth" | "request_body";
 	}
 ): this;
 ```
@@ -26,6 +29,7 @@ function constructor(
 - `tokenEndpoint`
 - `options`
   - `redirectURI`
+  - `authenticateWith` (default: `"http_basic_auth"`): How the credentials should be sent
 
 ## Methods
 
@@ -38,7 +42,11 @@ function constructor(
 ```ts
 interface Properties {
 	clientId: string;
+	authorizeEndpoint: string;
+	tokenEndpoint: string;
 }
 ```
 
 - `clientId`
+- `authorizeEndpoint`
+- `tokenEndpoint`
