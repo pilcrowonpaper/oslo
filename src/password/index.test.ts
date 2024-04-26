@@ -16,7 +16,7 @@ test("Bcrypt", async () => {
 	expect(bcrypt.verify(hash, password)).resolves.toBe(true);
 });
 
-test("Argon2id", async () => {
+test("Scrypt", async () => {
 	const password = encodeHex(crypto.getRandomValues(new Uint8Array(32)));
 	const scrypt = new Scrypt();
 	const hash = await scrypt.hash(password);

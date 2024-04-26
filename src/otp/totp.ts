@@ -11,7 +11,7 @@ export class TOTPController {
 	}
 
 	public async generate(secret: Uint8Array): Promise<string> {
-		const counter = Math.floor(Date.now() / this.period.milliseconds());
+		const counter = BigInt(Math.floor(Date.now() / this.period.milliseconds()));
 		return await generateHOTP(secret, counter, this.digits);
 	}
 

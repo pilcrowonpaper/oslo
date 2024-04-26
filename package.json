@@ -17,6 +17,7 @@
 	],
 	"exports": {
 		".": "./dist/index.js",
+		"./binary": "./dist/binary/index.js",
 		"./cookie": "./dist/cookie/index.js",
 		"./crypto": "./dist/crypto/index.js",
 		"./encoding": "./dist/encoding/index.js",
@@ -31,6 +32,9 @@
 		"*": {
 			".": [
 				"dist/index.d.ts"
+			],
+			"binary": [
+				"dist/binary/index.d.ts"
 			],
 			"cookie": [
 				"dist/cookie/index.d.ts"

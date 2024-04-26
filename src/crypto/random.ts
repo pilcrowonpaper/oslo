@@ -1,4 +1,4 @@
-import { bytesToInteger } from "../bytes.js";
+import { bigEndian } from "../binary/uint.js";
 
 export function random(): number {
 	const buffer = new ArrayBuffer(8);
@@ -14,8 +14,8 @@ export function random(): number {
 }
 
 export function generateRandomInteger(max: number): number {
-	if (max < 0 || !Number.isInteger(max)) {
-		throw new Error("Argument 'max' must be an integer greater than or equal to 0");
+	if (max < 0 || max > 2 ** 32 - 1) {
+		throw new Error("Argument 'max' must be an unsigned 32 bit integer");
 	}
 	const bitLength = (max - 1).toString(2).length;
 	const shift = bitLength % 8;
@@ -28,13 +28,13 @@ export function generateRandomInteger(max: number): number {
 	if (shift !== 0) {
 		bytes[0] &= (1 << shift) - 1;
 	}
-	let result = bytesToInteger(bytes);
+	let result = bigEndian.uint32(bytes);
 	while (result >= max) {
 		crypto.getRandomValues(bytes);
 		if (shift !== 0) {
 			bytes[0] &= (1 << shift) - 1;
 		}
-		result = bytesToInteger(bytes);
+		result = bigEndian.uint32(bytes);
 	}
 	return result;
 }

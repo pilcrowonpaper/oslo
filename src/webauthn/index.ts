@@ -1,5 +1,5 @@
 import { base64url } from "../encoding/index.js";
-import { compareBytes } from "../bytes.js";
+import { compareBytes } from "../binary/index.js";
 import { ECDSA, RSASSAPKCS1v1_5, sha256 } from "../crypto/index.js";
 
 export interface AttestationResponse {
@@ -59,7 +59,9 @@ export class WebAuthnController {
 		}
 
 		if (algorithm === "ES256") {
-			const signature = convertDERSignatureToECDSASignature(response.signature);
+			// ECDSA signatures are ASN.1 encoded (see RFC3279 section 2.3.3) while Web Crypto expects r|s.
+			// https://www.w3.org/TR/webauthn-3/#sctn-signature-attestation-types
+			const signature = convertDEREncodedECDSASignature(response.signature);
 			const hash = sha256(response.clientDataJSON);
 			const data = concatenateBytes(response.authenticatorData, hash);
 			const es256 = new ECDSA("SHA-256", "P-256");
@@ -68,11 +70,10 @@ export class WebAuthnController {
 				throw new Error("Failed to validate signature");
 			}
 		} else if (algorithm === "RS256") {
-			const signature = convertDERSignatureToECDSASignature(response.signature);
 			const hash = sha256(response.clientDataJSON);
 			const data = concatenateBytes(response.authenticatorData, hash);
 			const rs256 = new RSASSAPKCS1v1_5("SHA-256");
-			const validSignature = await rs256.verify(publicKey, signature, data);
+			const validSignature = await rs256.verify(publicKey, response.signature, data);
 			if (!validSignature) {
 				throw new Error("Failed to validate signature");
 			}
@@ -127,17 +128,17 @@ export class WebAuthnController {
 	}
 }
 
-function convertDERSignatureToECDSASignature(DERSignature: Uint8Array): Uint8Array {
+function convertDEREncodedECDSASignature(derEncoded: Uint8Array): Uint8Array {
 	const rStart = 4;
-	const rLength = DERSignature[3];
+	const rLength = derEncoded[3];
 	const rEnd = rStart + rLength!;
-	const DEREncodedR = DERSignature.slice(rStart, rEnd);
+	const DEREncodedR = derEncoded.slice(rStart, rEnd);
 	// DER encoded 32 bytes integers can have leading 0x00s or be smaller than 32 bytes
 	const r = decodeDERInteger(DEREncodedR, 32);
 
 	const sStart = rEnd + 2;
-	const sEnd = DERSignature.byteLength;
-	const DEREncodedS = DERSignature.slice(sStart, sEnd);
+	const sEnd = derEncoded.byteLength;
+	const DEREncodedS = derEncoded.slice(sStart, sEnd);
 	// repeat the process
 	const s = decodeDERInteger(DEREncodedS, 32);
 

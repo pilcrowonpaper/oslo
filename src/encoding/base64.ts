@@ -108,36 +108,3 @@ export const base64 = new Base64Encoding(
 export const base64url = new Base64Encoding(
 	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"
 );
-
-/** @deprecated Use `base64.encode()` instead */
-export function encodeBase64(
-	data: Uint8Array,
-	options?: {
-		padding?: boolean;
-	}
-): string {
-	return base64.encode(data, {
-		includePadding: options?.padding ?? true
-	});
-}
-
-/** @deprecated Use `base64.decode()` instead */
-export function decodeBase64(data: string): Uint8Array {
-	return base64.decode(data, {
-		strict: false
-	});
-}
-
-/** @deprecated Use `base64url.encode()` instead */
-export function encodeBase64url(data: Uint8Array): string {
-	return base64.encode(data, {
-		includePadding: false
-	});
-}
-
-/** @deprecated Use `base64url.decode()` instead */
-export function decodeBase64url(data: string): Uint8Array {
-	return base64url.decode(data, {
-		strict: false
-	});
-}
