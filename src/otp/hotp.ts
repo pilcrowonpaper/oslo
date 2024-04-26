@@ -1,5 +1,5 @@
 import { bigEndian } from "../binary/uint.js";
-import { HMAC } from "../crypto/hmac.js";
+import { HMAC } from "../crypto/signing-algorithm/hmac.js";
 
 export async function generateHOTP(
 	key: Uint8Array,

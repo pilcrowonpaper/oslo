@@ -1,6 +1,7 @@
-import type { SHAHash } from "./sha/index.js";
+import type { SigningAlgorithm } from "./shared.js";
+import type { SHAHash } from "../sha/index.js";
 
-export class HMAC {
+export class HMAC implements SigningAlgorithm {
 	private hash: SHAHash;
 	constructor(hash: SHAHash) {
 		this.hash = hash;

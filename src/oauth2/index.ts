@@ -1,6 +1,6 @@
 import { sha256 } from "../crypto/index.js";
 import { base64, base64url } from "../encoding/index.js";
-import { createDate, TimeSpan } from "../index.js";
+import { TimeSpan, addToDate } from "../index.js";
 
 export class OAuth2Client {
 	public clientId: string;
@@ -237,7 +237,7 @@ export class OAuth2TokenRevocationClient {
 			const retryAfterNumber = parseInt(retryAfterHeader);
 			if (!Number.isNaN(retryAfterNumber)) {
 				throw new OAuth2TokenRevocationRetryError({
-					retryAfter: createDate(new TimeSpan(retryAfterNumber, "s"))
+					retryAfter: addToDate(new Date(), new TimeSpan(retryAfterNumber, "s"))
 				});
 			}
 			const retryAfterDate = parseDateString(retryAfterHeader);
@@ -301,15 +301,6 @@ export interface TokenResponseBody {
 	expires_in?: number;
 	refresh_token?: string;
 	scope?: string;
-}
-
-export interface OAuth2Endpoints {
-	authorizeEndpoint: string;
-	tokenEndpoint: string;
-}
-
-export interface OAuth2EndpointsWithTokenRevocation extends OAuth2Endpoints {
-	tokenRevocationEndpoint: string;
 }
 
 function parseDateString(dateString: string): Date | null {

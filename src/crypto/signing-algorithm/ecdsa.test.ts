@@ -1,8 +1,8 @@
 import { describe, test, expect } from "vitest";
-import { ECDSA } from "./index.js";
+import { ECDSA } from "../index.js";
 
 import type { ECDSACurve } from "./ecdsa.js";
-import type { SHAHash } from "./sha/index.js";
+import type { SHAHash } from "../sha/index.js";
 
 interface TestCase {
 	hash: SHAHash;

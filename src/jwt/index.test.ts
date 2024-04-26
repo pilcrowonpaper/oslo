@@ -1,9 +1,9 @@
 import { describe, test, expect } from "vitest";
 import { createJWT, parseJWT, validateJWT } from "./index.js";
 
-import { HMAC } from "../crypto/hmac.js";
-import { ECDSA } from "../crypto/ecdsa.js";
-import { RSASSAPKCS1v1_5, RSASSAPSS } from "../crypto/rsa.js";
+import { HMAC } from "../crypto/signing-algorithm/hmac.js";
+import { ECDSA } from "../crypto/signing-algorithm/ecdsa.js";
+import { RSASSAPKCS1v1_5, RSASSAPSS } from "../crypto/signing-algorithm/rsa.js";
 import { TimeSpan } from "../index.js";
 
 test.each(["ES256", "ES384", "ES512"] as const)(

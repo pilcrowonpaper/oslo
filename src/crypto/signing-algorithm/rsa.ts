@@ -1,7 +1,7 @@
-import type { KeyPair } from "./index.js";
-import type { SHAHash } from "./sha/index.js";
+import type { KeyPair, SigningAlgorithm } from "./shared.js";
+import type { SHAHash } from "../sha/index.js";
 
-export class RSASSAPKCS1v1_5 {
+export class RSASSAPKCS1v1_5 implements SigningAlgorithm {
 	private hash: SHAHash;
 	constructor(hash: SHAHash) {
 		this.hash = hash;
@@ -132,12 +132,12 @@ export class RSASSAPSS {
 		return signature;
 	}
 
-	public async generateKeyPair(modulusLength?: 2048 | 4096): Promise<KeyPair> {
+	public async generateKeyPair(options?: { modulusLength?: 2048 | 4096 }): Promise<KeyPair> {
 		const cryptoKeyPair = await crypto.subtle.generateKey(
 			{
 				name: "RSA-PSS",
 				hash: this.hash,
-				modulusLength: modulusLength ?? 2048,
+				modulusLength: options?.modulusLength ?? 2048,
 				publicExponent: new Uint8Array([0x01, 0x00, 0x01])
 			},
 			true,

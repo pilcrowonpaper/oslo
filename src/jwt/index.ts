@@ -3,6 +3,7 @@ import { base64url } from "../encoding/index.js";
 import { isWithinExpirationDate } from "../index.js";
 
 import type { TimeSpan } from "../index.js";
+import type { SigningAlgorithm } from "../crypto/index.js";
 
 export type JWTAlgorithm =
 	| "HS256"
@@ -235,7 +236,7 @@ export interface JWT extends JWTProperties {
 	parts: [header: string, payload: string, signature: string];
 }
 
-function getAlgorithm(algorithm: JWTAlgorithm): ECDSA | HMAC | RSASSAPKCS1v1_5 | RSASSAPSS {
+function getAlgorithm(algorithm: JWTAlgorithm): SigningAlgorithm {
 	if (algorithm === "ES256" || algorithm === "ES384" || algorithm === "ES512") {
 		return new ECDSA(ecdsaDictionary[algorithm].hash, ecdsaDictionary[algorithm].curve);
 	}

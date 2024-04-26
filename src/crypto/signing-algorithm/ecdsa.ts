@@ -1,9 +1,9 @@
-import type { KeyPair } from "./index.js";
-import type { SHAHash } from "./sha/index.js";
+import type { SHAHash } from "../sha/index.js";
+import type { SigningAlgorithm, KeyPair } from "./shared.js";
 
 export type ECDSACurve = "P-256" | "P-384" | "P-521";
 
-export class ECDSA {
+export class ECDSA implements SigningAlgorithm {
 	private hash: SHAHash;
 	private curve: ECDSACurve;
 
