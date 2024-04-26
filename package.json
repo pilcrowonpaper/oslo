@@ -24,7 +24,6 @@
 		"./jwt": "./dist/jwt/index.js",
 		"./oauth2": "./dist/oauth2/index.js",
 		"./otp": "./dist/otp/index.js",
-		"./password": "./dist/password/index.js",
 		"./webauthn": "./dist/webauthn/index.js"
 	},
 	"typesVersions": {
@@ -52,9 +51,6 @@
 			],
 			"otp": [
 				"dist/otp/index.d.ts"
-			],
-			"password": [
-				"dist/password/index.d.ts"
 			],
 			"webauthn": [
 				"dist/webauthn/index.d.ts"
