@@ -249,9 +249,11 @@ export class OAuth2TokenRevocationClient {
 			throw new OAuth2TokenRevocationRetryError();
 		}
 
-		if (response.status !== 200) {
-			const result: TokenErrorResponseBody = await response.json();
+		const result: TokenErrorResponseBody = await response.json();
+		if (!("access_token" in result) && "error" in result) {
 			throw new OAuth2RequestError(request, result);
+		} else if (!response.ok) {
+			throw new OAuth2RequestError(request, {});
 		}
 	}
 }
