@@ -1,1 +1,1 @@
-Feat: Add `OAuth2TokenRevocationClient` and `OAuth2TokenRevocationRetryError`
+Feat: Add `TokenRevocationClient`, `TokenRevocationRetryError`, and `TokenRevocationRequestContext`

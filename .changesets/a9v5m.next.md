@@ -1,1 +1,1 @@
-Breaking: Move `authenticateWith` option from `OAuth2Client` methods to constructor
+Breaking: Update `OAuth2Client`

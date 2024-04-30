@@ -1,1 +1,1 @@
-Feat: `OAuthClient.createAuthorizationURL()` is synchronous
+Feat: Add `OAuth2RequestContext`, `AccessTokenRequestContext`, `RefreshTokenRequestContext`, and `OAuth2Request`

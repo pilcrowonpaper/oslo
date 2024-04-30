@@ -26,39 +26,48 @@ export class OAuth2Client {
 		}
 	}
 
-	public createAuthorizationURL(): OAuth2AuthorizationURL {
-		const url = new OAuth2AuthorizationURL(this.authorizeEndpoint, this.clientId);
+	public createAuthorizationURL(): AuthorizationURL {
+		const url = new AuthorizationURL(this.authorizeEndpoint, this.clientId);
 		if (this.redirectURI !== null) {
 			url.setRedirectURI(this.redirectURI);
 		}
 		return url;
 	}
 
-	public createAccessTokenRequest(authorizationCode: string): OAuth2AccessTokenRequest {
-		const request = new OAuth2AccessTokenRequest(
-			this.tokenEndpoint,
-			this.clientId,
-			authorizationCode
-		);
+	public createAccessTokenRequestContext(authorizationCode: string): AccessTokenRequestContext {
+		const request = new AccessTokenRequestContext(this.clientId, authorizationCode);
 		if (this.redirectURI !== null) {
 			request.setRedirectURI(this.redirectURI);
 		}
 		return request;
 	}
 
-	public createRefreshTokenRequest(refreshToken: string): OAuth2RefreshTokenRequest {
-		const request = new OAuth2RefreshTokenRequest(this.tokenEndpoint, this.clientId, refreshToken);
+	public createRefreshTokenRequestContext(refreshToken: string): RefreshTokenRequestContext {
+		const request = new RefreshTokenRequestContext(this.clientId, refreshToken);
 		return request;
 	}
 
-	public async sendTokenRequest<_TokenResponseBody extends TokenResponseBody>(
-		request: OAuth2Request
+	public async sendAccessTokenRequest<_TokenResponseBody extends TokenResponseBody>(
+		context: AccessTokenRequestContext
 	): Promise<_TokenResponseBody> {
-		const response = await fetch(request.createFetchRequest());
+		return await this.sendTokenRequest(context);
+	}
+
+	public async sendRefreshTokenRequest<_TokenResponseBody extends TokenResponseBody>(
+		context: RefreshTokenRequestContext
+	): Promise<_TokenResponseBody> {
+		return await this.sendTokenRequest(context);
+	}
+
+	private async sendTokenRequest<_TokenResponseBody extends TokenResponseBody>(
+		context: OAuth2RequestContext
+	): Promise<_TokenResponseBody> {
+		const response = await fetch(context.toFetchRequest("POST", this.tokenEndpoint));
 		const result: _TokenResponseBody | TokenErrorResponseBody = await response.json();
 		if ("access_token" in result) {
 			return result as _TokenResponseBody;
 		}
+		const request = new OAuth2Request("POST", this.tokenEndpoint, context.headers, context.body);
 		if ("error_description" in result) {
 			throw new OAuth2RequestError(request, {
 				message: result.error,
@@ -71,7 +80,7 @@ export class OAuth2Client {
 	}
 }
 
-export class OAuth2TokenRevocationClient {
+export class TokenRevocationClient {
 	public clientId: string;
 	public tokenRevocationEndpoint: string;
 
@@ -80,51 +89,53 @@ export class OAuth2TokenRevocationClient {
 		this.tokenRevocationEndpoint = tokenRevocationEndpoint;
 	}
 
-	public createAccessTokenRevocationRequest(accessToken: string): OAuth2TokenRevocationRequest {
-		const request = new OAuth2TokenRevocationRequest(
-			this.clientId,
-			this.tokenRevocationEndpoint,
-			accessToken
-		);
+	public createAccessTokenRevocationRequestContext(
+		accessToken: string
+	): TokenRevocationRequestContext {
+		const request = new TokenRevocationRequestContext(this.clientId, accessToken);
 		request.setTokenTypeHint("access_token");
 		return request;
 	}
 
-	public createRefreshTokenRevocationRequest(refreshToken: string): OAuth2TokenRevocationRequest {
-		const request = new OAuth2TokenRevocationRequest(
-			this.clientId,
-			this.tokenRevocationEndpoint,
-			refreshToken
-		);
+	public createRefreshTokenRevocationRequestContext(
+		refreshToken: string
+	): TokenRevocationRequestContext {
+		const request = new TokenRevocationRequestContext(this.clientId, refreshToken);
 		request.setTokenTypeHint("refresh_token");
 		return request;
 	}
 
-	public async sendTokenRevocationRequest(request: OAuth2TokenRevocationRequest): Promise<void> {
-		const response = await fetch(request.createFetchRequest());
+	public async sendTokenRevocationRequest(context: TokenRevocationRequestContext): Promise<void> {
+		const response = await fetch(context.toFetchRequest("POST", this.tokenRevocationEndpoint));
 		if (response.status === 200) {
 			return;
 		}
 		if (response.status === 503) {
 			const retryAfterHeader = response.headers.get("Retry-After");
 			if (retryAfterHeader === null) {
-				throw new OAuth2TokenRevocationRetryError();
+				throw new TokenRevocationRetryError();
 			}
-			const retryAfterNumber = parseInt(retryAfterHeader);
-			if (!Number.isNaN(retryAfterNumber)) {
-				throw new OAuth2TokenRevocationRetryError({
-					retryAfter: addToDate(new Date(), new TimeSpan(retryAfterNumber, "s"))
+			const retryAfterSeconds = parseInt(retryAfterHeader);
+			if (!Number.isNaN(retryAfterSeconds)) {
+				throw new TokenRevocationRetryError({
+					retryAfter: addToDate(new Date(), new TimeSpan(retryAfterSeconds, "s"))
 				});
 			}
 			const retryAfterDate = parseDateString(retryAfterHeader);
 			if (retryAfterDate !== null) {
-				throw new OAuth2TokenRevocationRetryError({
+				throw new TokenRevocationRetryError({
 					retryAfter: retryAfterDate
 				});
 			}
-			throw new OAuth2TokenRevocationRetryError();
+			throw new TokenRevocationRetryError();
 		}
 		const result: TokenErrorResponseBody = await response.json();
+		const request = new OAuth2Request(
+			"POST",
+			this.tokenRevocationEndpoint,
+			context.headers,
+			context.body
+		);
 		if ("error_description" in result) {
 			throw new OAuth2RequestError(request, {
 				message: result.error,
@@ -137,60 +148,69 @@ export class OAuth2TokenRevocationClient {
 	}
 }
 
-export class OAuth2AuthorizationURL extends URL {
-	constructor(url: string, clientId: string) {
-		super(url);
+export class OAuth2Request {
+	public method: string;
+	public url: string;
+	public headers: Headers;
+	public body: URLSearchParams;
+
+	constructor(method: string, url: string, headers: Headers, body: URLSearchParams) {
+		this.method = method;
+		this.url = url;
+		this.headers = headers;
+		this.body = body;
+	}
+}
+
+export class AuthorizationURL extends URL {
+	constructor(authorizeEndpoint: string, clientId: string) {
+		super(authorizeEndpoint);
 		this.searchParams.set("response_type", "code");
 		this.searchParams.set("client_id", clientId);
 	}
 
-	public setRedirectURI(redirectURI: string): this {
+	public setRedirectURI(redirectURI: string): void {
 		this.searchParams.set("redirect_uri", redirectURI);
-		return this;
 	}
 
-	public setScopes(...scopes: string[]): this {
+	public appendScopes(...scopes: string[]): void {
+		if (scopes.length < 1) {
+			return;
+		}
 		let scopeValue = scopes.join(" ");
 		const existingScopes = this.searchParams.get("scope");
 		if (existingScopes !== null) {
 			scopeValue = " " + existingScopes;
 		}
 		this.searchParams.set("scope", scopeValue);
-		return this;
 	}
 
-	public setState(state: string): this {
+	public setState(state: string): void {
 		this.searchParams.set("state", state);
-		return this;
 	}
 
-	public setS256CodeChallenge(codeVerifier: string): this {
+	public setS256CodeChallenge(codeVerifier: string): void {
 		const codeChallengeBytes = sha256(new TextEncoder().encode(codeVerifier));
 		const codeChallenge = base64url.encode(codeChallengeBytes, {
 			includePadding: false
 		});
 		this.searchParams.set("code_challenge", codeChallenge);
 		this.searchParams.set("code_challenge_method", "S256");
-		return this;
 	}
 
-	public setPlainCodeChallenge(codeVerifier: string): this {
+	public setPlainCodeChallenge(codeVerifier: string): void {
 		this.searchParams.set("code_challenge", codeVerifier);
 		this.searchParams.set("code_challenge_method", "plain");
-		return this;
 	}
 }
 
-export class OAuth2Request {
-	public method = "POST";
+export class OAuth2RequestContext {
 	public body = new URLSearchParams();
 	public headers = new Headers();
 
-	public url: string;
 	public clientId: string;
 
-	constructor(url: string, clientId: string) {
-		this.url = url;
+	constructor(clientId: string) {
 		this.clientId = clientId;
 		this.body.set("client_id", clientId);
 		this.headers.set("Content-Type", "application/x-www-form-urlencoded");
@@ -198,73 +218,70 @@ export class OAuth2Request {
 		this.headers.set("User-Agent", "oslo");
 	}
 
-	public authenticateWithRequestBody(clientSecret: string): this {
+	public authenticateWithRequestBody(clientSecret: string): void {
 		this.body.set("client_secret", clientSecret);
-		return this;
 	}
 
-	public authenticateWithHTTPBasicAuth(clientPassword: string): this {
+	public authenticateWithHTTPBasicAuth(clientPassword: string): void {
 		const authorizationHeader = base64.encode(
 			new TextEncoder().encode(`${this.clientId}:${clientPassword}`)
 		);
 		this.headers.set("Authorization", authorizationHeader);
-		return this;
 	}
 
-	public createFetchRequest(): Request {
-		return new Request(this.url, {
-			method: "POST",
+	public toFetchRequest(method: string, url: string): Request {
+		return new Request(url, {
+			method,
 			body: this.body,
 			headers: this.headers
 		});
 	}
 }
 
-export class OAuth2AccessTokenRequest extends OAuth2Request {
-	constructor(url: string, clientId: string, code: string) {
-		super(url, clientId);
+export class AccessTokenRequestContext extends OAuth2RequestContext {
+	constructor(clientId: string, authorizationCode: string) {
+		super(clientId);
 		this.body.set("grant_type", "authorization_code");
-		this.body.set("code", code);
+		this.body.set("code", authorizationCode);
 	}
 
-	public setCodeVerifier(codeVerifier: string): this {
+	public setCodeVerifier(codeVerifier: string): void {
 		this.body.set("code_verifier", codeVerifier);
-		return this;
 	}
 
-	public setRedirectURI(redirectURI: string): this {
+	public setRedirectURI(redirectURI: string): void {
 		this.body.set("redirect_uri", redirectURI);
-		return this;
 	}
 }
 
-export class OAuth2RefreshTokenRequest extends OAuth2Request {
-	constructor(url: string, clientId: string, code: string) {
-		super(url, clientId);
+export class RefreshTokenRequestContext extends OAuth2RequestContext {
+	constructor(clientId: string, refreshToken: string) {
+		super(clientId);
 		this.body.set("grant_type", "refresh_token");
-		this.body.set("code", code);
+		this.body.set("refresh_token", refreshToken);
 	}
 
-	public setScopes(...scopes: string[]): this {
+	public appendScopes(...scopes: string[]): void {
+		if (scopes.length < 1) {
+			return;
+		}
 		let scopeValue = scopes.join(" ");
 		const existingScopes = this.body.get("scope");
 		if (existingScopes !== null) {
-			scopeValue = " " + existingScopes;
+			scopeValue = scopeValue + " " + existingScopes;
 		}
 		this.body.set("scope", scopeValue);
-		return this;
 	}
 }
 
-export class OAuth2TokenRevocationRequest extends OAuth2Request {
-	constructor(url: string, clientId: string, token: string) {
-		super(url, clientId);
+export class TokenRevocationRequestContext extends OAuth2RequestContext {
+	constructor(clientId: string, token: string) {
+		super(clientId);
 		this.body.set("token", token);
 	}
 
-	public setTokenTypeHint(tokenTypeHint: "access_token" | "refresh_token"): this {
-		this.body.set("token_type_hint", tokenTypeHint);
-		return this;
+	public setTokenTypeHint(tokenType: "access_token" | "refresh_token"): void {
+		this.body.set("token_type_hint", tokenType);
 	}
 }
 
@@ -284,7 +301,7 @@ export class OAuth2RequestError extends Error {
 	}
 }
 
-export class OAuth2TokenRevocationRetryError extends Error {
+export class TokenRevocationRetryError extends Error {
 	public retryAfter: Date | null;
 	constructor(options?: { retryAfter?: Date }) {
 		super("retry revocation");
