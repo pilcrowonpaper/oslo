@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
 import { bigEndian, littleEndian } from "./uint.js";
-import { describe } from "node:test";
+import { describe } from "vitest";
 
 describe("bigEndian", () => {
 	describe("bigEndian.uint8", () => {
