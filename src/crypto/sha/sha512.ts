@@ -100,11 +100,11 @@ export function sha512(data: Uint8Array): Uint8Array {
 	]);
 
 	const l = data.byteLength * 8;
-	const targetLength = Math.ceil((data.length + 1 + 8) / 128) * 128;
+	const targetLength = Math.ceil((data.length + 1 + 16) / 128) * 128;
 	const buffer = new Uint8Array(targetLength);
 	buffer[data.length] = 0x80;
 	buffer.set(data);
-	bigEndian.putUint32(buffer, l, targetLength - 4);
+	bigEndian.putUint64(buffer, BigInt(l), targetLength - 8);
 	for (let i = 0; i < buffer.length; i += 128) {
 		for (let t = 0; t < 16; t++) {
 			w[t] =
