@@ -25,7 +25,7 @@ function createTOTPKeyURI(
 
 - `issuer`: Your company/website name
 - `accountName`: Account identifier (e.g. username)
-- `secret`: HOTP secret key
+- `secret`: TOTP secret key
 - `options`
   - `digits` (default: `6`): OTP digits
   - `period` (default: `30s`): How long the OTP is valid for at max
