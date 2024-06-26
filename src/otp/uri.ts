@@ -49,7 +49,7 @@ function createKeyURIBase(
 		secret: base32.encode(new Uint8Array(secret), {
 			includePadding: false
 		}),
-		issuer: encodedIssuer
+		issuer
 	});
 	if (options?.digits !== undefined) {
 		params.set("digits", options.digits.toString());
