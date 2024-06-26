@@ -1,7 +1,7 @@
 {
 	"name": "oslo",
 	"type": "module",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"description": "A collection of auth-related utilities",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",

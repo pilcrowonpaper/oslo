@@ -1,5 +1,11 @@
 # oslo
 
+## 1.2.1
+
+### Patch changes
+
+- Fix `issuer` parameter getting encoded twice in key URI ([#79](https://github.com/pilcrowOnPaper/oslo/pull/79))
+
 ## 1.2.0
 
 ### Minor changes
