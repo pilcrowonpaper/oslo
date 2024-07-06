@@ -1,4 +1,4 @@
-import { sha256 } from "../crypto/index.js";
+import { sha256, sha384 } from "../crypto/index.js";
 import { base64, base64url } from "../encoding/index.js";
 
 export class OAuth2Client {
@@ -25,7 +25,7 @@ export class OAuth2Client {
 	public async createAuthorizationURL(options?: {
 		state?: string;
 		codeVerifier?: string;
-		codeChallengeMethod?: "S256" | "plain";
+		codeChallengeMethod?: "S256" | "plain" | "ES384";
 		scopes?: string[];
 	}): Promise<URL> {
 		const scopes = Array.from(new Set(options?.scopes ?? [])); // remove duplicates
@@ -53,7 +53,16 @@ export class OAuth2Client {
 			} else if (codeChallengeMethod === "plain") {
 				authorizationUrl.searchParams.set("code_challenge", options.codeVerifier);
 				authorizationUrl.searchParams.set("code_challenge_method", "plain");
-			} else {
+			} 
+			else if (codeChallengeMethod === "ES384") {
+				const codeChallengeBuffer = await sha384(new TextEncoder().encode(options.codeVerifier));
+				const codeChallenge = base64url.encode(new Uint8Array(codeChallengeBuffer), {
+					includePadding: false
+				});
+				authorizationUrl.searchParams.set("code_challenge", codeChallenge);
+				authorizationUrl.searchParams.set("code_challenge_method", "ES384");
+			}
+			else {
 				throw new TypeError(`Invalid value for 'codeChallengeMethod': ${codeChallengeMethod}`);
 			}
 		}
