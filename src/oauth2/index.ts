@@ -7,6 +7,7 @@ export class OAuth2Client {
 	private authorizeEndpoint: string;
 	private tokenEndpoint: string;
 	private redirectURI: string | null;
+	private audience: string | null;
 
 	constructor(
 		clientId: string,
@@ -14,12 +15,14 @@ export class OAuth2Client {
 		tokenEndpoint: string,
 		options?: {
 			redirectURI?: string;
+			audience?: string,
 		}
 	) {
 		this.clientId = clientId;
 		this.authorizeEndpoint = authorizeEndpoint;
 		this.tokenEndpoint = tokenEndpoint;
 		this.redirectURI = options?.redirectURI ?? null;
+		this.audience = options?.audience ?? null;
 	}
 
 	public async createAuthorizationURL(options?: {
@@ -27,6 +30,7 @@ export class OAuth2Client {
 		codeVerifier?: string;
 		codeChallengeMethod?: "S256" | "plain";
 		scopes?: string[];
+		audience?: string;
 	}): Promise<URL> {
 		const scopes = Array.from(new Set(options?.scopes ?? [])); // remove duplicates
 		const authorizationUrl = new URL(this.authorizeEndpoint);
@@ -40,6 +44,9 @@ export class OAuth2Client {
 		}
 		if (this.redirectURI !== null) {
 			authorizationUrl.searchParams.set("redirect_uri", this.redirectURI);
+		}
+		if (this.audience != null || options?.audience !== undefined){
+			authorizationUrl.searchParams.set("audience", options?.audience ?? this.audience!);
 		}
 		if (options?.codeVerifier !== undefined) {
 			const codeChallengeMethod = options?.codeChallengeMethod ?? "S256";
@@ -66,6 +73,7 @@ export class OAuth2Client {
 			codeVerifier?: string;
 			credentials?: string;
 			authenticateWith?: "http_basic_auth" | "request_body";
+			audience?: string;
 		}
 	): Promise<_TokenResponseBody> {
 		const body = new URLSearchParams();
@@ -79,6 +87,9 @@ export class OAuth2Client {
 		if (options?.codeVerifier !== undefined) {
 			body.set("code_verifier", options.codeVerifier);
 		}
+		if (this.audience != null || options?.audience !== undefined){
+			body.set("audience", options?.audience ?? this.audience!);
+		}
 		return await this.sendTokenRequest<_TokenResponseBody>(body, options);
 	}
 
@@ -88,12 +99,17 @@ export class OAuth2Client {
 			credentials?: string;
 			authenticateWith?: "http_basic_auth" | "request_body";
 			scopes?: string[];
+			audience?: string;
 		}
 	): Promise<_TokenResponseBody> {
 		const body = new URLSearchParams();
 		body.set("refresh_token", refreshToken);
 		body.set("client_id", this.clientId);
 		body.set("grant_type", "refresh_token");
+
+		if (this.audience !== null || options?.audience !== undefined) {
+			body.set("audience", options?.audience ?? this.audience!);
+		}	
 
 		const scopes = Array.from(new Set(options?.scopes ?? [])); // remove duplicates
 		if (scopes.length > 0) {
