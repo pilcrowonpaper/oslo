@@ -7,7 +7,7 @@ title: "alphabet()"
 Generates a string with all the characters defined in the provided pattern:
 
 - `a-z`: `abcdefghijklmnopqrstuvwxyz`
-- `A-Z`: `ABCDEFGHIJKLMNOPqRSTUVWXYZ`
+- `A-Z`: `ABCDEFGHIJKLMNOPQRSTUVWXYZ`
 - `0-9`: `0123456789`
 - `-`: Character `-`
 - `_`: Character `_`
@@ -29,7 +29,7 @@ function alphabet(...patterns: "a-z" | "A-Z" | "0-9" | "-" | "_"): string;
 ```ts
 import { alphabet } from "oslo/crypto";
 
-// "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPqRSTUVWXYZ0123456789"
+// "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 alphabet("a-z", "A-Z", "0-9");
 
 // "0123456789"
