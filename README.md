@@ -1,7 +1,6 @@
 # `oslo`
 
-> [!IMPORTANT]
-> **This package will be deprecated by the end of 2024.** Please use the packages published under the [Oslo project](https://oslojs.dev) instead.
+> [!IMPORTANT] > **This package will be deprecated by the end of 2024.** Please use the packages published under the [Oslo project](https://oslojs.dev) instead.
 
 A collection of auth-related utilities, including:
 
