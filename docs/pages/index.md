@@ -4,7 +4,7 @@ title: "Oslo documentation"
 
 # Oslo documentation
 
-**This package will be deprecated by the end of 2024**. Please use the packages published under the [Oslo project](https://oslojs.dev) instead.
+**This package has been deprecated. Please use the packages published under the [Oslo project](https://oslojs.dev) instead.**
 
 Oslo provides a bunch of auth utilities, including APIs for:
 
